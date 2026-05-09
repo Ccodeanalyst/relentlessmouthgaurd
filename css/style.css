@@ -2333,3 +2333,276 @@ body {
     padding: 140px 0 60px;
   }
 }
+
+/* ============================================
+   BACKGROUND DESIGN TREATMENTS
+   Rich visual texture for flat sections
+   ============================================ */
+
+/* Shared: all treated sections need position context */
+.how-it-works,
+.products,
+.testimonials,
+.section-alt,
+.cta-banner {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ─────────────────────────────────────────────
+   HOW IT WORKS — diagonal grid + corner glow
+   ───────────────────────────────────────────── */
+.how-it-works::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(193, 18, 31, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(193, 18, 31, 0.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.how-it-works::after {
+  content: '';
+  position: absolute;
+  top: -200px;
+  right: -200px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(193, 18, 31, 0.09) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.how-it-works .container { position: relative; z-index: 1; }
+
+/* ─────────────────────────────────────────────
+   PRODUCTS — dot grid + left-side crimson beam
+   ───────────────────────────────────────────── */
+.products {
+  position: relative;
+  overflow: hidden;
+}
+
+.products::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse 70% 90% at 50% 50%, black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 90% at 50% 50%, black 30%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.products::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10%;
+  width: 2px;
+  height: 60%;
+  background: linear-gradient(180deg, transparent, var(--crimson), transparent);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.products .container { position: relative; z-index: 1; }
+
+/* ─────────────────────────────────────────────
+   GALLERY (section-dark) — scanlines + bottom glow
+   ───────────────────────────────────────────── */
+.section-dark {
+  position: relative;
+  overflow: hidden;
+}
+
+.section-dark::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(255, 255, 255, 0.013) 3px,
+    rgba(255, 255, 255, 0.013) 4px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.section-dark::after {
+  content: '';
+  position: absolute;
+  bottom: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 400px;
+  background: radial-gradient(ellipse, rgba(193, 18, 31, 0.07) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.section-dark .container { position: relative; z-index: 1; }
+
+/* ─────────────────────────────────────────────
+   TESTIMONIALS — faded watermark + left bleed glow
+   ───────────────────────────────────────────── */
+.testimonials::before {
+  content: 'RELENTLESS';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 13vw, 15rem);
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.02);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  line-height: 1;
+}
+
+.testimonials::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -80px;
+  width: 350px;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(193, 18, 31, 0.06) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.testimonials .container { position: relative; z-index: 1; }
+
+/* ─────────────────────────────────────────────
+   WHY RELENTLESS (section-alt) — diagonal slash lines
+   ───────────────────────────────────────────── */
+.section-alt::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 40px,
+    rgba(193, 18, 31, 0.03) 40px,
+    rgba(193, 18, 31, 0.03) 41px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.section-alt::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 50%;
+  background: linear-gradient(180deg, transparent, rgba(193,18,31,0.4), transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.section-alt .container { position: relative; z-index: 1; }
+
+/* ─────────────────────────────────────────────
+   CTA BANNER — bold stripes + center radial glow
+   ───────────────────────────────────────────── */
+.cta-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -55deg,
+    transparent,
+    transparent 28px,
+    rgba(193, 18, 31, 0.05) 28px,
+    rgba(193, 18, 31, 0.05) 30px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cta-banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 100% at 50% 50%, rgba(193, 18, 31, 0.14) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cta-banner .container { position: relative; z-index: 2; }
+
+/* ─────────────────────────────────────────────
+   PAGE BANNER — grid texture overlay
+   ───────────────────────────────────────────── */
+.page-banner {
+  position: relative;
+  overflow: hidden;
+}
+
+.page-banner .container { position: relative; z-index: 2; }
+
+/* Extra grid layer on page banners */
+.page-banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(193, 18, 31, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(193, 18, 31, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ─────────────────────────────────────────────
+   FOOTER — crimson gradient top rule + corner glow
+   ───────────────────────────────────────────── */
+.site-footer {
+  position: relative;
+  overflow: hidden;
+}
+
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--crimson), transparent);
+  opacity: 0.6;
+  z-index: 1;
+}
+
+.site-footer::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: -80px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(193, 18, 31, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.site-footer .container { position: relative; z-index: 1; }
+
