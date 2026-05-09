@@ -882,53 +882,276 @@ ul, ol { list-style: none; }
   .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 36px; }
 }
 
+/* ─── Tablet ─── */
 @media (max-width: 768px) {
-  :root { --header-h: 64px; }
+  :root { --header-h: 60px; }
 
+  /* Container: tighter side padding on mobile */
+  .container {
+    padding: 0 20px;
+  }
+
+  .header-inner {
+    padding: 0 20px;
+  }
+
+  /* Announcement bar: smaller text, allow wrap */
+  .announcement-bar {
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    padding: 9px 16px;
+    line-height: 1.5;
+  }
+
+  /* Logo: scaled down to prevent overflow at 375px */
+  .logo {
+    font-size: 1.55rem;
+    letter-spacing: 3px;
+  }
+
+  /* Hamburger visible */
   .hamburger { display: flex; }
 
+  /* Cart icon stays right-sized */
+  .cart-link {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+  }
+
+  /* Mobile slide-in nav */
   .nav-links {
     position: fixed;
-    top: 0; right: -100%;
+    top: 0;
+    right: -100%;
     width: 80%;
-    max-width: 360px;
+    max-width: 320px;
     height: 100vh;
     background: var(--carbon);
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    padding: 48px;
-    gap: 24px;
-    transition: right 0.5s var(--ease-out);
+    padding: 48px 36px;
+    gap: 20px;
+    transition: right 0.45s var(--ease-out);
     z-index: 999;
-    box-shadow: -10px 0 60px rgba(0, 0, 0, 0.6);
+    box-shadow: -10px 0 60px rgba(0, 0, 0, 0.7);
   }
 
   .nav-links.active { right: 0; }
+
+  .nav-links a {
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+  }
+
+  .nav-cta {
+    margin-top: 8px;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
 
   .nav-overlay {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(10, 10, 15, 0.7);
+    background: rgba(10, 10, 15, 0.75);
     z-index: 998;
   }
 
   .nav-overlay.active { display: block; }
 
+  /* Hero */
+  .hero {
+    padding: 100px 0 70px;
+    text-align: center;
+  }
+
   .hero-image { display: none; }
 
-  .steps-grid, .products-grid, .testimonial-grid {
-    grid-template-columns: 1fr;
+  .hero h1 {
+    font-size: clamp(2.2rem, 9vw, 3.2rem);
+    letter-spacing: 2px;
+    line-height: 1.0;
+    margin-bottom: 20px;
   }
 
+  .hero-subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 28px;
+    padding: 0 8px;
+  }
+
+  .hero-badge {
+    font-size: 0.7rem;
+    padding: 6px 14px;
+    margin-bottom: 24px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+    max-width: 320px;
+    justify-content: center;
+  }
+
+  /* Hero proof chips: stack vertically */
+  .hero-proof {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding-top: 32px;
+  }
+
+  .proof-chip {
+    max-width: 100%;
+  }
+
+  /* Sections: tighter vertical padding */
+  .section {
+    padding: 72px 0;
+  }
+
+  .section-intro {
+    margin-bottom: 48px;
+  }
+
+  .section-title {
+    font-size: clamp(1.8rem, 7vw, 2.5rem);
+    letter-spacing: 1px;
+  }
+
+  .section-desc {
+    font-size: 0.95rem;
+  }
+
+  /* Grids: single column */
+  .steps-grid,
+  .products-grid,
+  .testimonial-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  /* Step cards: horizontal layout on mobile */
+  .step-card {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 0 20px;
+    align-items: start;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-radius: 0;
+  }
+
+  .step-number {
+    font-size: 2.5rem;
+    opacity: 0.2;
+    margin-bottom: 0;
+    grid-row: span 2;
+    line-height: 1.1;
+  }
+
+  /* Gallery */
   .gallery-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
   }
 
-  .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 1; }
+  .gallery-item:nth-child(1) {
+    grid-column: span 2;
+    grid-row: span 1;
+  }
 
-  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+  /* Products grid: single column with max-width */
+  .products-grid,
+  .shop-grid {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+  }
+
+  /* Product cards: better mobile layout */
+  .product-image,
+  .shop-card-image {
+    aspect-ratio: 16 / 9;
+  }
+
+  /* Buttons: larger tap targets */
+  .btn {
+    padding: 16px 28px;
+    font-size: 0.85rem;
+    min-height: 52px;
+  }
+
+  .btn-block {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Testimonials */
+  .testimonial-grid {
+    max-width: 100%;
+  }
+
+  .testimonial-card {
+    padding: 24px 20px;
+  }
+
+  /* Trust/info grids: single column */
+  .trust-grid,
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    max-width: 100%;
+  }
+
+  /* CTA banner */
+  .cta-banner {
+    padding: 72px 0;
+  }
+
+  .cta-banner h2 {
+    font-size: clamp(2rem, 8vw, 3rem);
+    letter-spacing: 2px;
+  }
+
+  .cta-banner p {
+    font-size: 0.95rem;
+  }
+
+  /* Page banner (shop/gallery) */
+  .page-banner {
+    padding: 110px 0 52px;
+  }
+
+  .page-banner h1 {
+    font-size: clamp(2rem, 8vw, 3rem);
+    letter-spacing: 2px;
+  }
+
+  .page-banner-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .page-banner-actions .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  /* Footer */
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
 
   .footer-bottom {
     flex-direction: column;
@@ -936,19 +1159,120 @@ ul, ol { list-style: none; }
     text-align: center;
   }
 
-  .hero-actions {
+  .footer-social { justify-content: center; }
+
+  .email-form {
+    max-width: 100%;
+  }
+
+  /* Shop page */
+  .shop-grid {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+  }
+
+  .shop-card-body {
+    padding: 20px 16px;
+  }
+
+  /* Checkout */
+  .checkout-layout {
+    grid-template-columns: 1fr;
+    padding-top: 90px;
+    padding-bottom: 60px;
+    gap: 24px;
+  }
+
+  .checkout-card {
+    padding: 24px 16px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  /* Gallery filter bar */
+  .gallery-filter-bar {
+    gap: 8px;
+  }
+
+  .filter-btn {
+    padding: 8px 16px;
+    font-size: 0.72rem;
+  }
+
+  /* Gallery full grid */
+  .gallery-full-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  /* Builder */
+  .builder-step {
+    padding: 24px 16px;
+  }
+
+  .builder-preview {
+    padding: 24px 16px;
+  }
+}
+
+/* ─── Small phones (375px and below) ─── */
+@media (max-width: 400px) {
+  .logo {
+    font-size: 1.35rem;
+    letter-spacing: 2px;
+  }
+
+  .header-inner {
+    padding: 0 16px;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.9rem, 9vw, 2.8rem);
+  }
+
+  .section-title {
+    font-size: clamp(1.6rem, 8vw, 2.2rem);
+  }
+
+  .btn {
+    font-size: 0.8rem;
+    padding: 14px 20px;
+    letter-spacing: 1px;
+  }
+
+  .gallery-grid,
+  .gallery-full-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .gallery-item:nth-child(1) {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+
+  .email-form {
     flex-direction: column;
   }
 
-  .hero h1 { letter-spacing: 2px; }
+  .filter-btn {
+    padding: 7px 12px;
+    font-size: 0.68rem;
+  }
 
-  .section { padding: 80px 0; }
-}
+  .section {
+    padding: 60px 0;
+  }
 
-@media (max-width: 480px) {
-  .gallery-grid { grid-template-columns: 1fr; }
-  .gallery-item:nth-child(1) { grid-column: span 1; }
-  .email-form { flex-direction: column; }
+  .testimonial-card {
+    padding: 20px 16px;
+  }
 }
 
 /* ============================================
