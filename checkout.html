@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — RELENTLESS Mouthguards</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header scrolled" id="siteHeader">
+    <div class="header-inner">
+      <a href="index.html" class="logo">RELEN<span>TLESS</span></a>
+      <nav class="nav-links" id="navLinks">
+        <a href="index.html#how-it-works">How It Works</a>
+        <a href="shop.html">Shop</a>
+        <a href="builder.html">Design Yours</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="index.html#contact">Contact</a>
+        <a href="builder.html" class="nav-cta">Order Now</a>
+      </nav>
+      <a href="checkout.html" class="cart-link" aria-label="Cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-count">0</span>
+      </a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+    <div class="nav-overlay" id="navOverlay"></div>
+  </header>
+
+  <!-- Success State (hidden until order placed) -->
+  <div id="orderSuccess" class="order-success" style="padding-top: 140px;">
+    <div class="success-icon">✓</div>
+    <h2>ORDER PLACED!</h2>
+    <p>Your impression kit is being prepared for shipment. You'll receive a confirmation email shortly.</p>
+    <p style="color: var(--crimson); font-family: var(--font-accent); font-weight: 700; letter-spacing: 1px;" id="orderNumber"></p>
+    <p>Once your kit arrives, follow the included instructions and mail back your impressions. We'll send a design proof before production begins.</p>
+    <div style="margin-top: 40px; display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+      <a href="index.html" class="btn btn-primary">Back to Home <span class="btn-icon">→</span></a>
+      <a href="gallery.html" class="btn btn-outline">View Gallery</a>
+    </div>
+  </div>
+
+  <!-- Checkout Layout -->
+  <div id="checkoutLayout" class="container checkout-layout">
+
+    <!-- Left: Form -->
+    <div class="checkout-form-section">
+
+      <div>
+        <p class="section-label">Checkout</p>
+        <h1 class="section-title" style="margin-bottom: 4px;">YOUR ORDER</h1>
+        <p style="color: var(--chrome); font-size: 0.9rem;">Secure checkout. Impression kit ships within 24 hours.</p>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="checkout-card">
+        <h3>CONTACT INFO</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" id="firstName" class="form-control" placeholder="Marcus" autocomplete="given-name">
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" id="lastName" class="form-control" placeholder="Rivera" autocomplete="family-name">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="email" class="form-control" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label>Phone <span style="color:var(--chrome);font-weight:400;">(optional)</span></label>
+          <input type="tel" id="phone" class="form-control" placeholder="+1 (555) 000-0000" autocomplete="tel">
+        </div>
+        <label class="checkbox-row" style="margin-top: 8px;">
+          <input type="checkbox" id="emailOptIn" checked>
+          <span>Sign me up for exclusive offers, new design drops, and fight camp promotions.</span>
+        </label>
+      </div>
+
+      <!-- Shipping Address -->
+      <div class="checkout-card">
+        <h3>SHIPPING ADDRESS</h3>
+        <div class="form-group">
+          <label>Street Address</label>
+          <input type="text" id="address" class="form-control" placeholder="123 Fighter Lane" autocomplete="street-address">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>City</label>
+            <input type="text" id="city" class="form-control" placeholder="Las Vegas" autocomplete="address-level2">
+          </div>
+          <div class="form-group">
+            <label>State</label>
+            <input type="text" id="state" class="form-control" placeholder="NV" autocomplete="address-level1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>ZIP Code</label>
+            <input type="text" id="zip" class="form-control" placeholder="89101" autocomplete="postal-code">
+          </div>
+          <div class="form-group">
+            <label>Country</label>
+            <select id="country" class="form-control">
+              <option value="US">United States</option>
+              <option value="CA">Canada</option>
+              <option value="GB">United Kingdom</option>
+              <option value="AU">Australia</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Design Notes -->
+      <div class="checkout-card">
+        <h3>DESIGN NOTES</h3>
+        <div class="form-group">
+          <label>Sport / Discipline</label>
+          <select id="sport" class="form-control">
+            <option>MMA</option>
+            <option>Boxing</option>
+            <option>Muay Thai</option>
+            <option>BJJ / Grappling</option>
+            <option>Football</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Custom Instructions for Our Artists <span style="color:var(--chrome);font-weight:400;">(optional)</span></label>
+          <textarea id="designNotes" class="form-control" placeholder="E.g., Use my gym logo on the left side, make the text bold, use red and black theme..."></textarea>
+        </div>
+      </div>
+
+      <!-- Payment -->
+      <div class="checkout-card">
+        <h3>PAYMENT</h3>
+        <p style="color: var(--chrome); font-size: 0.88rem; margin-bottom: 24px; line-height: 1.6;">
+          Your card is charged securely via Stripe. We never store your card details.
+        </p>
+        <div class="form-group">
+          <label>Card Number</label>
+          <input type="text" id="cardNumber" class="form-control" placeholder="4242 4242 4242 4242" maxlength="19" autocomplete="cc-number">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Expiry</label>
+            <input type="text" id="cardExpiry" class="form-control" placeholder="MM / YY" maxlength="7" autocomplete="cc-exp">
+          </div>
+          <div class="form-group">
+            <label>CVC</label>
+            <input type="text" id="cardCvc" class="form-control" placeholder="123" maxlength="4" autocomplete="cc-csc">
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; margin-top:8px; color: var(--chrome); font-size:0.8rem;">
+          <span>🔒</span> Secured by Stripe. SSL encrypted.
+        </div>
+      </div>
+
+      <div id="formError" style="color: var(--crimson); font-family: var(--font-accent); font-size:0.88rem; font-weight:700; letter-spacing:1px; display:none; padding: 12px 16px; background: rgba(193,18,31,0.08); border: 1px solid rgba(193,18,31,0.2); border-radius: 6px;"></div>
+
+      <button class="btn btn-primary" id="placeOrderBtn" style="width:100%; justify-content:center; padding: 20px; font-size: 1rem;">
+        Place Order <span class="btn-icon">→</span>
+      </button>
+
+    </div>
+
+    <!-- Right: Order Summary -->
+    <div>
+      <div class="order-summary-panel">
+        <h3>ORDER SUMMARY</h3>
+
+        <!-- Cart Items -->
+        <div class="cart-line-items" id="cartLineItems">
+          <div class="empty-cart-msg" id="emptyCartMsg">
+            <p>Your cart is empty.</p>
+            <a href="shop.html" class="btn btn-primary btn-sm">Browse Products <span class="btn-icon">→</span></a>
+          </div>
+        </div>
+
+        <!-- Promo Code -->
+        <div style="margin: 20px 0; padding: 20px; background: var(--steel); border-radius: 8px; border: 1px solid var(--glass-border);">
+          <label style="display:block; font-family: var(--font-accent); font-size:0.78rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color: var(--chrome); margin-bottom:10px;">
+            Promo / Discount Code
+          </label>
+          <div class="promo-row">
+            <input type="text" id="promoInput" class="form-control" placeholder="e.g. RELENTLESS15" style="text-transform:uppercase;">
+            <button class="btn btn-outline btn-sm" id="applyPromoBtn">Apply</button>
+          </div>
+          <div class="promo-feedback" id="promoFeedback"></div>
+        </div>
+
+        <!-- Totals -->
+        <div class="summary-rows" id="summaryRows">
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span id="summarySubtotal">$0.00</span>
+          </div>
+          <div class="summary-row" id="discountRow" style="display:none;">
+            <span id="discountLabel">Discount</span>
+            <span id="discountAmt" style="color: var(--success);">-$0.00</span>
+          </div>
+          <div class="summary-row">
+            <span>Shipping</span>
+            <span style="color: var(--success);">FREE</span>
+          </div>
+          <div class="summary-row total">
+            <span>Total</span>
+            <span id="summaryTotal">$0.00</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/cart.js"></script>
+  <script src="js/promo.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    let appliedPromo = null;
+
+    function fmt(n) { return '$' + n.toFixed(2); }
+
+    function renderCart() {
+      const items       = Cart.get();
+      const lineItems   = document.getElementById('cartLineItems');
+      const emptyMsg    = document.getElementById('emptyCartMsg');
+      const placeBtn    = document.getElementById('placeOrderBtn');
+
+      // Remove existing lines (keep empty msg node)
+      lineItems.querySelectorAll('.cart-line').forEach(el => el.remove());
+
+      if (items.length === 0) {
+        emptyMsg.style.display = 'block';
+        placeBtn.disabled = true;
+        placeBtn.style.opacity = '0.5';
+      } else {
+        emptyMsg.style.display = 'none';
+        placeBtn.disabled = false;
+        placeBtn.style.opacity = '';
+        items.forEach(item => {
+          const line = document.createElement('div');
+          line.className = 'cart-line';
+          line.dataset.id = item.id;
+          line.innerHTML = `
+            <div class="cart-line-img"><img src="${item.img}" alt="${item.name}"></div>
+            <div class="cart-line-info">
+              <div class="cart-line-name">${item.name}</div>
+              <div class="cart-line-meta">Qty: ${item.qty}</div>
+            </div>
+            <div class="cart-line-price">${fmt(item.price * item.qty)}</div>
+            <button class="cart-line-remove" onclick="removeItem('${item.id}')" title="Remove">×</button>
+          `;
+          lineItems.insertBefore(line, emptyMsg);
+        });
+      }
+
+      updateTotals();
+    }
+
+    function removeItem(id) {
+      Cart.remove(id);
+      appliedPromo = null;
+      document.getElementById('discountRow').style.display = 'none';
+      document.getElementById('promoFeedback').textContent = '';
+      document.getElementById('promoInput').value = '';
+      renderCart();
+    }
+
+    function updateTotals() {
+      const sub      = Cart.subtotal();
+      const discount = appliedPromo ? appliedPromo.amount : 0;
+      const total    = Math.max(0, sub - discount);
+
+      document.getElementById('summarySubtotal').textContent = fmt(sub);
+      document.getElementById('summaryTotal').textContent    = fmt(total);
+
+      const discRow = document.getElementById('discountRow');
+      if (appliedPromo) {
+        discRow.style.display = '';
+        document.getElementById('discountLabel').textContent = `${appliedPromo.code} (${appliedPromo.label})`;
+        document.getElementById('discountAmt').textContent   = `-${fmt(discount)}`;
+      } else {
+        discRow.style.display = 'none';
+      }
+    }
+
+    // Promo code
+    document.getElementById('applyPromoBtn').addEventListener('click', () => {
+      const code     = document.getElementById('promoInput').value;
+      const feedback = document.getElementById('promoFeedback');
+      const result   = Promo.validate(code, Cart.subtotal());
+
+      if (result.valid) {
+        appliedPromo = result;
+        feedback.textContent = `✓ ${result.label} applied! (${result.campaign})`;
+        feedback.className   = 'promo-feedback success';
+      } else {
+        appliedPromo = null;
+        feedback.textContent = result.msg;
+        feedback.className   = 'promo-feedback error';
+      }
+      updateTotals();
+    });
+
+    document.getElementById('promoInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('applyPromoBtn').click();
+    });
+
+    // Card number formatting
+    document.getElementById('cardNumber').addEventListener('input', e => {
+      let v = e.target.value.replace(/\D/g, '').substring(0, 16);
+      e.target.value = v.replace(/(.{4})/g, '$1 ').trim();
+    });
+
+    document.getElementById('cardExpiry').addEventListener('input', e => {
+      let v = e.target.value.replace(/\D/g, '').substring(0, 4);
+      if (v.length >= 2) v = v.substring(0,2) + ' / ' + v.substring(2);
+      e.target.value = v;
+    });
+
+    // Place order
+    document.getElementById('placeOrderBtn').addEventListener('click', () => {
+      const get = id => document.getElementById(id).value.trim();
+      const err = document.getElementById('formError');
+
+      // Basic validation
+      if (!get('firstName') || !get('lastName')) return showError('Please enter your full name.');
+      if (!get('email') || !get('email').includes('@')) return showError('Please enter a valid email address.');
+      if (!get('address') || !get('city') || !get('zip')) return showError('Please complete your shipping address.');
+      if (Cart.get().length === 0) return showError('Your cart is empty.');
+
+      const cardRaw = get('cardNumber').replace(/\s/g, '');
+      if (cardRaw.length < 15) return showError('Please enter a valid card number.');
+      if (!get('cardExpiry')) return showError('Please enter your card expiry.');
+      if (!get('cardCvc')) return showError('Please enter your CVC.');
+
+      err.style.display = 'none';
+
+      // Simulate processing
+      const btn = document.getElementById('placeOrderBtn');
+      btn.textContent = 'Processing…';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        // Redeem promo code
+        if (appliedPromo) Promo.redeem(appliedPromo.code);
+
+        // Save order to localStorage (admin can view)
+        const order = {
+          id:       'ORD-' + Date.now(),
+          date:     new Date().toISOString(),
+          name:     get('firstName') + ' ' + get('lastName'),
+          email:    get('email'),
+          items:    Cart.get(),
+          subtotal: Cart.subtotal(),
+          discount: appliedPromo ? appliedPromo.amount : 0,
+          promo:    appliedPromo ? appliedPromo.code : null,
+          total:    Math.max(0, Cart.subtotal() - (appliedPromo ? appliedPromo.amount : 0)),
+          address:  `${get('address')}, ${get('city')}, ${get('state')} ${get('zip')}`,
+          sport:    get('sport'),
+          notes:    get('designNotes'),
+          emailOptIn: document.getElementById('emailOptIn').checked,
+          status:   'pending'
+        };
+
+        const orders = JSON.parse(localStorage.getItem('relentless_orders') || '[]');
+        orders.unshift(order);
+        localStorage.setItem('relentless_orders', JSON.stringify(orders));
+
+        Cart.clear();
+
+        // Show success
+        document.getElementById('checkoutLayout').style.display = 'none';
+        const success = document.getElementById('orderSuccess');
+        success.classList.add('show');
+        document.getElementById('orderNumber').textContent = `Order ID: ${order.id}`;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 1800);
+    });
+
+    function showError(msg) {
+      const err = document.getElementById('formError');
+      err.textContent = msg;
+      err.style.display = 'block';
+      err.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // Listen for cart updates
+    window.addEventListener('cart:updated', renderCart);
+
+    // Init
+    renderCart();
+  </script>
+</body>
+</html>
