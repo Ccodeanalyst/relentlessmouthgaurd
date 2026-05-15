@@ -38,10 +38,20 @@ Last updated: May 14, 2026
 - Finished Phase 3 buying flow QA:
   - Shop package cart buttons now use current product image paths.
   - Checkout line items show package/build details.
-  - Builder pricing now matches Premium Custom Design at `$79.99`.
+  - Builder pricing matched the previous Premium Custom Design package before the Phase 4 pricing update.
   - Builder cart items stay distinct by selected color, sport, and custom text.
   - Checkout cart text is escaped before rendering.
   - Playwright confirmed shop-to-checkout and builder-to-checkout totals.
+- Started Phase 4 content/pricing pass:
+  - Updated pricing to `$99` Single Layer Basic Light Bite, `$119` Dual Layer Basic Heavy Bite, and `$149` Dual Layer Custom Graphics.
+  - Updated builder pricing to `$149` for Dual Layer Custom Graphics.
+  - Removed dental-impression wording from key sales pages.
+  - Removed dual-color package language.
+  - Removed the Boner Garage image from homepage/top-photo usage.
+  - Replaced the gallery's older AI-style images with current product photos.
+  - Added team/gym discount and affiliate outreach copy.
+  - Added bottom disclaimer copy to the main public footers.
+  - Fixed homepage carousel autoplay so it no longer scrolls the page back to the gallery during rotation.
 - Updated `How It Works` navigation links to point to `shop.html#ordering`.
 - Verified `js/main.js` with `node --check`.
 

@@ -53,12 +53,24 @@ Status: Complete
 
 ## Phase 4: Content Review
 
-Status: Planned
+Status: In progress
 
-- Review homepage headline, subtitle, and CTAs for stronger sales language.
-- Review shop page FAQ/order notes for accuracy.
-- Check footer copy and navigation labels.
-- Remove any placeholder or internal-sounding copy before launch.
+- Review homepage headline, subtitle, and CTAs for stronger sales language. Status: In progress.
+- Review shop page FAQ/order notes for accuracy. Status: In progress.
+- Check footer copy and navigation labels. Status: In progress.
+- Remove any placeholder or internal-sounding copy before launch. Status: In progress.
+
+## Phase 4 Findings
+
+- Updated public pricing to `$99` Single Layer Basic Light Bite, `$119` Dual Layer Basic Heavy Bite, and `$149` Dual Layer Custom Graphics.
+- Updated package copy to say shipping and the at-home impression kit are included.
+- Removed dental-impression phrasing from the homepage, shop page, and gallery copy.
+- Removed dual-color language from the premium/custom graphics package.
+- Removed the older AI-style gallery image paths and refreshed the gallery with current product photos.
+- Removed the Boner Garage image from the homepage/top-photo flow.
+- Added team/gym outreach copy for discounts and affiliate program interest.
+- Added a bottom mouthguard safety disclaimer to the main public footers.
+- Fixed the homepage carousel autoplay so it no longer pulls the page back to the gallery while rotating.
 
 ## Phase 5: Launch Readiness
 

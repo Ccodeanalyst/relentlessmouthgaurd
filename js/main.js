@@ -91,7 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const scrollToSlide = index => {
       const nextIndex = (index + slides.length) % slides.length;
-      slides[nextIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      const slide = slides[nextIndex];
+      const left = slide.offsetLeft - (track.clientWidth - slide.clientWidth) / 2;
+      track.scrollTo({ left, behavior: 'smooth' });
       setActiveDot(nextIndex);
     };
 

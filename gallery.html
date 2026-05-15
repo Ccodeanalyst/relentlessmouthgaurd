@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Design Gallery — RELENTLESS Mouthguards</title>
-  <meta name="description" content="See every custom mouthguard we've built. MMA, boxing, Muay Thai — premium designs for elite fighters.">
+  <title>Design Gallery - RELENTLESS Mouthguards</title>
+  <meta name="description" content="See custom mouthguard builds for MMA, boxing, Muay Thai, teams, and premium graphics orders.">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
   <div class="announcement-bar">
-    🥊 Free Shipping on Impression Kits — Use Code: <strong>RELENTLESS15</strong> for 15% Off
+    Free shipping on impression kits. Custom Graphics orders include a design proof before production.
   </div>
 
   <header class="site-header" id="siteHeader">
@@ -30,25 +30,21 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
         <span class="cart-count">0</span>
       </a>
-      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle Navigation" aria-expanded="false" aria-controls="navLinks"><span></span><span></span><span></span></button>
     </div>
     <div class="nav-overlay" id="navOverlay"></div>
   </header>
 
-  <!-- Banner -->
   <section class="page-banner">
     <div class="container">
       <p class="section-label">Our Work</p>
       <h1>DESIGN GALLERY</h1>
-      <p>Every guard is one-of-a-kind. Browse our fighter builds for inspiration before you design yours.</p>
+      <p>Real customer-style builds and product photos for inspiration before you design yours.</p>
     </div>
   </section>
 
-  <!-- Gallery -->
   <section class="section" style="background: var(--obsidian); padding-top: 60px;">
     <div class="container">
-
-      <!-- Filter Bar -->
       <div class="gallery-filter-bar reveal">
         <button class="filter-btn active" data-filter="all">All Designs</button>
         <button class="filter-btn" data-filter="mma">MMA</button>
@@ -58,79 +54,72 @@
         <button class="filter-btn" data-filter="team">Team / Gym</button>
       </div>
 
-      <!-- Grid -->
       <div class="gallery-full-grid" id="galleryGrid">
-
-        <div class="gallery-full-item reveal" data-category="mma" data-label="MMA — Red Storm">
-          <img src="assets/images/hero-guard.png" alt="Red Storm MMA guard">
-          <div class="gallery-overlay"><span class="gallery-overlay-label">MMA — Red Storm</span></div>
+        <div class="gallery-full-item reveal" data-category="team" data-label="Team Red">
+          <img src="assets/images/relentless-work-usa-red.jpg" alt="Red, white, and blue team mouthguard">
+          <div class="gallery-overlay"><span class="gallery-overlay-label">Team Red</span></div>
         </div>
 
-        <div class="gallery-full-item reveal" data-category="boxing" data-label="Boxing — Patriot">
-          <img src="assets/images/gallery-1.png" alt="Patriot boxing guard">
-          <div class="gallery-overlay"><span class="gallery-overlay-label">Boxing — Patriot</span></div>
+        <div class="gallery-full-item reveal" data-category="boxing" data-label="Fang Layout">
+          <img src="assets/images/relentless-work-teeth.jpg" alt="Black custom mouthguard with fang artwork">
+          <div class="gallery-overlay"><span class="gallery-overlay-label">Fang Layout</span></div>
         </div>
 
-        <div class="gallery-full-item reveal" data-category="custom" data-label="Custom — Gold Rush">
-          <img src="assets/images/gallery-2.png" alt="Gold Rush custom guard">
-          <div class="gallery-overlay"><span class="gallery-overlay-label">Custom — Gold Rush</span></div>
+        <div class="gallery-full-item reveal" data-category="team" data-label="Team Blue">
+          <img src="assets/images/relentless-work-usa-blue.jpg" alt="Blue and white custom mouthguard with flag artwork">
+          <div class="gallery-overlay"><span class="gallery-overlay-label">Team Blue</span></div>
         </div>
 
-        <div class="gallery-full-item reveal" data-category="muay-thai" data-label="Muay Thai — Camo">
-          <img src="assets/images/gallery-3.png" alt="Camo Muay Thai guard">
-          <div class="gallery-overlay"><span class="gallery-overlay-label">Muay Thai — Camo</span></div>
+        <div class="gallery-full-item reveal" data-category="custom" data-label="Pink Custom">
+          <img src="assets/images/relentless-work-pink.jpg" alt="Pink custom mouthguard">
+          <div class="gallery-overlay"><span class="gallery-overlay-label">Pink Custom</span></div>
         </div>
 
-        <div class="gallery-full-item reveal" data-category="team" data-label="Team — Gym Edition">
-          <img src="assets/images/gallery-1.png" alt="Gym team guard">
-          <div class="gallery-overlay"><span class="gallery-overlay-label">Team — Gym Edition</span></div>
+        <div class="gallery-full-item reveal" data-category="muay-thai" data-label="Yellow Strike">
+          <img src="assets/images/relentless-work-yellow.jpg" alt="Yellow custom mouthguard">
+          <div class="gallery-overlay"><span class="gallery-overlay-label">Yellow Strike</span></div>
         </div>
 
-        <div class="gallery-full-item reveal" data-category="mma" data-label="MMA — Blackout">
-          <img src="assets/images/hero-guard.png" alt="Blackout MMA guard">
-          <div class="gallery-overlay"><span class="gallery-overlay-label">MMA — Blackout</span></div>
+        <div class="gallery-full-item reveal" data-category="mma" data-label="Green Pop">
+          <img src="assets/images/relentless-work-yoda.jpg" alt="Green custom mouthguard in case">
+          <div class="gallery-overlay"><span class="gallery-overlay-label">Green Pop</span></div>
         </div>
 
-        <div class="gallery-full-item reveal" data-category="boxing" data-label="Boxing — Silver Chrome">
-          <img src="assets/images/gallery-2.png" alt="Silver Chrome boxing guard">
-          <div class="gallery-overlay"><span class="gallery-overlay-label">Boxing — Silver Chrome</span></div>
+        <div class="gallery-full-item reveal" data-category="boxing" data-label="Destroyer Blue">
+          <img src="assets/images/relentless-work-destroyer.jpg" alt="Blue custom mouthguard with bold text layout">
+          <div class="gallery-overlay"><span class="gallery-overlay-label">Destroyer Blue</span></div>
         </div>
 
-        <div class="gallery-full-item reveal" data-category="custom" data-label="Custom — Skull Art">
-          <img src="assets/images/gallery-3.png" alt="Skull art custom guard">
-          <div class="gallery-overlay"><span class="gallery-overlay-label">Custom — Skull Art</span></div>
+        <div class="gallery-full-item reveal" data-category="custom" data-label="Mafia Layout">
+          <img src="assets/images/relentless-work-mafia.jpg" alt="Red and blue custom mouthguard with graphic layout">
+          <div class="gallery-overlay"><span class="gallery-overlay-label">Mafia Layout</span></div>
         </div>
-
       </div>
 
-      <!-- Load More -->
       <div style="text-align:center; margin-top: 48px;" class="reveal">
-        <p style="color: var(--chrome); font-size: 0.9rem; margin-bottom: 20px;">Showing all current designs. New builds added weekly.</p>
-        <a href="builder.html" class="btn btn-primary">Design Yours <span class="btn-icon">→</span></a>
+        <p style="color: var(--chrome); font-size: 0.9rem; margin-bottom: 20px;">Showing current design references. New builds can be added as photos come in.</p>
+        <a href="builder.html" class="btn btn-primary">Design Yours <span class="btn-icon">&rarr;</span></a>
       </div>
-
     </div>
   </section>
 
-  <!-- Inspiration CTA -->
   <section class="section" style="background: var(--carbon);">
     <div class="container" style="text-align:center;">
       <div class="reveal">
         <p class="section-label">Get Inspired</p>
         <h2 class="section-title">MAKE IT YOURS</h2>
         <p class="section-desc" style="max-width:580px; margin: 0 auto 40px;">
-          Every guard starts with your dental impressions and a blank canvas.
+          Every guard starts with your at-home impression kit and a blank canvas.
           Upload your logo, pick your colors, and tell our artists what you're envisioning.
         </p>
         <div class="hero-actions">
-          <a href="builder.html" class="btn btn-primary">Open Builder <span class="btn-icon">→</span></a>
+          <a href="builder.html" class="btn btn-primary">Open Builder <span class="btn-icon">&rarr;</span></a>
           <a href="shop.html" class="btn btn-outline">View Pricing</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="site-footer" id="contact">
     <div class="container">
       <div class="footer-grid">
@@ -138,7 +127,7 @@
           <div class="logo logo-static">
             <img src="assets/images/relentless-logo-full.png" alt="RELENTLESS Mouth Guards">
           </div>
-          <p>Premium custom mouthguards for combat sports. Designed by fighters, built for fighters.</p>
+          <p>Premium custom mouthguards for combat sports, team programs, and athletes who want a better fit with a cleaner finish.</p>
           <div class="email-form" style="margin-top:24px;">
             <input type="email" placeholder="Enter your email" id="footerEmail" aria-label="Email address">
             <button class="btn btn-primary" style="white-space:nowrap;">Join List</button>
@@ -146,48 +135,42 @@
         </div>
         <div class="footer-col">
           <h4>Shop</h4>
-          <a href="shop.html">Impression Kits</a>
+          <a href="shop.html">Mouthguard Packages</a>
           <a href="builder.html">Custom Builder</a>
           <a href="gallery.html">Design Gallery</a>
-          <a href="#">Team Orders</a>
+          <a href="shop.html#contact">Gym Discounts</a>
         </div>
         <div class="footer-col">
           <h4>Company</h4>
-          <a href="#">About Relentless</a>
-          <a href="#">FAQ</a>
-          <a href="#">Shipping &amp; Returns</a>
-          <a href="#">Contact</a>
+          <a href="shop.html#ordering">How It Works</a>
+          <a href="shop.html">FAQ</a>
+          <a href="shop.html">Shipping Included</a>
+          <a href="index.html#contact">Contact</a>
         </div>
         <div class="footer-col">
           <h4>Support</h4>
-          <a href="#">Fitting Instructions</a>
-          <a href="#">Impression Guide</a>
-          <a href="#">Care Guide</a>
-          <a href="#">Wholesale Program</a>
+          <a href="shop.html">At-Home Impression Kit</a>
+          <a href="shop.html#ordering">Order Process</a>
+          <a href="builder.html">Artwork Upload</a>
+          <a href="shop.html#contact">Affiliate Program</a>
         </div>
       </div>
       <div class="footer-bottom">
+        <p class="footer-disclaimer">Disclaimer: RELENTLESS mouthguards are intended to reduce the risk of oral injury during sports. No mouthguard can prevent all injuries, concussions, or dental trauma. Follow fitting and care instructions before use.</p>
         <span>&copy; 2026 Relentless Mouth Guards. All rights reserved.</span>
-        <div class="footer-social">
-          <a href="#" aria-label="Instagram">📷</a>
-          <a href="#" aria-label="TikTok">🎵</a>
-          <a href="#" aria-label="YouTube">▶</a>
-          <a href="#" aria-label="Twitter">𝕏</a>
-        </div>
+        <span>Built for a sharper custom-order experience.</span>
       </div>
     </div>
   </footer>
 
-  <!-- Lightbox -->
   <div class="lightbox" id="lightbox" role="dialog" aria-label="Image viewer">
     <img id="lightboxImg" src="" alt="">
-    <button class="lightbox-close" id="lightboxClose" aria-label="Close">✕</button>
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
   </div>
 
   <script src="js/cart.js"></script>
   <script src="js/main.js"></script>
   <script>
-    // Filter
     document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -200,9 +183,8 @@
       });
     });
 
-    // Lightbox
-    const lightbox     = document.getElementById('lightbox');
-    const lightboxImg  = document.getElementById('lightboxImg');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
     const lightboxClose = document.getElementById('lightboxClose');
 
     document.querySelectorAll('.gallery-full-item').forEach(item => {

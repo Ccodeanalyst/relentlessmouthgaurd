@@ -321,7 +321,7 @@
     <div>
       <div class="builder-preview reveal">
         <div class="preview-image" id="previewImage">
-          <img src="assets/images/hero-guard.png" alt="Custom Guard Preview">
+          <img src="assets/images/relentless-work-teeth.jpg" alt="Custom graphics guard preview">
         </div>
         
         <div class="builder-summary">
@@ -331,8 +331,8 @@
                 <span>Included</span>
             </div>
             <div class="summary-row">
-                <span>Premium Custom Design</span>
-                <span>$79.99</span>
+                <span>Dual Layer Custom Graphics</span>
+                <span>$149</span>
             </div>
             <div class="summary-row">
                 <span>Base Color: <span id="summaryColor">Obsidian Black</span></span>
@@ -345,7 +345,7 @@
             
             <div class="summary-total">
                 <span>Total</span>
-                <span>$79.99</span>
+                <span>$149</span>
             </div>
             
             <button id="addToCartBtn" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 24px; padding: 18px;">
@@ -386,14 +386,14 @@
         const customText = hasText ? hasText.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : 'no-text';
         const colorSlug = color.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
         const sportSlug = sport.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-        const name     = `Premium Custom Design - ${color}`;
+        const name     = `Dual Layer Custom Graphics - ${color}`;
 
         Cart.add({
-          id:    `premium-builder-${colorSlug}-${sportSlug}-${customText}`,
+          id:    `custom-graphics-${colorSlug}-${sportSlug}-${customText}`,
           name,
-          price: 79.99,
+          price: 149,
           img:   'assets/images/relentless-work-teeth.jpg',
-          meta:  `Builder order - ${sport}${hasText ? ' - Text: "' + hasText + '"' : ''}`
+          meta:  `Custom graphics builder order - ${sport}${hasText ? ' - Text: "' + hasText + '"' : ''}`
         });
 
         // Visual feedback on button

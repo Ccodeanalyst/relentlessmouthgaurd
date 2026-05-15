@@ -825,10 +825,20 @@ ul, ol { list-style: none; }
   border-top: 1px solid var(--glass-border);
   padding-top: 28px;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap: 12px 24px;
   font-size: 0.8rem;
   color: var(--chrome);
+}
+
+.footer-disclaimer {
+  flex: 0 0 100%;
+  max-width: 980px;
+  color: rgba(192, 192, 192, 0.78);
+  font-size: 0.75rem;
+  line-height: 1.7;
 }
 
 .footer-social {
