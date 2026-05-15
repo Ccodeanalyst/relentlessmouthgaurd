@@ -2,7 +2,7 @@
    CLINCH — Cart System (localStorage)
    ============================================ */
 
-const CART_KEY = 'clinch_cart';
+const CART_KEY = 'relentless_cart';
 
 const Cart = {
   get() {
@@ -60,7 +60,7 @@ const Cart = {
     document.querySelector('.clinch-toast')?.remove();
     const t = document.createElement('div');
     t.className = 'clinch-toast';
-    t.innerHTML = `<span class="toast-check">✓</span>${msg}`;
+    t.innerHTML = `<span class="toast-check">&check;</span>${msg}`;
     document.body.appendChild(t);
     requestAnimationFrame(() => t.classList.add('show'));
     setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 400); }, 3000);

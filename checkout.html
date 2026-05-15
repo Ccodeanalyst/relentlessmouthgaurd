@@ -3,16 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Checkout — RELENTLESS Mouthguards</title>
+  <title>Checkout - RELENTLESS Mouthguards</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
   <header class="site-header scrolled" id="siteHeader">
     <div class="header-inner">
-      <a href="index.html" class="logo">RELEN<span>TLESS</span></a>
+      <a href="index.html" class="logo" aria-label="RELENTLESS Mouth Guards home">
+        <img src="assets/images/relentless-logo-horizontal.png" alt="RELENTLESS Mouth Guards">
+      </a>
       <nav class="nav-links" id="navLinks">
-        <a href="index.html#how-it-works">How It Works</a>
+        <a href="shop.html#ordering">How It Works</a>
         <a href="shop.html">Shop</a>
         <a href="builder.html">Design Yours</a>
         <a href="gallery.html">Gallery</a>
@@ -30,13 +32,13 @@
 
   <!-- Success State (hidden until order placed) -->
   <div id="orderSuccess" class="order-success" style="padding-top: 140px;">
-    <div class="success-icon">✓</div>
+    <div class="success-icon">&check;</div>
     <h2>ORDER PLACED!</h2>
     <p>Your impression kit is being prepared for shipment. You'll receive a confirmation email shortly.</p>
     <p style="color: var(--crimson); font-family: var(--font-accent); font-weight: 700; letter-spacing: 1px;" id="orderNumber"></p>
     <p>Once your kit arrives, follow the included instructions and mail back your impressions. We'll send a design proof before production begins.</p>
     <div style="margin-top: 40px; display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
-      <a href="index.html" class="btn btn-primary">Back to Home <span class="btn-icon">→</span></a>
+      <a href="index.html" class="btn btn-primary">Back to Home <span class="btn-icon">&rarr;</span></a>
       <a href="gallery.html" class="btn btn-outline">View Gallery</a>
     </div>
   </div>
@@ -156,14 +158,14 @@
           </div>
         </div>
         <div style="display:flex; align-items:center; gap:8px; margin-top:8px; color: var(--chrome); font-size:0.8rem;">
-          <span>🔒</span> Secured by Stripe. SSL encrypted.
+          <span aria-hidden="true">Lock</span> Secured by Stripe. SSL encrypted.
         </div>
       </div>
 
       <div id="formError" style="color: var(--crimson); font-family: var(--font-accent); font-size:0.88rem; font-weight:700; letter-spacing:1px; display:none; padding: 12px 16px; background: rgba(193,18,31,0.08); border: 1px solid rgba(193,18,31,0.2); border-radius: 6px;"></div>
 
       <button class="btn btn-primary" id="placeOrderBtn" style="width:100%; justify-content:center; padding: 20px; font-size: 1rem;">
-        Place Order <span class="btn-icon">→</span>
+        Place Order <span class="btn-icon">&rarr;</span>
       </button>
 
     </div>
@@ -177,7 +179,7 @@
         <div class="cart-line-items" id="cartLineItems">
           <div class="empty-cart-msg" id="emptyCartMsg">
             <p>Your cart is empty.</p>
-            <a href="shop.html" class="btn btn-primary btn-sm">Browse Products <span class="btn-icon">→</span></a>
+            <a href="shop.html" class="btn btn-primary btn-sm">Browse Products <span class="btn-icon">&rarr;</span></a>
           </div>
         </div>
 
@@ -225,6 +227,15 @@
     let appliedPromo = null;
 
     function fmt(n) { return '$' + n.toFixed(2); }
+    function escapeHtml(value) {
+      return String(value || '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[char]));
+    }
 
     function renderCart() {
       const items       = Cart.get();
@@ -244,17 +255,20 @@
         placeBtn.disabled = false;
         placeBtn.style.opacity = '';
         items.forEach(item => {
+          const name = escapeHtml(item.name);
+          const meta = item.meta ? ' &middot; ' + escapeHtml(item.meta) : '';
+          const img = escapeHtml(item.img);
           const line = document.createElement('div');
           line.className = 'cart-line';
           line.dataset.id = item.id;
           line.innerHTML = `
-            <div class="cart-line-img"><img src="${item.img}" alt="${item.name}"></div>
+            <div class="cart-line-img"><img src="${img}" alt="${name}"></div>
             <div class="cart-line-info">
-              <div class="cart-line-name">${item.name}</div>
-              <div class="cart-line-meta">Qty: ${item.qty}</div>
+              <div class="cart-line-name">${name}</div>
+              <div class="cart-line-meta">Qty: ${item.qty}${meta}</div>
             </div>
             <div class="cart-line-price">${fmt(item.price * item.qty)}</div>
-            <button class="cart-line-remove" onclick="removeItem('${item.id}')" title="Remove">×</button>
+            <button class="cart-line-remove" onclick="removeItem('${item.id}')" title="Remove">&times;</button>
           `;
           lineItems.insertBefore(line, emptyMsg);
         });
@@ -298,7 +312,7 @@
 
       if (result.valid) {
         appliedPromo = result;
-        feedback.textContent = `✓ ${result.label} applied! (${result.campaign})`;
+        feedback.textContent = `${result.label} applied! (${result.campaign})`;
         feedback.className   = 'promo-feedback success';
       } else {
         appliedPromo = null;
@@ -344,7 +358,7 @@
 
       // Simulate processing
       const btn = document.getElementById('placeOrderBtn');
-      btn.textContent = 'Processing…';
+      btn.textContent = 'Processing...';
       btn.disabled = true;
 
       setTimeout(() => {

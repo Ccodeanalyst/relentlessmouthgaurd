@@ -1,0 +1,24 @@
+{
+  "name": "relentloess",
+  "version": "1.0.0",
+  "description": "Static website for RELENTLESS custom combat mouthguards.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ccodeanalyst/Impactmouthgaurd.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Ccodeanalyst/Impactmouthgaurd/issues"
+  },
+  "homepage": "https://github.com/Ccodeanalyst/Impactmouthgaurd#readme",
+  "devDependencies": {
+    "playwright": "^1.60.0"
+  }
+}

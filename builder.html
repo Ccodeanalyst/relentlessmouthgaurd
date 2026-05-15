@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Design Your Guard — RELENTLESS</title>
+  <title>Design Your Guard - RELENTLESS</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
     /* Builder Specific Styles */
@@ -227,9 +227,11 @@
   <!-- ═══════ HEADER ═══════ -->
   <header class="site-header" id="siteHeader">
     <div class="header-inner">
-      <a href="index.html" class="logo">RELEN<span>TLESS</span></a>
+      <a href="index.html" class="logo" aria-label="RELENTLESS Mouth Guards home">
+        <img src="assets/images/relentless-logo-horizontal.png" alt="RELENTLESS Mouth Guards">
+      </a>
       <nav class="nav-links" id="navLinks">
-        <a href="index.html#how-it-works">How It Works</a>
+        <a href="shop.html#ordering">How It Works</a>
         <a href="shop.html">Shop</a>
         <a href="builder.html">Design Yours</a>
         <a href="gallery.html">Gallery</a>
@@ -329,7 +331,7 @@
                 <span>Included</span>
             </div>
             <div class="summary-row">
-                <span>Custom Fit Guard</span>
+                <span>Premium Custom Design</span>
                 <span>$79.99</span>
             </div>
             <div class="summary-row">
@@ -337,17 +339,17 @@
                 <span>$0.00</span>
             </div>
             <div class="summary-row">
-                <span>Custom Artwork</span>
-                <span>$15.00</span>
+                <span>Artwork Upload + Proof</span>
+                <span>Included</span>
             </div>
             
             <div class="summary-total">
                 <span>Total</span>
-                <span>$94.99</span>
+                <span>$79.99</span>
             </div>
             
             <button id="addToCartBtn" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 24px; padding: 18px;">
-                Add to Cart <span class="btn-icon">→</span>
+                Add to Cart <span class="btn-icon">&rarr;</span>
             </button>
             <p style="text-align: center; font-size: 0.8rem; color: var(--chrome); margin-top: 16px;">
                 Impression kit ships within 24 hours.
@@ -381,22 +383,25 @@
         const color    = document.getElementById('summaryColor').textContent;
         const sport    = document.getElementById('sport').value;
         const hasText  = document.getElementById('customText').value.trim();
-        const name     = `Premium Custom Design — ${color}`;
+        const customText = hasText ? hasText.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : 'no-text';
+        const colorSlug = color.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        const sportSlug = sport.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        const name     = `Premium Custom Design - ${color}`;
 
         Cart.add({
-          id:    'premium-guard',
+          id:    `premium-builder-${colorSlug}-${sportSlug}-${customText}`,
           name,
           price: 79.99,
-          img:   'assets/images/hero-guard.png',
-          meta:  `${sport}${hasText ? ' · "' + hasText + '"' : ''}`
+          img:   'assets/images/relentless-work-teeth.jpg',
+          meta:  `Builder order - ${sport}${hasText ? ' - Text: "' + hasText + '"' : ''}`
         });
 
         // Visual feedback on button
         const btn = document.getElementById('addToCartBtn');
-        btn.textContent = '✓ Added to Cart!';
+        btn.textContent = 'Added to Cart!';
         btn.style.background = 'var(--success)';
         setTimeout(() => {
-          btn.innerHTML = 'Add to Cart <span class="btn-icon">→</span>';
+          btn.innerHTML = 'Add to Cart <span class="btn-icon">&rarr;</span>';
           btn.style.background = '';
         }, 2500);
       });

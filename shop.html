@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shop — RELENTLESS Mouthguards</title>
+  <title>Shop - RELENTLESS Mouthguards</title>
   <meta name="description" content="Order your custom mouthguard impression kit. Choose your tier, design your guard, fight with total confidence.">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -16,10 +16,12 @@
 
   <header class="site-header" id="siteHeader">
     <div class="header-inner">
-      <a href="index.html" class="logo">RELEN<span>TLESS</span></a>
+      <a href="index.html" class="logo" aria-label="RELENTLESS Mouth Guards home">
+        <img src="assets/images/relentless-logo-horizontal.png" alt="RELENTLESS Mouth Guards">
+      </a>
       <nav class="nav-links" id="navLinks">
         <a href="index.html">Home</a>
-        <a href="index.html#how-it-works">How It Works</a>
+        <a href="shop.html#ordering">How It Works</a>
         <a href="shop.html" class="current">Shop</a>
         <a href="builder.html">Design Yours</a>
         <a href="gallery.html">Gallery</a>
@@ -42,20 +44,20 @@
   </header>
 
   <main id="mainContent">
-    <section class="page-banner">
-      <div class="container">
+    <section class="page-banner shop-banner">
+      <div class="container section-wide">
         <p class="section-label">Shop</p>
         <h1>BUILD YOUR PROTECTION</h1>
         <p>Choose the package that matches your level, then move to checkout or the custom builder when you're ready.</p>
         <div class="page-banner-actions">
-          <a href="builder.html" class="btn btn-primary">Open Builder <span class="btn-icon">→</span></a>
+          <a href="builder.html" class="btn btn-primary">Open Builder <span class="btn-icon">&rarr;</span></a>
           <a href="checkout.html" class="btn btn-outline">View Cart</a>
         </div>
       </div>
     </section>
 
-    <section class="section">
-      <div class="container">
+    <section class="section section-spread shop-packages">
+      <div class="container section-wide">
         <div class="section-intro reveal">
           <p class="section-label">Packages</p>
           <h2 class="section-title">START WITH THE RIGHT ORDER TYPE</h2>
@@ -68,7 +70,7 @@
         <div class="shop-grid">
           <article class="shop-card reveal">
             <div class="shop-card-image">
-              <img src="assets/images/gallery-1.png" alt="Standard RELENTLESS custom guard">
+              <img src="assets/images/relentless-work-mafia.jpg" alt="Standard RELENTLESS custom guard">
               <div class="product-badge">Starter</div>
             </div>
             <div class="shop-card-body">
@@ -83,15 +85,15 @@
                 <li>Name or short text personalization</li>
                 <li>Ships in 10 to 14 days after impressions arrive</li>
               </ul>
-              <button class="btn btn-outline btn-block" onclick="addToCart('standard-guard','Standard Custom Guard',39.99,'assets/images/gallery-1.svg')">
-                Add to Cart <span class="btn-icon">→</span>
+              <button class="btn btn-outline btn-block" onclick="addToCart('standard-guard','Standard Custom Guard',39.99,'assets/images/relentless-work-mafia.jpg','Standard package - one-color direction, optional text personalization')">
+                Add to Cart <span class="btn-icon">&rarr;</span>
               </button>
             </div>
           </article>
 
           <article class="shop-card featured reveal">
             <div class="shop-card-image">
-              <img src="assets/images/hero-guard.png" alt="Premium RELENTLESS custom design">
+              <img src="assets/images/relentless-work-beast.jpg" alt="Premium RELENTLESS custom design">
               <div class="product-badge">Premium</div>
             </div>
             <div class="shop-card-body">
@@ -106,15 +108,15 @@
                 <li>Artist proof review before production</li>
                 <li>Premium finish for cleaner presentation</li>
               </ul>
-              <button class="btn btn-primary btn-block" onclick="addToCart('premium-guard','Premium Custom Design',79.99,'assets/images/hero-guard.svg')">
-                Add to Cart <span class="btn-icon">→</span>
+              <button class="btn btn-primary btn-block" onclick="addToCart('premium-guard','Premium Custom Design',79.99,'assets/images/relentless-work-beast.jpg','Premium package - artwork upload support and proof review')">
+                Add to Cart <span class="btn-icon">&rarr;</span>
               </button>
             </div>
           </article>
 
           <article class="shop-card reveal">
             <div class="shop-card-image">
-              <img src="assets/images/gallery-2.png" alt="RELENTLESS team and gym order package">
+              <img src="assets/images/relentless-work-usa-red.jpg" alt="RELENTLESS team and gym order package">
               <div class="product-badge">Teams</div>
             </div>
             <div class="shop-card-body">
@@ -130,7 +132,7 @@
                 <li>Great fit for recurring programs</li>
               </ul>
               <a href="builder.html" class="btn btn-outline btn-outline-soft btn-block">
-                Start a Custom Order <span class="btn-icon">→</span>
+                Start a Custom Order <span class="btn-icon">&rarr;</span>
               </a>
             </div>
           </article>
@@ -138,8 +140,8 @@
       </div>
     </section>
 
-    <section class="section section-dark">
-      <div class="container">
+    <section class="section section-dark section-spread shop-kit">
+      <div class="container section-wide">
         <div class="section-intro reveal">
           <p class="section-label">What's Included</p>
           <h2 class="section-title">YOUR KIT ARRIVES READY TO USE</h2>
@@ -173,28 +175,82 @@
       </div>
     </section>
 
-    <section class="section section-alt">
-      <div class="container">
+    <section class="section section-alt section-spread shop-ordering" id="ordering">
+      <div class="container section-wide">
         <div class="section-intro reveal">
-          <p class="section-label">Why It Works</p>
-          <h2 class="section-title">A SHOPPING FLOW BUILT FOR CONFIDENCE</h2>
+          <p class="section-label">How Ordering Works</p>
+          <h2 class="section-title">FROM PACKAGE TO FINISHED GUARD</h2>
           <p class="section-desc">
-            The goal is to make ordering feel simple: choose a package, preview the next step, and move directly into a more personalized build if needed.
+            Once you choose a package, the process moves through a clear impression, design, and production workflow.
           </p>
         </div>
 
-        <div class="info-grid">
+        <div class="order-flow">
+          <div class="order-step reveal">
+            <span>01</span>
+            <h3>Choose Package</h3>
+            <p>Pick Standard, Premium, or Team based on how much design support and coordination you need.</p>
+          </div>
+          <div class="order-step reveal">
+            <span>02</span>
+            <h3>Get Your Kit</h3>
+            <p>Your impression kit ships first with trays, material, instructions, and a return label.</p>
+          </div>
+          <div class="order-step reveal">
+            <span>03</span>
+            <h3>Send Impressions</h3>
+            <p>Return your impressions so the lab can verify the fit before production starts.</p>
+          </div>
+          <div class="order-step reveal">
+            <span>04</span>
+            <h3>Approve and Receive</h3>
+            <p>Premium orders get proof review, then your finished guard ships after production.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-spread shop-upgrade">
+      <div class="container section-wide">
+        <div class="upgrade-layout">
+          <div class="upgrade-copy reveal">
+            <p class="section-label">Design Upgrade</p>
+            <h2 class="section-title">WANT THE FULL CUSTOM LOOK?</h2>
+            <p class="section-desc">
+              Premium is the best fit when you want dual-color direction, artwork upload support, and a proof before production.
+            </p>
+            <a href="builder.html" class="btn btn-primary">Open Builder <span class="btn-icon">&rarr;</span></a>
+          </div>
+          <div class="upgrade-image reveal">
+            <img src="assets/images/relentless-work-teeth.jpg" alt="Black custom mouthguard with fang artwork">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark section-spread shop-faq">
+      <div class="container section-wide">
+        <div class="section-intro reveal">
+          <p class="section-label">Order Notes</p>
+          <h2 class="section-title">DETAILS BEFORE YOU CHECK OUT</h2>
+        </div>
+
+        <div class="faq-grid">
           <div class="info-card reveal">
-            <h3>Clear Package Tiers</h3>
-            <p>Each order path is defined by fit, design support, and scale so customers know exactly what they are buying.</p>
+            <h3>When does production start?</h3>
+            <p>Production begins after your impressions arrive and are checked for a clean usable fit.</p>
           </div>
           <div class="info-card reveal">
-            <h3>Fast Cart Access</h3>
-            <p>The cart badge follows the customer across the site so they can move between shopping, building, and checkout without losing context.</p>
+            <h3>Do premium orders get a proof?</h3>
+            <p>Yes. Premium custom designs include a proof review before final production starts.</p>
           </div>
           <div class="info-card reveal">
-            <h3>Builder-Ready Upsell</h3>
-            <p>Premium customers can jump into the custom builder immediately when they want more control over the final look.</p>
+            <h3>How long does it take?</h3>
+            <p>Most custom builds ship 10 to 14 days after usable impressions arrive at the lab.</p>
+          </div>
+          <div class="info-card reveal">
+            <h3>Can teams order together?</h3>
+            <p>Yes. Team and gym orders support bulk pricing, matching branding, and athlete-specific layouts.</p>
           </div>
         </div>
       </div>
@@ -205,7 +261,7 @@
         <h2>READY TO ORDER?</h2>
         <p>Choose a package here, or move into the builder if you want to start your design direction before checkout.</p>
         <div class="hero-actions">
-          <a href="builder.html" class="btn btn-primary">Design in Builder <span class="btn-icon">→</span></a>
+          <a href="builder.html" class="btn btn-primary">Design in Builder <span class="btn-icon">&rarr;</span></a>
           <a href="checkout.html" class="btn btn-outline">View Cart</a>
         </div>
       </div>
@@ -216,7 +272,9 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <div class="logo">RELEN<span>TLESS</span></div>
+          <div class="logo logo-static">
+            <img src="assets/images/relentless-logo-full.png" alt="RELENTLESS Mouth Guards">
+          </div>
           <p>Premium custom mouthguards for combat sports, team programs, and athletes who want a better fit with a cleaner finish.</p>
           <div class="email-form">
             <input type="email" placeholder="Enter your email" id="footerEmail" aria-label="Email address">
@@ -263,8 +321,8 @@
   <script src="js/cart.js"></script>
   <script src="js/main.js"></script>
   <script>
-    function addToCart(id, name, price, img) {
-      Cart.add({ id, name, price, img });
+    function addToCart(id, name, price, img, meta) {
+      Cart.add({ id, name, price, img, meta });
     }
   </script>
 </body>

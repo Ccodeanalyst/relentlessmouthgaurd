@@ -1,0 +1,58 @@
+# Project Status
+
+Last updated: May 14, 2026
+
+## Completed
+
+- Replaced text-based site logos with image logo assets across the public pages.
+- Removed the extra logo image from the homepage hero.
+- Expanded the shop page sections so they feel full-width and less compact, matching the homepage spread style.
+- Added a photo background to the shop hero with dark overlays for readable copy.
+- Converted the homepage recent work/design preview into a carousel with arrows, dots, keyboard support, swipe-friendly scrolling, slow autoplay, and pause on hover/focus.
+- Started Phase 2 visual QA:
+  - Fixed mobile homepage hero headline clipping.
+  - Tightened mobile shop hero spacing so packages appear sooner.
+  - Confirmed no browser console warnings or errors during the mobile pass.
+- Installed Playwright and Chromium for viewport-specific screenshot QA.
+- Ran a Playwright smoke test against `shop.html` and saved a screenshot in `projectmanagement/qa/`.
+- Finished Phase 2 visual QA:
+  - Captured desktop, tablet, and mobile Playwright screenshots for the homepage and shop page.
+  - Switched tablet navigation to the hamburger menu before the header gets crowded.
+  - Fixed mobile shop kit detail spacing so the "What's Included" copy stacks cleanly.
+  - Confirmed carousel autoplay advances slowly and pauses on hover.
+  - Confirmed homepage and shop page console checks return no warnings or errors.
+  - Confirmed CTA arrows render correctly after removing encoded arrow artifacts.
+- Reworked the homepage into a leaner sales funnel:
+  - Hero with `Design Your Guard` as the primary CTA.
+  - `See Recent Work` secondary CTA.
+  - Design carousel.
+  - Three value points: Custom Fit, Premium Design, Free Kit Shipping.
+  - Featured Premium Custom Design offer at `$79.99`.
+  - Final CTA banner.
+- Moved heavier buying/detail content to the shop page:
+  - Package comparison.
+  - What is included in the kit.
+  - How ordering works.
+  - Design upgrade / builder CTA.
+  - FAQ and order notes.
+- Finished Phase 3 buying flow QA:
+  - Shop package cart buttons now use current product image paths.
+  - Checkout line items show package/build details.
+  - Builder pricing now matches Premium Custom Design at `$79.99`.
+  - Builder cart items stay distinct by selected color, sport, and custom text.
+  - Checkout cart text is escaped before rendering.
+  - Playwright confirmed shop-to-checkout and builder-to-checkout totals.
+- Updated `How It Works` navigation links to point to `shop.html#ordering`.
+- Verified `js/main.js` with `node --check`.
+
+## Current Site Flow
+
+Homepage:
+Hero -> Design carousel -> Value proof -> Featured premium offer -> CTA.
+
+Shop page:
+Shop hero -> Package comparison -> Kit contents -> Ordering workflow -> Design upgrade -> FAQ/order notes -> CTA.
+
+## Open Follow-Ups
+
+- Review final copy for brand tone and pricing accuracy before launch.

@@ -16,11 +16,13 @@
 
   <header class="site-header" id="siteHeader">
     <div class="header-inner">
-      <a href="index.html" class="logo">RELEN<span>TLESS</span></a>
+      <a href="index.html" class="logo" aria-label="RELENTLESS Mouth Guards home">
+        <img src="assets/images/relentless-logo-horizontal.png" alt="RELENTLESS Mouth Guards">
+      </a>
 
       <nav class="nav-links" id="navLinks">
         <a href="index.html" class="current">Home</a>
-        <a href="#how-it-works">How It Works</a>
+        <a href="#gallery">Designs</a>
         <a href="shop.html">Shop</a>
         <a href="builder.html">Design Yours</a>
         <a href="gallery.html">Gallery</a>
@@ -47,9 +49,14 @@
     <section class="hero" id="hero">
       <div class="hero-bg"></div>
       <div class="hero-particles" id="heroParticles"></div>
-      <img src="assets/images/hero-guard.png" alt="RELENTLESS premium custom mouthguard" class="hero-image">
+      <div class="hero-visual" aria-hidden="true">
+        <img src="assets/images/relentless-work-beast.jpg" alt="" class="hero-visual-img hero-visual-main">
+        <img src="assets/images/relentless-work-teeth.jpg" alt="" class="hero-visual-img hero-visual-accent hero-visual-accent-one">
+        <img src="assets/images/relentless-work-usa-blue.jpg" alt="" class="hero-visual-img hero-visual-accent hero-visual-accent-two">
+      </div>
 
       <div class="hero-content">
+        <div class="hero-copy">
         <div class="hero-badge">
           <span class="dot"></span>
           Custom-fit protection for boxing, MMA, Muay Thai, and team programs
@@ -67,253 +74,114 @@
             Design Your Guard
             <span class="btn-icon">→</span>
           </a>
-          <a href="shop.html" class="btn btn-outline">
-            Shop Packages
+          <a href="#gallery" class="btn btn-outline">
+            See Recent Work
           </a>
         </div>
-
-        <div class="hero-proof">
-          <div class="proof-chip">
-            <strong>Custom Fit</strong>
-            <span>Built from your dental impression for competition-ready retention</span>
-          </div>
-          <div class="proof-chip">
-            <strong>Design Proof</strong>
-            <span>Preview approval on premium orders before production begins</span>
-          </div>
-          <div class="proof-chip">
-            <strong>Fast Turnaround</strong>
-            <span>10–14 days from impression arrival to finished guard</span>
-          </div>
         </div>
       </div>
     </section>
 
-    <section class="section how-it-works" id="how-it-works">
-      <div class="container">
-        <div class="section-intro reveal">
-          <p class="section-label">The Process</p>
-          <h2 class="section-title">FROM IMPRESSION KIT TO FIGHT NIGHT</h2>
-          <p class="section-desc">
-            The RELENTLESS process is designed to feel premium from day one: clear steps, fast kit delivery,
-            proof-backed design, and a finished guard built around your bite.
-          </p>
-        </div>
-
-        <div class="steps-grid">
-          <div class="step-card reveal">
-            <div class="step-number">01</div>
-            <div class="step-icon">Kit</div>
-            <h3>We Ship Your Impression Kit</h3>
-            <p>Everything arrives ready to use, including the return label and simple at-home instructions.</p>
-          </div>
-
-          <div class="step-card reveal">
-            <div class="step-number">02</div>
-            <div class="step-icon">Design</div>
-            <h3>You Choose the Look</h3>
-            <p>Select colors, upload a mark, and leave direction for our artists inside the builder.</p>
-          </div>
-
-          <div class="step-card reveal">
-            <div class="step-number">03</div>
-            <div class="step-icon">Return</div>
-            <h3>Send Impressions Back</h3>
-            <p>Once your impressions arrive, our lab verifies the fit and prepares your custom production file.</p>
-          </div>
-
-          <div class="step-card reveal">
-            <div class="step-number">04</div>
-            <div class="step-icon">Build</div>
-            <h3>Receive Your Finished Guard</h3>
-            <p>Your final guard arrives ready for sparring, training, and competition with a clean premium finish.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section products" id="products">
-      <div class="container">
-        <div class="section-intro reveal">
-          <p class="section-label">Order Options</p>
-          <h2 class="section-title">CHOOSE THE RIGHT BUILD</h2>
-          <p class="section-desc">
-            Start simple, go fully custom, or outfit your full gym. Every option begins with the same reliable impression workflow.
-          </p>
-        </div>
-
-        <div class="products-grid">
-          <article class="product-card reveal">
-            <div class="product-image">
-              <img src="assets/images/gallery-1.png" alt="Standard RELENTLESS mouthguard package">
-              <div class="product-badge">Starter</div>
-            </div>
-            <div class="product-info">
-              <span class="card-kicker">Best entry point</span>
-              <h3>Standard Custom Guard</h3>
-              <div class="price">$39.99 <small>plus free impression kit</small></div>
-              <ul class="detail-list">
-                <li>Custom dental fit for training and competition</li>
-                <li>One base color plus name or short text</li>
-                <li>Great for first-time RELENTLESS orders</li>
-              </ul>
-              <a href="shop.html" class="btn btn-outline btn-outline-soft btn-block">
-                View Package
-                <span class="btn-icon">→</span>
-              </a>
-            </div>
-          </article>
-
-          <article class="product-card featured reveal">
-            <div class="product-image">
-              <img src="assets/images/hero-guard.png" alt="Premium RELENTLESS custom mouthguard">
-              <div class="product-badge">Premium</div>
-            </div>
-            <div class="product-info">
-              <span class="card-kicker">Most popular</span>
-              <h3>Premium Custom Design</h3>
-              <div class="price">$79.99 <small>with design proof</small></div>
-              <ul class="detail-list">
-                <li>Dual-color direction and logo or artwork upload</li>
-                <li>Artist review before final production</li>
-                <li>Premium finish built for standout branding</li>
-              </ul>
-              <a href="builder.html" class="btn btn-primary btn-block">
-                Start in Builder
-                <span class="btn-icon">→</span>
-              </a>
-            </div>
-          </article>
-
-          <article class="product-card reveal">
-            <div class="product-image">
-              <img src="assets/images/gallery-2.png" alt="Bulk team mouthguard program">
-              <div class="product-badge">Teams</div>
-            </div>
-            <div class="product-info">
-              <span class="card-kicker">For gyms and teams</span>
-              <h3>Team and Gym Orders</h3>
-              <div class="price">From $34.99 <small>per guard</small></div>
-              <ul class="detail-list">
-                <li>Matching or athlete-specific designs at scale</li>
-                <li>Bulk pricing for teams of five or more</li>
-                <li>Ideal for gyms, fight teams, and school programs</li>
-              </ul>
-              <a href="shop.html" class="btn btn-outline btn-outline-soft btn-block">
-                Compare Options
-                <span class="btn-icon">→</span>
-              </a>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-dark" id="gallery">
-      <div class="container">
+    <section class="section section-dark work-gallery section-spread" id="gallery">
+      <div class="container section-wide">
         <div class="section-intro reveal">
           <p class="section-label">Recent Work</p>
-          <h2 class="section-title">PRODUCTION LOOKS BUILT TO STAND OUT</h2>
+          <h2 class="section-title">PICK A LOOK THAT HITS HARD</h2>
           <p class="section-desc">
-            A few of the directions athletes and gyms use most often: black-and-red fight branding,
-            championship metallics, patriotic layouts, and bold team colorways.
+            A quick look at real design directions before you build yours.
           </p>
         </div>
 
-        <div class="gallery-grid">
-          <a class="gallery-item reveal" href="gallery.html">
-            <img src="assets/images/hero-guard.png" alt="Black and crimson performance mouthguard">
-            <span class="gallery-caption">Black / Crimson Signature</span>
-          </a>
-          <a class="gallery-item reveal" href="gallery.html">
-            <img src="assets/images/gallery-1.png" alt="Navy, red, and white custom mouthguard">
-            <span class="gallery-caption">Patriot Team Layout</span>
-          </a>
-          <a class="gallery-item reveal" href="gallery.html">
-            <img src="assets/images/gallery-2.png" alt="Gold accented premium mouthguard">
-            <span class="gallery-caption">Championship Gold</span>
-          </a>
-          <a class="gallery-item reveal" href="gallery.html">
-            <img src="assets/images/gallery-3.png" alt="Green and black custom mouthguard">
-            <span class="gallery-caption">Camo Utility Build</span>
-          </a>
+        <div class="design-carousel reveal" data-carousel>
+          <div class="carousel-shell">
+            <button class="carousel-control carousel-control-prev" type="button" aria-label="Previous design" data-carousel-prev>
+              <span aria-hidden="true">&lsaquo;</span>
+            </button>
+
+            <div class="carousel-track" tabindex="0" aria-label="Recent mouthguard designs" data-carousel-track>
+              <a class="carousel-slide" href="gallery.html">
+                <img src="assets/images/relentless-work-beast.jpg" alt="Red custom performance mouthguard">
+                <span class="gallery-caption">Red Fight Build</span>
+              </a>
+              <a class="carousel-slide" href="gallery.html">
+                <img src="assets/images/relentless-work-teeth.jpg" alt="Black custom mouthguard with fang artwork">
+                <span class="gallery-caption">Fang Layout</span>
+              </a>
+              <a class="carousel-slide" href="gallery.html">
+                <img src="assets/images/relentless-work-usa-blue.jpg" alt="Blue and white custom mouthguard with flag artwork">
+                <span class="gallery-caption">Team Blue</span>
+              </a>
+              <a class="carousel-slide" href="gallery.html">
+                <img src="assets/images/relentless-work-yoda.jpg" alt="Green custom mouthguard in black case">
+                <span class="gallery-caption">Green Pop</span>
+              </a>
+              <a class="carousel-slide" href="gallery.html">
+                <img src="assets/images/relentless-work-pink.jpg" alt="Pink custom mouthguard">
+                <span class="gallery-caption">Pink Custom</span>
+              </a>
+              <a class="carousel-slide" href="gallery.html">
+                <img src="assets/images/relentless-work-yellow.jpg" alt="Yellow custom mouthguard">
+                <span class="gallery-caption">Yellow Strike</span>
+              </a>
+            </div>
+
+            <button class="carousel-control carousel-control-next" type="button" aria-label="Next design" data-carousel-next>
+              <span aria-hidden="true">&rsaquo;</span>
+            </button>
+          </div>
+
+          <div class="carousel-dots" aria-label="Choose design slide" data-carousel-dots>
+            <button type="button" class="active" aria-label="Show design 1"></button>
+            <button type="button" aria-label="Show design 2"></button>
+            <button type="button" aria-label="Show design 3"></button>
+            <button type="button" aria-label="Show design 4"></button>
+            <button type="button" aria-label="Show design 5"></button>
+            <button type="button" aria-label="Show design 6"></button>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section testimonials" id="testimonials">
-      <div class="container">
-        <div class="section-intro reveal">
-          <p class="section-label">Athlete Feedback</p>
-          <h2 class="section-title">TRUSTED WHEN FIT AND BREATHING MATTER</h2>
-          <p class="section-desc">
-            The strongest feedback we hear is always the same: easier breathing, better retention,
-            and a final look that feels like serious fight gear instead of generic stock equipment.
-          </p>
-        </div>
-
-        <div class="testimonial-grid">
-          <article class="testimonial-card reveal">
-            <div class="testimonial-stars">★★★★★</div>
-            <p class="testimonial-text">Best fitting guard I've used. It locks in clean, feels compact, and I can talk between rounds without fighting it.</p>
-            <div class="testimonial-author">
-              <div class="testimonial-avatar">MR</div>
-              <div>
-                <div class="testimonial-name">Marcus R.</div>
-                <div class="testimonial-role">Amateur MMA fighter</div>
-              </div>
-            </div>
-          </article>
-
-          <article class="testimonial-card reveal">
-            <div class="testimonial-stars">★★★★★</div>
-            <p class="testimonial-text">The design proof made the whole process feel legit. We sent our gym branding and the finished guard looked exactly on brand.</p>
-            <div class="testimonial-author">
-              <div class="testimonial-avatar">JT</div>
-              <div>
-                <div class="testimonial-name">Jake T.</div>
-                <div class="testimonial-role">Boxing coach</div>
-              </div>
-            </div>
-          </article>
-
-          <article class="testimonial-card reveal">
-            <div class="testimonial-stars">★★★★★</div>
-            <p class="testimonial-text">The kit was straightforward, the turnaround was fast, and the final guard felt like a real upgrade over store-bought gear.</p>
-            <div class="testimonial-author">
-              <div class="testimonial-avatar">SD</div>
-              <div>
-                <div class="testimonial-name">Sarah D.</div>
-                <div class="testimonial-role">Muay Thai competitor</div>
-              </div>
-            </div>
-          </article>
+    <section class="section section-alt value-proof section-spread">
+      <div class="container section-wide">
+        <div class="value-grid">
+          <div class="value-card reveal">
+            <span>01</span>
+            <h3>Custom Fit</h3>
+            <p>Made from your dental impressions for a tighter, cleaner fit than boil-and-bite gear.</p>
+          </div>
+          <div class="value-card reveal">
+            <span>02</span>
+            <h3>Premium Design</h3>
+            <p>Choose colors, upload artwork, and get a proof review on premium custom builds.</p>
+          </div>
+          <div class="value-card reveal">
+            <span>03</span>
+            <h3>Free Kit Shipping</h3>
+            <p>Your impression kit ships first, with a simple return workflow before production starts.</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section section-alt">
-      <div class="container">
-        <div class="section-intro reveal">
-          <p class="section-label">Why RELENTLESS</p>
-          <h2 class="section-title">A PROFESSIONAL ORDER EXPERIENCE</h2>
-          <p class="section-desc">
-            The goal is simple: a custom product that feels dependable, intentional, and premium from the first click through checkout.
-          </p>
-        </div>
-
-        <div class="trust-grid">
-          <div class="trust-card reveal">
-            <h3>Clear Production Workflow</h3>
-            <p>From kit delivery to final production, every stage is designed to be easy to follow and easy to trust.</p>
+    <section class="section featured-offer section-spread" id="start-order">
+      <div class="container section-wide">
+        <div class="featured-offer-layout">
+          <div class="featured-offer-image reveal">
+            <img src="assets/images/relentless-work-beast.jpg" alt="Premium RELENTLESS custom mouthguard">
           </div>
-          <div class="trust-card reveal">
-            <h3>Built Around Performance</h3>
-            <p>Low-profile custom fit, durable materials, and a process made for athletes who train hard and compete often.</p>
-          </div>
-          <div class="trust-card reveal">
-            <h3>Brand-Ready Design Direction</h3>
-            <p>Clean premium styling for individual fighters, coaches, teams, and gyms that want their gear to look intentional.</p>
+          <div class="featured-offer-copy reveal">
+            <p class="section-label">Most Popular</p>
+            <h2 class="section-title">START WITH PREMIUM CUSTOM DESIGN</h2>
+            <p class="section-desc">
+              Built for athletes, coaches, and gyms that want the fit handled right and the design to look intentional.
+            </p>
+            <div class="featured-price">$79.99 <small>with free impression kit shipping</small></div>
+            <a href="builder.html" class="btn btn-primary">
+              Start Your Order
+              <span class="btn-icon">&rarr;</span>
+            </a>
+            <a href="shop.html" class="text-link">Compare all packages</a>
           </div>
         </div>
       </div>
@@ -322,7 +190,7 @@
     <section class="cta-banner" id="cta">
       <div class="container reveal">
         <h2>READY TO BUILD YOURS?</h2>
-        <p>Start with the package that fits your level, then move straight into the builder when you're ready for a fully custom finish.</p>
+        <p>Jump into the builder now or compare package details before you order.</p>
         <div class="hero-actions">
           <a href="builder.html" class="btn btn-primary">
             Start Your Design
@@ -340,7 +208,9 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <div class="logo">RELEN<span>TLESS</span></div>
+          <div class="logo logo-static">
+            <img src="assets/images/relentless-logo-full.png" alt="RELENTLESS Mouth Guards">
+          </div>
           <p>Premium custom mouthguards for combat sports, team programs, and athletes who want a better fit with a cleaner finish.</p>
           <div class="email-form">
             <input type="email" placeholder="Enter your email" id="footerEmail" aria-label="Email address">
