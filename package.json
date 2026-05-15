@@ -4,21 +4,24 @@
   "description": "Static website for RELENTLESS custom combat mouthguards.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "wrangler deploy",
+    "preview": "wrangler dev",
+    "test": "echo \"No automated test suite configured\" && exit 0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Ccodeanalyst/Impactmouthgaurd.git"
+    "url": "git+https://github.com/Ccodeanalyst/relentlessmouthgaurd.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/Ccodeanalyst/Impactmouthgaurd/issues"
+    "url": "https://github.com/Ccodeanalyst/relentlessmouthgaurd/issues"
   },
-  "homepage": "https://github.com/Ccodeanalyst/Impactmouthgaurd#readme",
+  "homepage": "https://github.com/Ccodeanalyst/relentlessmouthgaurd#readme",
   "devDependencies": {
-    "playwright": "^1.60.0"
+    "playwright": "^1.60.0",
+    "wrangler": "^4.91.0"
   }
 }

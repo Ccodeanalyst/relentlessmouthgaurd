@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop - RELENTLESS Mouthguards</title>
+  <meta name="description" content="Order your custom mouthguard impression kit. Choose your tier, design your guard, fight with total confidence.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#mainContent">Skip to content</a>
+
+  <div class="announcement-bar">
+    Shipping and impression kit included. Custom Graphics orders include a design proof before production.
+  </div>
+
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+      <a href="index.html" class="logo" aria-label="RELENTLESS Mouth Guards home">
+        <img src="assets/images/relentless-logo-horizontal.png" alt="RELENTLESS Mouth Guards">
+      </a>
+      <nav class="nav-links" id="navLinks">
+        <a href="index.html">Home</a>
+        <a href="shop.html#ordering">How It Works</a>
+        <a href="shop.html" class="current">Shop</a>
+        <a href="builder.html">Design Yours</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="checkout.html">Checkout</a>
+        <a href="builder.html" class="nav-cta">Start Order</a>
+      </nav>
+      <a href="checkout.html" class="cart-link" aria-label="Cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        <span class="cart-count">0</span>
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle Navigation" aria-expanded="false" aria-controls="navLinks">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="nav-overlay" id="navOverlay"></div>
+  </header>
+
+  <main id="mainContent">
+    <section class="page-banner shop-banner">
+      <div class="container section-wide">
+        <p class="section-label">Shop</p>
+        <h1>BUILD YOUR PROTECTION</h1>
+        <p>Choose the package that matches your level, then move to checkout or the custom builder when you're ready.</p>
+        <div class="page-banner-actions">
+          <a href="builder.html" class="btn btn-primary">Open Builder <span class="btn-icon">&rarr;</span></a>
+          <a href="checkout.html" class="btn btn-outline">View Cart</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-spread shop-packages">
+      <div class="container section-wide">
+        <div class="section-intro reveal">
+          <p class="section-label">Packages</p>
+          <h2 class="section-title">START WITH THE RIGHT ORDER TYPE</h2>
+          <p class="section-desc">
+            Every order includes shipping and the at-home impression kit. Choose the layer, bite level, and design support
+            that fits how you train.
+          </p>
+        </div>
+
+        <div class="shop-grid">
+          <article class="shop-card reveal">
+            <div class="shop-card-image">
+              <img src="assets/images/relentless-work-usa-blue.jpg" alt="Single layer basic RELENTLESS custom guard">
+              <div class="product-badge">Starter</div>
+            </div>
+            <div class="shop-card-body">
+              <span class="card-kicker">Light bite</span>
+              <h3>Single Layer Basic</h3>
+              <p class="desc">A clean single-layer guard for lighter contact, built from your at-home impression kit.</p>
+              <div class="price">$99 <small>includes shipping and kit</small></div>
+              <ul class="shop-features">
+                <li>At-home impression kit shipped first</li>
+                <li>Single-layer build for light bite protection</li>
+                <li>One base color selection</li>
+                <li>Name or short text option</li>
+                <li>Ships in 10 to 14 days after impressions arrive</li>
+              </ul>
+              <button class="btn btn-outline btn-block" onclick="addToCart('single-layer-basic','Single Layer Basic - Light Bite',99,'assets/images/relentless-work-usa-blue.jpg','Single layer light bite - includes shipping and impression kit')">
+                Add to Cart <span class="btn-icon">&rarr;</span>
+              </button>
+            </div>
+          </article>
+
+          <article class="shop-card featured reveal">
+            <div class="shop-card-image">
+              <img src="assets/images/relentless-work-usa-red.jpg" alt="Dual layer basic RELENTLESS custom guard">
+              <div class="product-badge">Heavy Bite</div>
+            </div>
+            <div class="shop-card-body">
+              <span class="card-kicker">Dual layer basic</span>
+              <h3>Dual Layer Basic</h3>
+              <p class="desc">A heavier dual-layer guard for stronger bite protection with a clean basic finish.</p>
+              <div class="price">$119 <small>includes shipping and kit</small></div>
+              <ul class="shop-features">
+                <li>At-home impression kit shipped first</li>
+                <li>Dual-layer build for heavy bite protection</li>
+                <li>One base color selection</li>
+                <li>Name or short text option</li>
+                <li>Includes shipping both ways</li>
+              </ul>
+              <button class="btn btn-primary btn-block" onclick="addToCart('dual-layer-basic','Dual Layer Basic - Heavy Bite',119,'assets/images/relentless-work-usa-red.jpg','Dual layer heavy bite - includes shipping and impression kit')">
+                Add to Cart <span class="btn-icon">&rarr;</span>
+              </button>
+            </div>
+          </article>
+
+          <article class="shop-card reveal">
+            <div class="shop-card-image">
+              <img src="assets/images/relentless-work-teeth.jpg" alt="Dual layer custom graphics RELENTLESS mouthguard">
+              <div class="product-badge">Graphics</div>
+            </div>
+            <div class="shop-card-body">
+              <span class="card-kicker">Custom graphics</span>
+              <h3>Dual Layer Custom Graphics</h3>
+              <p class="desc">Dual-layer protection with logo or artwork upload support and a proof review before production starts.</p>
+              <div class="price">$149 <small>includes shipping and kit</small></div>
+              <ul class="shop-features">
+                <li>Everything included in Dual Layer Basic</li>
+                <li>Logo or artwork upload support</li>
+                <li>Custom graphic layout direction</li>
+                <li>Artist proof review before production</li>
+                <li>Premium finish for cleaner presentation</li>
+              </ul>
+              <button class="btn btn-outline btn-outline-soft btn-block" onclick="addToCart('dual-layer-custom-graphics','Dual Layer Custom Graphics',149,'assets/images/relentless-work-teeth.jpg','Custom graphics package - includes shipping, impression kit, and proof review')">
+                Add to Cart <span class="btn-icon">&rarr;</span>
+              </button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt section-spread">
+      <div class="container section-wide">
+        <div class="featured-offer-layout">
+          <div class="featured-offer-copy reveal">
+            <p class="section-label">Team and Gym Orders</p>
+            <h2 class="section-title">GYM DISCOUNTS AND AFFILIATE PROGRAMS</h2>
+            <p class="section-desc">
+              Coaching a team, running a gym, or interested in becoming a RELENTLESS Mouth Guard affiliate?
+              Reach out for bulk pricing, gym discount options, and affiliate details.
+            </p>
+            <a href="#contact" class="btn btn-primary">Reach Out <span class="btn-icon">&rarr;</span></a>
+          </div>
+          <div class="featured-offer-image reveal">
+            <img src="assets/images/relentless-work-pink.jpg" alt="RELENTLESS custom mouthguard for team and gym programs">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark section-spread shop-kit">
+      <div class="container section-wide">
+        <div class="section-intro reveal">
+          <p class="section-label">What's Included</p>
+          <h2 class="section-title">YOUR KIT ARRIVES READY TO USE</h2>
+          <p class="section-desc">
+            No guesswork. Every impression kit is built to make the at-home step simple, fast, and clean for first-time customers.
+          </p>
+        </div>
+
+        <div class="steps-grid">
+          <div class="step-card reveal">
+            <div class="step-icon">Tray</div>
+            <h3>Impression Trays</h3>
+            <p>Upper and lower trays sized for adult use and ready for a straightforward at-home fitting process.</p>
+          </div>
+          <div class="step-card reveal">
+            <div class="step-icon">Mix</div>
+            <h3>Impression Material</h3>
+            <p>Professional-grade material with a quick-set workflow designed for clean, usable impressions.</p>
+          </div>
+          <div class="step-card reveal">
+            <div class="step-icon">Guide</div>
+            <h3>Step-by-Step Instructions</h3>
+            <p>Simple directions that keep the process moving even if you've never used an impression kit before.</p>
+          </div>
+          <div class="step-card reveal">
+            <div class="step-icon">Return</div>
+            <h3>Prepaid Return Label</h3>
+            <p>Drop the kit back in the mail and the RELENTLESS production team takes it from there.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt section-spread shop-ordering" id="ordering">
+      <div class="container section-wide">
+        <div class="section-intro reveal">
+          <p class="section-label">How Ordering Works</p>
+          <h2 class="section-title">FROM PACKAGE TO FINISHED GUARD</h2>
+          <p class="section-desc">
+            Once you choose a package, the process moves through a clear at-home impression, design, and production workflow.
+          </p>
+        </div>
+
+        <div class="order-flow">
+          <div class="order-step reveal">
+            <span>01</span>
+            <h3>Choose Package</h3>
+            <p>Pick Single Layer Basic, Dual Layer Basic, or Custom Graphics based on your bite level and design needs.</p>
+          </div>
+          <div class="order-step reveal">
+            <span>02</span>
+            <h3>Get Your Kit</h3>
+            <p>Your impression kit ships first with trays, material, instructions, and a return label.</p>
+          </div>
+          <div class="order-step reveal">
+            <span>03</span>
+            <h3>Send Impressions</h3>
+            <p>Return your impressions so the lab can verify the fit before production starts.</p>
+          </div>
+          <div class="order-step reveal">
+            <span>04</span>
+            <h3>Approve and Receive</h3>
+            <p>Custom Graphics orders get proof review, then your finished guard ships after production.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-spread shop-upgrade">
+      <div class="container section-wide">
+        <div class="upgrade-layout">
+          <div class="upgrade-copy reveal">
+            <p class="section-label">Design Upgrade</p>
+            <h2 class="section-title">WANT THE FULL CUSTOM LOOK?</h2>
+            <p class="section-desc">
+              Custom Graphics is the best fit when you want artwork upload support, layout direction, and a proof before production.
+            </p>
+            <a href="builder.html" class="btn btn-primary">Open Builder <span class="btn-icon">&rarr;</span></a>
+          </div>
+          <div class="upgrade-image reveal">
+            <img src="assets/images/relentless-work-teeth.jpg" alt="Black custom mouthguard with fang artwork">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark section-spread shop-faq">
+      <div class="container section-wide">
+        <div class="section-intro reveal">
+          <p class="section-label">Order Notes</p>
+          <h2 class="section-title">DETAILS BEFORE YOU CHECK OUT</h2>
+        </div>
+
+        <div class="faq-grid">
+          <div class="info-card reveal">
+            <h3>When does production start?</h3>
+            <p>Production begins after your impressions arrive and are checked for a clean usable fit.</p>
+          </div>
+          <div class="info-card reveal">
+            <h3>Do Custom Graphics orders get a proof?</h3>
+            <p>Yes. Dual Layer Custom Graphics orders include a proof review before final production starts.</p>
+          </div>
+          <div class="info-card reveal">
+            <h3>How long does it take?</h3>
+            <p>Most custom builds ship 10 to 14 days after usable impressions arrive at the lab.</p>
+          </div>
+          <div class="info-card reveal">
+            <h3>Can teams order together?</h3>
+            <p>Yes. Reach out for gym discounts, bulk pricing, and RELENTLESS Mouth Guard affiliate options.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-banner">
+      <div class="container reveal">
+        <h2>READY TO ORDER?</h2>
+        <p>Choose a package here, or move into the builder if you want to start your design direction before checkout.</p>
+        <div class="hero-actions">
+          <a href="builder.html" class="btn btn-primary">Design in Builder <span class="btn-icon">&rarr;</span></a>
+          <a href="checkout.html" class="btn btn-outline">View Cart</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo logo-static">
+            <img src="assets/images/relentless-logo-full.png" alt="RELENTLESS Mouth Guards">
+          </div>
+          <p>Premium custom mouthguards for combat sports, team programs, and athletes who want a better fit with a cleaner finish.</p>
+          <div class="email-form">
+            <input type="email" placeholder="Enter your email" id="footerEmail" aria-label="Email address">
+            <button class="btn btn-primary">Join List</button>
+          </div>
+          <div class="footer-proof">
+            <span>Custom-fit build</span>
+            <span>Proof-backed graphics orders</span>
+            <span>Free kit shipping</span>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <a href="index.html">Home</a>
+          <a href="shop.html">Shop Packages</a>
+          <a href="builder.html">Custom Builder</a>
+          <a href="gallery.html">Design Gallery</a>
+          <a href="checkout.html">Checkout</a>
+        </div>
+        <div class="footer-col">
+          <h4>Order Notes</h4>
+          <div class="footer-text-list">
+            <span>Impression kit ships first.</span>
+            <span>Most custom builds ship 10 to 14 days after impressions arrive.</span>
+            <span>Custom Graphics orders include a design proof review.</span>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Best For</h4>
+          <div class="footer-text-list">
+            <span>Individual fighters and coaches</span>
+            <span>Team and gym order programs</span>
+            <span>Training, sparring, and competition use</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-disclaimer">Disclaimer: RELENTLESS mouthguards are intended to reduce the risk of oral injury during sports. No mouthguard can prevent all injuries, concussions, or dental trauma. Follow fitting and care instructions before use.</p>
+        <span>&copy; 2026 Relentless Mouth Guards. All rights reserved.</span>
+        <span>Built for a sharper custom-order experience.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    function addToCart(id, name, price, img, meta) {
+      Cart.add({ id, name, price, img, meta });
+    }
+  </script>
+</body>
+</html>
