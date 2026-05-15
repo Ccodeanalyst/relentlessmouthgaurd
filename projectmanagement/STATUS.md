@@ -52,6 +52,11 @@ Last updated: May 14, 2026
   - Added team/gym discount and affiliate outreach copy.
   - Added bottom disclaimer copy to the main public footers.
   - Fixed homepage carousel autoplay so it no longer scrolls the page back to the gallery during rotation.
+- Simplified the main navigation:
+  - Main nav now links only to top-level pages: Home, Shop, Design Yours, Gallery, and Contact.
+  - Removed section links and the text Checkout link from the main nav.
+  - Kept checkout access as the cart icon.
+  - Added a dedicated Contact page for order questions, gym discounts, and affiliate inquiries.
 - Updated `How It Works` navigation links to point to `shop.html#ordering`.
 - Verified `js/main.js` with `node --check`.
 

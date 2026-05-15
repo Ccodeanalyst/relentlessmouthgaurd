@@ -71,6 +71,9 @@ Status: In progress
 - Added team/gym outreach copy for discounts and affiliate program interest.
 - Added a bottom mouthguard safety disclaimer to the main public footers.
 - Fixed the homepage carousel autoplay so it no longer pulls the page back to the gallery while rotating.
+- Added a dedicated Contact page for order questions, gym discounts, and affiliate inquiries.
+- Simplified the main navigation so it only points to top-level pages.
+- Kept checkout out of the main nav and available through the cart icon.
 
 ## Phase 5: Launch Readiness
 
