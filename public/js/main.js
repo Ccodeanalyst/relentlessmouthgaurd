@@ -3,6 +3,29 @@
    ============================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // --- Homepage intro reveal ---
+  const intro = document.getElementById('siteIntro');
+  const introSkip = document.getElementById('introSkip');
+  if (intro) {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const hideIntro = () => {
+      intro.classList.add('is-hidden');
+      document.body.classList.remove('intro-active');
+      window.setTimeout(() => intro.remove(), 700);
+    };
+
+    if (reduceMotion) {
+      hideIntro();
+    } else {
+      document.body.classList.add('intro-active');
+      const introTimer = window.setTimeout(hideIntro, 2600);
+      introSkip?.addEventListener('click', () => {
+        window.clearTimeout(introTimer);
+        hideIntro();
+      });
+    }
+  }
+
   // --- Header scroll effect ---
   const header = document.getElementById('siteHeader');
   if (header) {

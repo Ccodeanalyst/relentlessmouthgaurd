@@ -57,6 +57,16 @@ Last updated: May 14, 2026
   - Removed section links and the text Checkout link from the main nav.
   - Kept checkout access as the cart icon.
   - Added a dedicated Contact page for order questions, gym discounts, and affiliate inquiries.
+- Added legal/safety content:
+  - Created a Terms & Safety Disclaimer page.
+  - Clarified that RELENTLESS provides sports mouthguards for contact sports and is not a dental or medical provider.
+  - Added non-treatment language for night guards, bruxism, TMJ/TMD, sleep apnea, retainers, orthodontic appliances, and similar dental/medical uses.
+  - Added footer links to the disclaimer page.
+- Added homepage intro prototype:
+  - Full-screen cinematic logo reveal inspired by movie-studio intros.
+  - Skippable intro button.
+  - Reduced-motion fallback.
+  - Local Playwright screenshots saved in `projectmanagement/qa/`.
 - Updated `How It Works` navigation links to point to `shop.html#ordering`.
 - Verified `js/main.js` with `node --check`.
 

@@ -74,6 +74,9 @@ Status: In progress
 - Added a dedicated Contact page for order questions, gym discounts, and affiliate inquiries.
 - Simplified the main navigation so it only points to top-level pages.
 - Kept checkout out of the main nav and available through the cart icon.
+- Added a Terms & Safety Disclaimer page for sports-mouthguard use, non-dental-provider language, injury limitations, and fit/care guidance.
+- Added footer links to the Terms & Safety Disclaimer page.
+- Added a homepage cinematic logo intro prototype with a skip control and reduced-motion fallback.
 
 ## Phase 5: Launch Readiness
 
