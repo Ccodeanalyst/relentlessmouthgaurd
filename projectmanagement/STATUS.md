@@ -27,7 +27,7 @@ Last updated: May 16, 2026
   - `See Recent Work` secondary CTA.
   - Design carousel.
   - Three value points: Custom Fit, Premium Design, Free Kit Shipping.
-  - Featured Premium Custom Design offer at `$79.99`.
+- Featured custom design offer before the Phase 4 pricing update.
   - Final CTA banner.
 - Moved heavier buying/detail content to the shop page:
   - Package comparison.
@@ -38,7 +38,7 @@ Last updated: May 16, 2026
 - Finished Phase 3 buying flow QA:
   - Shop package cart buttons now use current product image paths.
   - Checkout line items show package/build details.
-  - Builder pricing matched the previous Premium Custom Design package before the Phase 4 pricing update.
+- Builder pricing matched the previous custom design package before the Phase 4 pricing update.
   - Builder cart items stay distinct by selected color, sport, and custom text.
   - Checkout cart text is escaped before rendering.
   - Playwright confirmed shop-to-checkout and builder-to-checkout totals.
@@ -47,7 +47,7 @@ Last updated: May 16, 2026
   - Updated builder pricing to `$149` for Dual Layer Custom Graphics.
   - Removed dental-impression wording from key sales pages.
   - Removed dual-color package language.
-  - Removed the Boner Garage image from homepage/top-photo usage.
+- Removed outdated non-product imagery from homepage/top-photo usage.
   - Replaced the gallery's older AI-style images with current product photos.
   - Added team/gym discount and affiliate outreach copy.
   - Added bottom disclaimer copy to the main public footers.
@@ -70,7 +70,7 @@ Last updated: May 16, 2026
 - Synced local `main` with GitHub before starting the May 16 update pass.
 - Completed the latest content/product cleanup:
   - Changed the homepage hero statement to "Fit as good as they look."
-  - Confirmed no `Boner Garage`, `dental impression`, old `Standard Custom Guard`, old `Premium Custom Design`, or old `$39.99` / `$79.99` pricing remains in source pages.
+  - Confirmed no outdated business names, dental-impression wording, old product labels, or old pricing remains in source pages.
   - Renamed public product options to Base Guard, Dual Layer Guard, and Full Custom Graphics Guard.
   - Added clear pricing language for `$99`, `$119`, and `$149` with shipping and at-home impression kit included.
   - Added available color options and labeled color combination examples on the shop page.

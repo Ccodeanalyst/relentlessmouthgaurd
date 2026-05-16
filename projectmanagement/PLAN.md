@@ -45,7 +45,7 @@ Status: Complete
 ## Phase 3 Findings
 
 - Updated shop package buttons to add the same product images shown on the page.
-- Aligned builder pricing with the Premium package at `$79.99`.
+- Aligned builder pricing with the previous premium package before the Phase 4 pricing update.
 - Builder orders now create distinct cart lines by color, sport, and custom text instead of merging into the generic Premium item.
 - Checkout now shows product detail notes in each cart line.
 - Checkout cart text is escaped before rendering.
@@ -71,7 +71,7 @@ Status: In progress
 - Removed dental-impression phrasing from the homepage, shop page, and gallery copy.
 - Removed dual-color language from the premium/custom graphics package.
 - Removed the older AI-style gallery image paths and refreshed the gallery with current product photos.
-- Removed the Boner Garage image from the homepage/top-photo flow.
+- Removed outdated non-product imagery from the homepage/top-photo flow.
 - Added team/gym outreach copy for discounts and affiliate program interest.
 - Added rush order note as an estimated `$30` option depending on shipping and production timing.
 - Added promo codes for FightEvo, teamSrisuk50, SwaycityMT, and RMGSponsor81.
