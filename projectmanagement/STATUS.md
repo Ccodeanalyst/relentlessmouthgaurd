@@ -80,6 +80,7 @@ Last updated: May 16, 2026
   - Added promo codes for FightEvo, teamSrisuk50, SwaycityMT, and RMGSponsor81.
   - Updated gallery helper copy to "Current design examples. More custom builds will be added soon."
   - Tightened carousel behavior so homepage autoplay stops when the carousel is out of view.
+- Refreshed the homepage carousel to use the full real product photo set, including Mafia Layout and Green Pop instead of only the previous six slides.
 - Updated `How It Works` navigation links to point to `shop.html#ordering`.
 - Verified `js/main.js` with `node --check`.
 
