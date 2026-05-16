@@ -96,3 +96,6 @@ Shop hero -> Package comparison -> Kit contents -> Ordering workflow -> Design u
 
 - Confirm whether the rush order add-on should be active in checkout or remain a contact-before-order note.
 - Reconfirm pricing if it changes tomorrow morning.
+- Add any new real product photos when the final photo folder is available.
+- Start Phase 5 next: final launch QA across all public pages.
+- After Phase 5, move into Cloudflare/domain/analytics setup, then real checkout, database, and admin dashboard phases.

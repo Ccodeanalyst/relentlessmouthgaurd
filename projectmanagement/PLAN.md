@@ -94,3 +94,72 @@ Status: Planned
 - Check images load correctly from `assets/images`.
 - Check mobile navigation and cart badge behavior.
 - Prepare a final completed-work summary in `projectmanagement/STATUS.md`.
+
+## Phase 5 Checklist
+
+- Final visual QA on Home, Shop, Builder, Gallery, Contact, Checkout, and Terms pages.
+- Confirm all CTAs lead to the intended next step.
+- Confirm promo codes apply correctly in checkout.
+- Confirm cart add/remove behavior works across pages.
+- Confirm all active product images are real product photos.
+- Confirm homepage intro feels polished and is not too slow for returning visitors.
+- Reconfirm final pricing, shipping, and rush order language before public launch.
+- Run Cloudflare dry-run deploy before each push.
+
+## Phase 6: Deployment, Domain, and Analytics
+
+Status: Planned
+
+- Confirm Cloudflare deploy command uses `npx wrangler deploy`.
+- Confirm Cloudflare deploy reads from `public/` only.
+- Connect the production domain when ready.
+- Add redirects if any old URLs need to point to the new pages.
+- Add basic analytics so visits, CTA clicks, and checkout starts can be measured.
+- Add conversion events for `Design Your Guard`, `Add to Cart`, promo apply, and checkout start.
+- Confirm sitemap, metadata, favicon, and social preview card.
+
+## Phase 7: Checkout and Payments
+
+Status: Planned
+
+- Replace demo checkout behavior with real payment processing.
+- Choose payment provider flow, likely Stripe Checkout or embedded Stripe Elements.
+- Decide whether rush order becomes a selectable checkout add-on.
+- Decide whether team/gym orders stay as contact requests or get their own quote form.
+- Send order confirmation emails to the customer and business.
+- Add clearer order status language: kit shipped, impressions received, proof sent, production, shipped.
+- Make sure discount codes are handled server-side before taking real payments.
+
+## Phase 8: Orders Database and Admin Dashboard
+
+Status: Planned
+
+- Move orders out of browser `localStorage` and into a real database.
+- Recommended Cloudflare path: Workers + D1 for orders, with R2 later if file uploads are needed.
+- Add admin login before exposing order data.
+- Build admin order list with filters by status, product type, promo code, and date.
+- Add order detail view with customer info, selected color, sport, design notes, rush flag, and uploaded art when available.
+- Add status updates and internal notes for production tracking.
+- Add export options for CSV and email list management.
+
+## Phase 9: Design Builder Upgrade
+
+Status: Planned
+
+- Add clearer product selection inside the builder: Base Guard, Dual Layer Guard, Full Custom Graphics Guard.
+- Add color combo selection with labels under color circles.
+- Add artwork upload flow for logos or reference images.
+- Add optional rush order toggle if approved.
+- Add team/gym inquiry path from the builder.
+- Improve preview behavior so selected colors and notes feel more connected to the final order.
+
+## Phase 10: Content, SEO, and Growth
+
+Status: Planned
+
+- Add more real product photos as they come in.
+- Add team/gym landing content when partnerships are ready.
+- Add contact-sport specific copy for MMA, boxing, Muay Thai, football, BJJ, and other sports.
+- Add FAQ content for shipping time, impression kit process, proof review, fit concerns, and care instructions.
+- Review Terms & Safety Disclaimer with a qualified professional before launch.
+- Build promo campaign tracking for gyms, affiliates, and sponsored athletes.
