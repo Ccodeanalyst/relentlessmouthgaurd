@@ -1469,7 +1469,7 @@ body.intro-active {
 /* ============================================
    CART TOAST
    ============================================ */
-.clinch-toast {
+.relentless-toast {
   position: fixed;
   bottom: 32px;
   right: 32px;
@@ -1492,7 +1492,7 @@ body.intro-active {
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
 }
 
-.clinch-toast.show { transform: translateY(0); opacity: 1; }
+.relentless-toast.show { transform: translateY(0); opacity: 1; }
 
 .toast-check {
   width: 22px;
@@ -3793,6 +3793,85 @@ body {
   padding: clamp(28px, 2.6vw, 44px);
 }
 
+.shop-colors {
+  background: var(--obsidian);
+}
+
+.color-swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(74px, 1fr));
+  gap: 16px;
+  margin-top: 42px;
+}
+
+.color-swatch {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  color: var(--platinum);
+  font-family: var(--font-accent);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.color-swatch span,
+.combo-item span {
+  display: block;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 14px 24px rgba(0, 0, 0, 0.35);
+}
+
+.color-swatch .swatch-clear {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.28)),
+    repeating-linear-gradient(45deg, #d9d9d9 0 7px, #f8f8f8 7px 14px);
+}
+
+.color-combo-panel {
+  margin-top: 46px;
+  padding-top: 36px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.color-combo-panel h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw, 2.6rem);
+  letter-spacing: 1px;
+  margin-bottom: 22px;
+}
+
+.combo-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
+  gap: 18px;
+}
+
+.combo-item {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  color: var(--platinum);
+  font-family: var(--font-accent);
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.combo-item div {
+  display: flex;
+  gap: 10px;
+}
+
 .shop-kit {
   padding: 140px 0;
 }
@@ -3994,6 +4073,23 @@ body {
 
   .cta-banner .hero-actions {
     align-items: flex-start;
+  }
+}
+
+@media (max-width: 900px) {
+  .color-swatch-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .combo-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 540px) {
+  .color-swatch-grid,
+  .combo-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

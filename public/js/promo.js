@@ -11,6 +11,10 @@ const SEED_PROMOS = {
   'FIGHTCLUB501': { discount: 20, type: 'pct', maxUses:    1, uses: 0, expiry: '2027-06-30', campaign: 'Fight Club Crate',  created: '2026-01-01' },
   'FC15OFF':      { discount: 15, type: 'pct', maxUses:    1, uses: 0, expiry: '2027-06-30', campaign: 'Fight Club Crate',  created: '2026-01-01' },
   'IM1120':       { discount: 20, type: 'pct', maxUses:    1, uses: 0, expiry: '2027-06-30', campaign: 'Fight Club Crate',  created: '2026-01-01' },
+  'FIGHTEVO':     { discount: 15, type: 'pct', maxUses: 9999, uses: 0, expiry: '2028-12-31', campaign: 'FightEvo',          created: '2026-05-16' },
+  'TEAMSRISUK50': { discount: 50, type: 'pct', maxUses: 9999, uses: 0, expiry: '2028-12-31', campaign: 'Team Srisuk',       created: '2026-05-16' },
+  'SWAYCITYMT':   { discount: 30, type: 'pct', maxUses: 9999, uses: 0, expiry: '2028-12-31', campaign: 'Sway City Muay Thai', created: '2026-05-16' },
+  'RMGSPONSOR81': { discount: 50, type: 'pct', maxUses: 9999, uses: 0, expiry: '2028-12-31', campaign: 'RMG Sponsor',       created: '2026-05-16' },
 };
 
 const Promo = {

@@ -103,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const autoplayDelay = 6500;
     let activeIndex = 0;
     let autoplayTimer;
+    let carouselInView = true;
 
     const setActiveDot = index => {
       activeIndex = index;
@@ -126,6 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const startAutoplay = () => {
+      if (!carouselInView) return;
       stopAutoplay();
       autoplayTimer = window.setInterval(() => {
         scrollToSlide(activeIndex + 1);
@@ -180,6 +182,19 @@ document.addEventListener('DOMContentLoaded', () => {
         startAutoplay();
       }
     });
+
+    const carouselVisibility = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        carouselInView = entry.isIntersecting;
+        if (carouselInView) {
+          startAutoplay();
+        } else {
+          stopAutoplay();
+        }
+      });
+    }, { threshold: 0.25 });
+
+    carouselVisibility.observe(carousel);
 
     const slideObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => {

@@ -1,5 +1,5 @@
 /* ============================================
-   CLINCH — Cart System (localStorage)
+   RELENTLESS - Cart System (localStorage)
    ============================================ */
 
 const CART_KEY = 'relentless_cart';
@@ -57,9 +57,9 @@ const Cart = {
   },
 
   toast(msg) {
-    document.querySelector('.clinch-toast')?.remove();
+    document.querySelector('.relentless-toast')?.remove();
     const t = document.createElement('div');
-    t.className = 'clinch-toast';
+    t.className = 'relentless-toast';
     t.innerHTML = `<span class="toast-check">&check;</span>${msg}`;
     document.body.appendChild(t);
     requestAnimationFrame(() => t.classList.add('show'));

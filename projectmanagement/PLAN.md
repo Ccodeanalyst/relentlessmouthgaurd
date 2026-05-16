@@ -1,6 +1,6 @@
 # Project Plan
 
-Last updated: May 14, 2026
+Last updated: May 16, 2026
 
 ## Phase 1: Funnel Structure
 
@@ -64,19 +64,27 @@ Status: In progress
 
 - Updated public pricing to `$99` Single Layer Basic Light Bite, `$119` Dual Layer Basic Heavy Bite, and `$149` Dual Layer Custom Graphics.
 - Updated package copy to say shipping and the at-home impression kit are included.
+- Renamed the public product option labels to Base Guard, Dual Layer Guard, and Full Custom Graphics Guard.
+- Added available colors: Black, White, Clear, Blue, Red, Green, Yellow, and Pink.
+- Added labeled color combination examples, including Red-Green.
+- Noted purple and orange as coming soon.
 - Removed dental-impression phrasing from the homepage, shop page, and gallery copy.
 - Removed dual-color language from the premium/custom graphics package.
 - Removed the older AI-style gallery image paths and refreshed the gallery with current product photos.
 - Removed the Boner Garage image from the homepage/top-photo flow.
 - Added team/gym outreach copy for discounts and affiliate program interest.
+- Added rush order note as an estimated `$30` option depending on shipping and production timing.
+- Added promo codes for FightEvo, teamSrisuk50, SwaycityMT, and RMGSponsor81.
 - Added a bottom mouthguard safety disclaimer to the main public footers.
 - Fixed the homepage carousel autoplay so it no longer pulls the page back to the gallery while rotating.
+- Updated carousel behavior so autoplay pauses when the gallery carousel is out of view.
 - Added a dedicated Contact page for order questions, gym discounts, and affiliate inquiries.
 - Simplified the main navigation so it only points to top-level pages.
 - Kept checkout out of the main nav and available through the cart icon.
 - Added a Terms & Safety Disclaimer page for sports-mouthguard use, non-dental-provider language, injury limitations, and fit/care guidance.
 - Added footer links to the Terms & Safety Disclaimer page.
 - Added a homepage cinematic logo intro prototype with a skip control and reduced-motion fallback.
+- Changed the homepage hero phrase to "Fit as good as they look."
 
 ## Phase 5: Launch Readiness
 

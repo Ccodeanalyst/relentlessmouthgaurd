@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: May 14, 2026
+Last updated: May 16, 2026
 
 ## Completed
 
@@ -67,6 +67,19 @@ Last updated: May 14, 2026
   - Skippable intro button.
   - Reduced-motion fallback.
   - Local Playwright screenshots saved in `projectmanagement/qa/`.
+- Synced local `main` with GitHub before starting the May 16 update pass.
+- Completed the latest content/product cleanup:
+  - Changed the homepage hero statement to "Fit as good as they look."
+  - Confirmed no `Boner Garage`, `dental impression`, old `Standard Custom Guard`, old `Premium Custom Design`, or old `$39.99` / `$79.99` pricing remains in source pages.
+  - Renamed public product options to Base Guard, Dual Layer Guard, and Full Custom Graphics Guard.
+  - Added clear pricing language for `$99`, `$119`, and `$149` with shipping and at-home impression kit included.
+  - Added available color options and labeled color combination examples on the shop page.
+  - Updated builder color choices to Black, White, Clear, Blue, Red, Green, Yellow, and Pink, with purple and orange noted as coming soon.
+  - Added team, gym, and affiliate order copy.
+  - Added a rush order note as an estimated `$30` option depending on shipping and production timing.
+  - Added promo codes for FightEvo, teamSrisuk50, SwaycityMT, and RMGSponsor81.
+  - Updated gallery helper copy to "Current design examples. More custom builds will be added soon."
+  - Tightened carousel behavior so homepage autoplay stops when the carousel is out of view.
 - Updated `How It Works` navigation links to point to `shop.html#ordering`.
 - Verified `js/main.js` with `node --check`.
 
@@ -80,4 +93,5 @@ Shop hero -> Package comparison -> Kit contents -> Ordering workflow -> Design u
 
 ## Open Follow-Ups
 
-- Review final copy for brand tone and pricing accuracy before launch.
+- Confirm whether the rush order add-on should be active in checkout or remain a contact-before-order note.
+- Reconfirm pricing if it changes tomorrow morning.
