@@ -1,6 +1,6 @@
 # RELENTLESS Mouth Guards
 
-Static website for RELENTLESS custom combat mouthguards.
+Static website for RELENTLESS custom contact sports mouthguards.
 
 ## Project Notes
 
@@ -13,4 +13,3 @@ Update that file whenever major design, content, or functionality work is comple
 ## Current Focus
 
 The homepage is being shaped as the main conversion page, while the shop page carries package details, ordering workflow, upgrade prompts, and FAQ/order notes.
-

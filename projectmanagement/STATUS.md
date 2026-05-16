@@ -109,3 +109,4 @@ Shop hero -> Package comparison -> Kit contents -> Ordering workflow -> Design u
 - Started Phase 9 builder upgrade:
   - Rebuilt the builder around package selection, base color, color combo, artwork reference, sport/details, rush request, and team/gym inquiry path.
   - Builder cart metadata now carries package, sport, color, combo, artwork filename, rush flag, text, and notes into checkout.
+- Updated broad brand copy from combat-sports-only language to contact sports, including the homepage hero badge.
