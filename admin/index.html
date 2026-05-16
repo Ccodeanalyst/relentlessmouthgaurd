@@ -461,9 +461,13 @@
           <td>
             <select onchange="updateOrderStatus('${o.id}', this.value)" style="background:var(--steel);border:1px solid var(--glass-border);color:var(--white);padding:4px 8px;border-radius:4px;font-size:0.8rem;cursor:pointer;">
               <option ${o.status==='pending'?'selected':''}>pending</option>
+              <option ${o.status==='kit-shipped'?'selected':''}>kit-shipped</option>
+              <option ${o.status==='impressions-received'?'selected':''}>impressions-received</option>
+              <option ${o.status==='proof-sent'?'selected':''}>proof-sent</option>
               <option ${o.status==='in-production'?'selected':''}>in-production</option>
               <option ${o.status==='shipped'?'selected':''}>shipped</option>
               <option ${o.status==='delivered'?'selected':''}>delivered</option>
+              <option ${o.status==='cancelled'?'selected':''}>cancelled</option>
             </select>
           </td>
         </tr>

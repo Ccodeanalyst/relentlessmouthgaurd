@@ -102,3 +102,10 @@ Shop hero -> Package comparison -> Kit contents -> Ordering workflow -> Design u
 - Added primary contact/order email: relentlessmouthgaurds@gmail.com.
 - Changed checkout to a temporary order-request email flow so the site does not show fake Stripe/card fields before real payment processing is connected.
 - Added `projectmanagement/PAYMENTS.md` with the recommended Stripe Checkout + Cloudflare Workers payment plan.
+- Started Phase 8 backend/admin foundation:
+  - Added future D1 schema in `database/schema.sql`.
+  - Added non-deployed Workers API foundation in `workers/orders-api.mjs`.
+  - Expanded local admin order statuses for kit shipped, impressions received, proof sent, production, shipped, delivered, and cancelled.
+- Started Phase 9 builder upgrade:
+  - Rebuilt the builder around package selection, base color, color combo, artwork reference, sport/details, rush request, and team/gym inquiry path.
+  - Builder cart metadata now carries package, sport, color, combo, artwork filename, rush flag, text, and notes into checkout.

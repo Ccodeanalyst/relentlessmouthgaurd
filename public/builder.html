@@ -6,72 +6,59 @@
   <title>Design Your Guard - RELENTLESS</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
-    /* Builder Specific Styles */
     .builder-container {
-      padding-top: 120px;
-      padding-bottom: 80px;
+      padding-top: 140px;
+      padding-bottom: 90px;
       display: grid;
-      grid-template-columns: 1fr 400px;
+      grid-template-columns: minmax(0, 1fr) 420px;
       gap: 48px;
       align-items: start;
-    }
-
-    .builder-preview {
-      position: sticky;
-      top: 120px;
-      background: var(--carbon);
-      border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      padding: 40px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 400px;
-    }
-
-    .preview-image {
-      width: 100%;
-      max-width: 400px;
-      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
-      transition: filter 0.3s;
-      position: relative;
-    }
-    
-    .preview-image img {
-        width: 100%;
-        height: auto;
-        display: block;
     }
 
     .builder-steps {
       display: flex;
       flex-direction: column;
-      gap: 32px;
+      gap: 28px;
     }
 
-    .builder-step {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: var(--glass-blur);
-      border-radius: 12px;
-      padding: 32px;
+    .builder-step,
+    .builder-preview {
+      background: var(--steel);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 30px;
+    }
+
+    .builder-preview {
+      position: sticky;
+      top: 116px;
+    }
+
+    .preview-image {
+      width: 100%;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+      transition: filter 0.25s ease;
+    }
+
+    .preview-image img {
+      width: 100%;
+      display: block;
+      border-radius: 6px;
     }
 
     .step-header {
       display: flex;
       align-items: center;
-      gap: 16px;
-      margin-bottom: 24px;
+      gap: 14px;
+      margin-bottom: 22px;
     }
 
     .step-badge {
-      background: var(--crimson);
-      color: var(--white);
       width: 32px;
       height: 32px;
       border-radius: 50%;
+      background: var(--crimson);
+      color: var(--white);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -81,11 +68,67 @@
 
     .step-header h3 {
       font-family: var(--font-display);
-      font-size: 1.8rem;
-      letter-spacing: 2px;
+      font-size: 1.7rem;
+      letter-spacing: 1px;
     }
 
-    /* Color Selection */
+    .package-grid,
+    .combo-grid-builder {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .package-option,
+    .combo-option {
+      min-height: 138px;
+      padding: 18px;
+      border: 1px solid var(--glass-border);
+      background: var(--carbon);
+      border-radius: 8px;
+      color: var(--platinum);
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s, background 0.2s;
+    }
+
+    .package-option:hover,
+    .combo-option:hover,
+    .package-option.selected,
+    .combo-option.selected {
+      border-color: var(--crimson);
+      background: rgba(193, 18, 31, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .package-option strong,
+    .combo-option strong {
+      display: block;
+      color: var(--white);
+      font-family: var(--font-accent);
+      font-size: 0.86rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .package-option .package-price {
+      display: block;
+      color: var(--crimson);
+      font-family: var(--font-display);
+      font-size: 2rem;
+      margin-bottom: 6px;
+    }
+
+    .package-option small,
+    .combo-option small {
+      display: block;
+      color: var(--chrome);
+      font-size: 0.8rem;
+      line-height: 1.45;
+    }
+
     .color-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
@@ -115,41 +158,52 @@
       position: relative;
     }
 
-    .color-option.clear-swatch {
-      background:
-        linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.25)),
-        repeating-linear-gradient(45deg, #d9d9d9 0 7px, #f8f8f8 7px 14px);
-    }
-
-    .color-option:hover {
-      transform: scale(1.1);
-    }
-
+    .color-option:hover,
     .color-option.selected {
+      transform: scale(1.08);
       border-color: var(--white);
-      transform: scale(1.1);
     }
 
     .color-option.selected::after {
-      content: '✓';
+      content: "OK";
       position: absolute;
       inset: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--white);
-      font-weight: bold;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      font-weight: 800;
+      font-size: 0.7rem;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.65);
     }
 
-    /* File Upload */
+    .clear-swatch {
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.25)),
+        repeating-linear-gradient(45deg, #d9d9d9 0 7px, #f8f8f8 7px 14px);
+    }
+
+    .combo-dots {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .combo-dots span {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.16);
+      display: block;
+    }
+
     .upload-area {
       border: 2px dashed var(--glass-border);
       border-radius: 8px;
-      padding: 40px 20px;
+      padding: 34px 20px;
       text-align: center;
       cursor: pointer;
-      transition: border-color 0.3s, background 0.3s;
+      transition: border-color 0.25s, background 0.25s;
     }
 
     .upload-area:hover {
@@ -157,13 +211,18 @@
       background: rgba(193, 18, 31, 0.05);
     }
 
-    .upload-area p {
-      color: var(--chrome);
-      font-size: 0.9rem;
-      margin-top: 12px;
+    .upload-area.has-file {
+      border-color: var(--success);
+      background: rgba(34, 197, 94, 0.06);
     }
 
-    /* Form Inputs */
+    .upload-area p,
+    .builder-note {
+      color: var(--chrome);
+      font-size: 0.86rem;
+      line-height: 1.65;
+    }
+
     .form-group {
       margin-top: 20px;
     }
@@ -171,7 +230,10 @@
     .form-group label {
       display: block;
       font-family: var(--font-accent);
-      font-weight: 600;
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
       margin-bottom: 8px;
       color: var(--platinum);
     }
@@ -179,71 +241,81 @@
     .form-control {
       width: 100%;
       padding: 12px 16px;
-      background: var(--steel);
+      background: var(--carbon);
       border: 1px solid var(--glass-border);
       border-radius: 4px;
       color: var(--white);
       font-family: var(--font-body);
-      transition: border-color 0.3s;
-    }
-
-    .form-control:focus {
-      outline: none;
-      border-color: var(--crimson);
     }
 
     textarea.form-control {
       resize: vertical;
-      min-height: 100px;
+      min-height: 110px;
     }
-    
+
+    .builder-check {
+      margin-top: 20px;
+      padding: 18px;
+      background: var(--carbon);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+    }
+
     .builder-summary {
-        margin-top: 24px;
-        padding-top: 24px;
-        border-top: 1px solid var(--glass-border);
-        width: 100%;
-        text-align: left;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--glass-border);
     }
-    
+
     .builder-summary h4 {
-        font-family: var(--font-accent);
-        font-size: 1.2rem;
-        margin-bottom: 16px;
-        color: var(--white);
+      font-family: var(--font-accent);
+      font-size: 1.15rem;
+      margin-bottom: 16px;
+      color: var(--white);
     }
-    
+
     .summary-row {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 8px;
-        font-size: 0.9rem;
-        color: var(--chrome);
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+      color: var(--chrome);
     }
-    
+
+    .summary-row span:last-child {
+      color: var(--platinum);
+      text-align: right;
+    }
+
     .summary-total {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 16px;
-        padding-top: 16px;
-        border-top: 1px solid rgba(255,255,255,0.1);
-        font-family: var(--font-display);
-        font-size: 2rem;
-        color: var(--crimson);
+      display: flex;
+      justify-content: space-between;
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--crimson);
     }
 
     @media (max-width: 992px) {
       .builder-container {
         grid-template-columns: 1fr;
       }
+
       .builder-preview {
         position: static;
+      }
+
+      .package-grid,
+      .combo-grid-builder {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
 <body>
-
-  <!-- ═══════ HEADER ═══════ -->
   <header class="site-header" id="siteHeader">
     <div class="header-inner">
       <a href="index.html" class="logo" aria-label="RELENTLESS Mouth Guards home">
@@ -269,56 +341,91 @@
   </header>
 
   <main class="container builder-container">
-    
-    <!-- Left: Form Steps -->
     <div class="builder-steps">
       <div class="reveal">
         <p class="section-label">Custom Builder</p>
-        <h1 class="section-title" style="margin-bottom: 8px;">DESIGN YOUR GUARD</h1>
-        <p class="section-desc">Follow the steps below to customize your protection. Every mouth guard includes shipping and an at-home impression kit.</p>
+        <h1 class="section-title" style="margin-bottom:8px;">DESIGN YOUR GUARD</h1>
+        <p class="section-desc">Choose package, color, artwork direction, and order notes. Every mouth guard includes shipping and an at-home impression kit.</p>
       </div>
 
-      <!-- Step 1 -->
-      <div class="builder-step reveal">
+      <section class="builder-step reveal">
         <div class="step-header">
           <div class="step-badge">1</div>
+          <h3>Package</h3>
+        </div>
+        <div class="package-grid">
+          <button type="button" class="package-option" data-package-id="base-guard" data-package-name="Base Guard" data-package-detail="Single Layer Basic - Light Bite" data-price="99" data-image="assets/images/relentless-work-usa-blue.jpg">
+            <strong>Base Guard</strong>
+            <span class="package-price">$99</span>
+            <small>Single Layer Basic "Light Bite"</small>
+          </button>
+          <button type="button" class="package-option" data-package-id="dual-layer-guard" data-package-name="Dual Layer Guard" data-package-detail="Dual Layer Basic - Heavy Bite" data-price="119" data-image="assets/images/relentless-work-usa-red.jpg">
+            <strong>Dual Layer Guard</strong>
+            <span class="package-price">$119</span>
+            <small>Dual Layer Basic "Heavy Bite"</small>
+          </button>
+          <button type="button" class="package-option selected" data-package-id="full-custom-graphics-guard" data-package-name="Full Custom Graphics Guard" data-package-detail="Dual Layer Custom Graphics" data-price="149" data-image="assets/images/relentless-work-teeth.jpg">
+            <strong>Full Custom Graphics Guard</strong>
+            <span class="package-price">$149</span>
+            <small>Artwork upload support and proof review</small>
+          </button>
+        </div>
+      </section>
+
+      <section class="builder-step reveal">
+        <div class="step-header">
+          <div class="step-badge">2</div>
           <h3>Base Color</h3>
         </div>
         <div class="color-grid">
-          <div class="color-choice"><div class="color-option selected" style="background-color: #050505;" data-color="Black" data-filter="drop-shadow(0 20px 40px rgba(0,0,0,0.5))"></div><span>Black</span></div>
-          <div class="color-choice"><div class="color-option" style="background-color: #F5F5F0;" data-color="White" data-filter="drop-shadow(0 20px 40px rgba(255, 255, 255, 0.2)) brightness(2) contrast(0.8)"></div><span>White</span></div>
+          <div class="color-choice"><div class="color-option selected" style="background-color:#050505;" data-color="Black" data-filter="drop-shadow(0 20px 40px rgba(0,0,0,0.5))"></div><span>Black</span></div>
+          <div class="color-choice"><div class="color-option" style="background-color:#f5f5f0;" data-color="White" data-filter="drop-shadow(0 20px 40px rgba(255,255,255,0.2)) brightness(2) contrast(0.8)"></div><span>White</span></div>
           <div class="color-choice"><div class="color-option clear-swatch" data-color="Clear" data-filter="drop-shadow(0 20px 40px rgba(255,255,255,0.22)) brightness(1.35) contrast(0.8)"></div><span>Clear</span></div>
-          <div class="color-choice"><div class="color-option" style="background-color: #1D5FD1;" data-color="Blue" data-filter="drop-shadow(0 20px 40px rgba(29,95,209,0.35)) sepia(1) hue-rotate(170deg) saturate(4)"></div><span>Blue</span></div>
-          <div class="color-choice"><div class="color-option" style="background-color: #C1121F;" data-color="Red" data-filter="drop-shadow(0 20px 40px rgba(193, 18, 31, 0.4)) sepia(1) hue-rotate(330deg) saturate(5)"></div><span>Red</span></div>
-          <div class="color-choice"><div class="color-option" style="background-color: #22C55E;" data-color="Green" data-filter="drop-shadow(0 20px 40px rgba(34, 197, 94, 0.3)) sepia(1) hue-rotate(80deg) saturate(4)"></div><span>Green</span></div>
-          <div class="color-choice"><div class="color-option" style="background-color: #FACC15;" data-color="Yellow" data-filter="drop-shadow(0 20px 40px rgba(250,204,21,0.28)) sepia(1) hue-rotate(5deg) saturate(3) brightness(1.2)"></div><span>Yellow</span></div>
-          <div class="color-choice"><div class="color-option" style="background-color: #FF5DA8;" data-color="Pink" data-filter="drop-shadow(0 20px 40px rgba(255,93,168,0.3)) sepia(1) hue-rotate(290deg) saturate(3)"></div><span>Pink</span></div>
+          <div class="color-choice"><div class="color-option" style="background-color:#1d5fd1;" data-color="Blue" data-filter="drop-shadow(0 20px 40px rgba(29,95,209,0.35)) sepia(1) hue-rotate(170deg) saturate(4)"></div><span>Blue</span></div>
+          <div class="color-choice"><div class="color-option" style="background-color:#c1121f;" data-color="Red" data-filter="drop-shadow(0 20px 40px rgba(193,18,31,0.4)) sepia(1) hue-rotate(330deg) saturate(5)"></div><span>Red</span></div>
+          <div class="color-choice"><div class="color-option" style="background-color:#22c55e;" data-color="Green" data-filter="drop-shadow(0 20px 40px rgba(34,197,94,0.3)) sepia(1) hue-rotate(80deg) saturate(4)"></div><span>Green</span></div>
+          <div class="color-choice"><div class="color-option" style="background-color:#facc15;" data-color="Yellow" data-filter="drop-shadow(0 20px 40px rgba(250,204,21,0.28)) sepia(1) hue-rotate(5deg) saturate(3) brightness(1.2)"></div><span>Yellow</span></div>
+          <div class="color-choice"><div class="color-option" style="background-color:#ff5da8;" data-color="Pink" data-filter="drop-shadow(0 20px 40px rgba(255,93,168,0.3)) sepia(1) hue-rotate(290deg) saturate(3)"></div><span>Pink</span></div>
         </div>
-        <p style="color: var(--chrome); font-size: 0.82rem; margin-top: 16px;">Purple and orange will be added soon.</p>
-      </div>
+        <p class="builder-note" style="margin-top:16px;">Purple and orange will be added soon.</p>
+      </section>
 
-      <!-- Step 2 -->
-      <div class="builder-step reveal">
-        <div class="step-header">
-          <div class="step-badge">2</div>
-          <h3>Custom Artwork</h3>
-        </div>
-        <div class="upload-area">
-          <div style="font-size: 2rem; margin-bottom: 10px;">📸</div>
-          <h4>Upload Logo or Graphic</h4>
-          <p>PNG or JPG. High resolution recommended.<br>We'll email a proof before production.</p>
-        </div>
-        <div class="form-group">
-          <label for="customText">Or add custom text (Optional)</label>
-          <input type="text" id="customText" class="form-control" placeholder="E.g., Your Last Name or Nickname">
-        </div>
-      </div>
-
-      <!-- Step 3 -->
-      <div class="builder-step reveal">
+      <section class="builder-step reveal">
         <div class="step-header">
           <div class="step-badge">3</div>
-          <h3>Details & Notes</h3>
+          <h3>Color Combo</h3>
+        </div>
+        <div class="combo-grid-builder">
+          <button type="button" class="combo-option selected" data-combo="None"><strong>Single Color</strong><small>Use the selected base color only.</small></button>
+          <button type="button" class="combo-option" data-combo="Red-Green"><div class="combo-dots"><span style="background:#c1121f;"></span><span style="background:#22c55e;"></span></div><strong>Red-Green</strong><small>Clear combo label for the order notes.</small></button>
+          <button type="button" class="combo-option" data-combo="Blue-White"><div class="combo-dots"><span style="background:#1d5fd1;"></span><span style="background:#f7f7f0;"></span></div><strong>Blue-White</strong><small>Popular team-style color direction.</small></button>
+          <button type="button" class="combo-option" data-combo="Black-Red"><div class="combo-dots"><span style="background:#050505;"></span><span style="background:#c1121f;"></span></div><strong>Black-Red</strong><small>Bold fight-camp look.</small></button>
+          <button type="button" class="combo-option" data-combo="Yellow-Black"><div class="combo-dots"><span style="background:#facc15;"></span><span style="background:#050505;"></span></div><strong>Yellow-Black</strong><small>High contrast custom direction.</small></button>
+        </div>
+      </section>
+
+      <section class="builder-step reveal">
+        <div class="step-header">
+          <div class="step-badge">4</div>
+          <h3>Artwork</h3>
+        </div>
+        <div class="upload-area" id="uploadArea">
+          <div style="font-size:2rem; margin-bottom:10px;">Upload</div>
+          <h4>Logo or Graphic Reference</h4>
+          <p>PNG, JPG, or WEBP. We will use this as an order reference and email a proof for custom graphics.</p>
+          <input type="file" id="artworkFile" accept="image/png,image/jpeg,image/webp" style="display:none;">
+        </div>
+        <p id="artworkFileName" class="builder-note" style="margin-top:12px;">No file selected yet.</p>
+        <div class="form-group">
+          <label for="customText">Custom Text</label>
+          <input type="text" id="customText" class="form-control" placeholder="E.g., last name, nickname, team name">
+        </div>
+      </section>
+
+      <section class="builder-step reveal">
+        <div class="step-header">
+          <div class="step-badge">5</div>
+          <h3>Details</h3>
         </div>
         <div class="form-group">
           <label for="sport">Primary Sport</label>
@@ -326,68 +433,49 @@
             <option>MMA</option>
             <option>Boxing</option>
             <option>Muay Thai</option>
-            <option>BJJ</option>
+            <option>BJJ / Grappling</option>
             <option>Football</option>
             <option>Other</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="notes">Design Notes for our Artists</label>
-          <textarea id="notes" class="form-control" placeholder="E.g., Make the text bold, place logo on the left side..."></textarea>
+          <label for="notes">Design Notes</label>
+          <textarea id="notes" class="form-control" placeholder="E.g., make the text bold, place logo on the left side, use red and black theme..."></textarea>
         </div>
-      </div>
-      
+        <label class="checkbox-row builder-check">
+          <input type="checkbox" id="rushOrder">
+          <span>Add rush request (estimated +$30, final timing depends on shipping and production availability).</span>
+        </label>
+        <p class="builder-note" style="margin-top:18px;">
+          Need mouth guards for a gym, fight team, or athletes?
+          <a href="contact.html" class="text-link">Reach out for team pricing, gym discounts, or affiliate options.</a>
+        </p>
+      </section>
     </div>
 
-    <!-- Right: Preview & Checkout -->
-    <div>
+    <aside>
       <div class="builder-preview reveal">
         <div class="preview-image" id="previewImage">
-          <img src="assets/images/relentless-work-teeth.jpg" alt="Custom graphics guard preview">
+          <img src="assets/images/relentless-work-teeth.jpg" alt="Full Custom Graphics Guard preview">
         </div>
-        
         <div class="builder-summary">
-            <h4>Order Summary</h4>
-            <div class="summary-row">
-                <span>Impression Kit</span>
-                <span>Included</span>
-            </div>
-            <div class="summary-row">
-                <span>Dual Layer Custom Graphics</span>
-                <span>$149</span>
-            </div>
-            <div class="summary-row">
-                <span>Base Color: <span id="summaryColor">Black</span></span>
-                <span>$0.00</span>
-            </div>
-            <div class="summary-row">
-                <span>Artwork Upload + Proof</span>
-                <span>Included</span>
-            </div>
-            <div class="summary-row">
-                <span>Shipping</span>
-                <span>Included</span>
-            </div>
-            <div class="summary-row">
-                <span>Rush Order</span>
-                <span>Est. +$30</span>
-            </div>
-            
-            <div class="summary-total">
-                <span>Total</span>
-                <span>$149</span>
-            </div>
-            
-            <button id="addToCartBtn" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 24px; padding: 18px;">
-                Add to Cart <span class="btn-icon">&rarr;</span>
-            </button>
-            <p style="text-align: center; font-size: 0.8rem; color: var(--chrome); margin-top: 16px;">
-                Rush order pricing depends on shipping options and current production timing.
-            </p>
+          <h4>Order Summary</h4>
+          <div class="summary-row"><span>Package</span><span id="summaryPackageName">Full Custom Graphics Guard</span></div>
+          <div class="summary-row"><span>Package Price</span><span id="summaryPackagePrice">$149</span></div>
+          <div class="summary-row"><span>Base Color</span><span id="summaryColor">Black</span></div>
+          <div class="summary-row"><span>Color Combo</span><span id="summaryCombo">None</span></div>
+          <div class="summary-row"><span>Artwork File</span><span id="summaryArtwork">Optional</span></div>
+          <div class="summary-row"><span>Impression Kit</span><span>Included</span></div>
+          <div class="summary-row"><span>Shipping</span><span>Included</span></div>
+          <div class="summary-row"><span>Rush Request</span><span id="summaryRush">$0.00</span></div>
+          <div class="summary-total"><span>Total</span><span id="summaryTotal">$149</span></div>
+          <button id="addToCartBtn" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:24px; padding:18px;">
+            Add to Cart <span class="btn-icon">&rarr;</span>
+          </button>
+          <p class="builder-note" style="text-align:center; margin-top:16px;">Checkout currently prepares an order email. Payments will be connected later.</p>
         </div>
       </div>
-    </div>
-
+    </aside>
   </main>
 
   <footer class="site-footer" id="contact">
@@ -405,10 +493,68 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const colorOptions = document.querySelectorAll('.color-option');
+      const packageOptions = document.querySelectorAll('.package-option');
+      const comboOptions = document.querySelectorAll('.combo-option');
       const previewImage = document.getElementById('previewImage');
+      const previewImg = previewImage.querySelector('img');
       const summaryColor = document.getElementById('summaryColor');
+      const summaryCombo = document.getElementById('summaryCombo');
+      const summaryPackageName = document.getElementById('summaryPackageName');
+      const summaryPackagePrice = document.getElementById('summaryPackagePrice');
+      const summaryArtwork = document.getElementById('summaryArtwork');
+      const summaryRush = document.getElementById('summaryRush');
+      const summaryTotal = document.getElementById('summaryTotal');
+      const uploadArea = document.getElementById('uploadArea');
+      const artworkFile = document.getElementById('artworkFile');
+      const artworkFileName = document.getElementById('artworkFileName');
+      const rushOrder = document.getElementById('rushOrder');
 
-      // Color selection + live preview
+      let selectedPackage = {
+        id: 'full-custom-graphics-guard',
+        name: 'Full Custom Graphics Guard',
+        detail: 'Dual Layer Custom Graphics',
+        price: 149,
+        image: 'assets/images/relentless-work-teeth.jpg'
+      };
+      let selectedCombo = 'None';
+      let selectedArtworkName = '';
+
+      function money(value) {
+        return '$' + Number(value).toFixed(2).replace('.00', '');
+      }
+
+      function slug(value) {
+        return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'none';
+      }
+
+      function updateSummary() {
+        const rushPrice = rushOrder.checked ? 30 : 0;
+        const total = selectedPackage.price + rushPrice;
+        summaryPackageName.textContent = selectedPackage.name;
+        summaryPackagePrice.textContent = money(selectedPackage.price);
+        summaryCombo.textContent = selectedCombo;
+        summaryArtwork.textContent = selectedArtworkName || 'Optional';
+        summaryRush.textContent = rushPrice ? '+$30' : '$0.00';
+        summaryTotal.textContent = money(total);
+        previewImg.src = selectedPackage.image;
+        previewImg.alt = selectedPackage.name + ' preview';
+      }
+
+      packageOptions.forEach(option => {
+        option.addEventListener('click', () => {
+          packageOptions.forEach(opt => opt.classList.remove('selected'));
+          option.classList.add('selected');
+          selectedPackage = {
+            id: option.dataset.packageId,
+            name: option.dataset.packageName,
+            detail: option.dataset.packageDetail,
+            price: parseFloat(option.dataset.price),
+            image: option.dataset.image
+          };
+          updateSummary();
+        });
+      });
+
       colorOptions.forEach(option => {
         option.addEventListener('click', () => {
           colorOptions.forEach(opt => opt.classList.remove('selected'));
@@ -418,25 +564,50 @@
         });
       });
 
-      // Add to Cart
+      comboOptions.forEach(option => {
+        option.addEventListener('click', () => {
+          comboOptions.forEach(opt => opt.classList.remove('selected'));
+          option.classList.add('selected');
+          selectedCombo = option.dataset.combo;
+          updateSummary();
+        });
+      });
+
+      uploadArea.addEventListener('click', () => artworkFile.click());
+      artworkFile.addEventListener('change', () => {
+        selectedArtworkName = artworkFile.files[0]?.name || '';
+        artworkFileName.textContent = selectedArtworkName ? 'Selected: ' + selectedArtworkName : 'No file selected yet.';
+        uploadArea.classList.toggle('has-file', Boolean(selectedArtworkName));
+        updateSummary();
+      });
+
+      rushOrder.addEventListener('change', updateSummary);
+
       document.getElementById('addToCartBtn').addEventListener('click', () => {
-        const color    = document.getElementById('summaryColor').textContent;
-        const sport    = document.getElementById('sport').value;
-        const hasText  = document.getElementById('customText').value.trim();
-        const customText = hasText ? hasText.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : 'no-text';
-        const colorSlug = color.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-        const sportSlug = sport.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-        const name     = `Dual Layer Custom Graphics - ${color}`;
+        const color = summaryColor.textContent;
+        const sport = document.getElementById('sport').value;
+        const customText = document.getElementById('customText').value.trim();
+        const notes = document.getElementById('notes').value.trim();
+        const rushPrice = rushOrder.checked ? 30 : 0;
+        const metaParts = [
+          selectedPackage.detail,
+          'Sport: ' + sport,
+          'Color: ' + color,
+          'Combo: ' + selectedCombo,
+          customText ? 'Text: "' + customText + '"' : '',
+          selectedArtworkName ? 'Artwork file: ' + selectedArtworkName : '',
+          notes ? 'Notes: ' + notes : '',
+          rushOrder.checked ? 'Rush requested' : ''
+        ].filter(Boolean);
 
         Cart.add({
-          id:    `custom-graphics-${colorSlug}-${sportSlug}-${customText}`,
-          name,
-          price: 149,
-          img:   'assets/images/relentless-work-teeth.jpg',
-          meta:  `Custom graphics builder order - ${sport}${hasText ? ' - Text: "' + hasText + '"' : ''}`
+          id: `${selectedPackage.id}-${slug(color)}-${slug(selectedCombo)}-${slug(sport)}-${slug(customText || 'no-text')}-${rushOrder.checked ? 'rush' : 'standard'}`,
+          name: `${selectedPackage.name} - ${color}`,
+          price: selectedPackage.price + rushPrice,
+          img: selectedPackage.image,
+          meta: metaParts.join(' - ')
         });
 
-        // Visual feedback on button
         const btn = document.getElementById('addToCartBtn');
         btn.textContent = 'Added to Cart!';
         btn.style.background = 'var(--success)';
@@ -445,6 +616,8 @@
           btn.style.background = '';
         }, 2500);
       });
+
+      updateSummary();
     });
   </script>
 </body>

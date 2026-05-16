@@ -134,7 +134,7 @@ Status: Planned
 
 ## Phase 8: Orders Database and Admin Dashboard
 
-Status: Planned
+Status: In progress
 
 - Move orders out of browser `localStorage` and into a real database.
 - Recommended Cloudflare path: Workers + D1 for orders, with R2 later if file uploads are needed.
@@ -144,9 +144,16 @@ Status: Planned
 - Add status updates and internal notes for production tracking.
 - Add export options for CSV and email list management.
 
+## Phase 8 Current Pass
+
+- Added `database/schema.sql` as the future Cloudflare D1 order schema.
+- Added `workers/orders-api.mjs` as a non-deployed Workers API foundation.
+- Expanded local admin order statuses to match the future production workflow.
+- Kept live checkout as the email order-request flow until payments/database are ready.
+
 ## Phase 9: Design Builder Upgrade
 
-Status: Planned
+Status: In progress
 
 - Add clearer product selection inside the builder: Base Guard, Dual Layer Guard, Full Custom Graphics Guard.
 - Add color combo selection with labels under color circles.
@@ -154,6 +161,16 @@ Status: Planned
 - Add optional rush order toggle if approved.
 - Add team/gym inquiry path from the builder.
 - Improve preview behavior so selected colors and notes feel more connected to the final order.
+
+## Phase 9 Current Pass
+
+- Rebuilt the builder into a five-step flow: package, base color, color combo, artwork, and details.
+- Added package switching for Base Guard, Dual Layer Guard, and Full Custom Graphics Guard.
+- Added labeled color combo controls.
+- Added artwork filename capture for order metadata.
+- Added rush request toggle at estimated `+$30`.
+- Added team/gym/affiliate path from the builder.
+- Builder cart items now include package, sport, color, combo, artwork filename, rush request, custom text, and notes.
 
 ## Phase 10: Content, SEO, and Growth
 
