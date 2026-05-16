@@ -99,3 +99,6 @@ Shop hero -> Package comparison -> Kit contents -> Ordering workflow -> Design u
 - Add any new real product photos when the final photo folder is available.
 - Start Phase 5 next: final launch QA across all public pages.
 - After Phase 5, move into Cloudflare/domain/analytics setup, then real checkout, database, and admin dashboard phases.
+- Added primary contact/order email: relentlessmouthgaurds@gmail.com.
+- Changed checkout to a temporary order-request email flow so the site does not show fake Stripe/card fields before real payment processing is connected.
+- Added `projectmanagement/PAYMENTS.md` with the recommended Stripe Checkout + Cloudflare Workers payment plan.

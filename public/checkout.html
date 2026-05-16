@@ -34,7 +34,7 @@
   <div id="orderSuccess" class="order-success" style="padding-top: 140px;">
     <div class="success-icon">&check;</div>
     <h2>ORDER PLACED!</h2>
-    <p>Your impression kit is being prepared for shipment. You'll receive a confirmation email shortly.</p>
+    <p>Your order request has been prepared. RELENTLESS will confirm payment, shipping, and kit details by email.</p>
     <p style="color: var(--crimson); font-family: var(--font-accent); font-weight: 700; letter-spacing: 1px;" id="orderNumber"></p>
     <p>Once your kit arrives, follow the included instructions and mail back your impressions. We'll send a design proof before production begins.</p>
     <div style="margin-top: 40px; display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
@@ -139,33 +139,20 @@
 
       <!-- Payment -->
       <div class="checkout-card">
-        <h3>PAYMENT</h3>
+        <h3>PAYMENT NEXT STEP</h3>
         <p style="color: var(--chrome); font-size: 0.88rem; margin-bottom: 24px; line-height: 1.6;">
-          Your card is charged securely via Stripe. We never store your card details.
+          Online card payments are being connected. For now, submit your order request and RELENTLESS will reply from
+          relentlessmouthgaurds@gmail.com to confirm payment, shipping, and kit timing.
         </p>
-        <div class="form-group">
-          <label>Card Number</label>
-          <input type="text" id="cardNumber" class="form-control" placeholder="4242 4242 4242 4242" maxlength="19" autocomplete="cc-number">
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Expiry</label>
-            <input type="text" id="cardExpiry" class="form-control" placeholder="MM / YY" maxlength="7" autocomplete="cc-exp">
-          </div>
-          <div class="form-group">
-            <label>CVC</label>
-            <input type="text" id="cardCvc" class="form-control" placeholder="123" maxlength="4" autocomplete="cc-csc">
-          </div>
-        </div>
         <div style="display:flex; align-items:center; gap:8px; margin-top:8px; color: var(--chrome); font-size:0.8rem;">
-          <span aria-hidden="true">Lock</span> Secured by Stripe. SSL encrypted.
+          <span aria-hidden="true">Note</span> No card information is collected on this page yet.
         </div>
       </div>
 
       <div id="formError" style="color: var(--crimson); font-family: var(--font-accent); font-size:0.88rem; font-weight:700; letter-spacing:1px; display:none; padding: 12px 16px; background: rgba(193,18,31,0.08); border: 1px solid rgba(193,18,31,0.2); border-radius: 6px;"></div>
 
       <button class="btn btn-primary" id="placeOrderBtn" style="width:100%; justify-content:center; padding: 20px; font-size: 1rem;">
-        Place Order <span class="btn-icon">&rarr;</span>
+        Prepare Order Email <span class="btn-icon">&rarr;</span>
       </button>
 
     </div>
@@ -336,19 +323,7 @@
       if (e.key === 'Enter') document.getElementById('applyPromoBtn').click();
     });
 
-    // Card number formatting
-    document.getElementById('cardNumber').addEventListener('input', e => {
-      let v = e.target.value.replace(/\D/g, '').substring(0, 16);
-      e.target.value = v.replace(/(.{4})/g, '$1 ').trim();
-    });
-
-    document.getElementById('cardExpiry').addEventListener('input', e => {
-      let v = e.target.value.replace(/\D/g, '').substring(0, 4);
-      if (v.length >= 2) v = v.substring(0,2) + ' / ' + v.substring(2);
-      e.target.value = v;
-    });
-
-    // Place order
+    // Prepare order request
     document.getElementById('placeOrderBtn').addEventListener('click', () => {
       const get = id => document.getElementById(id).value.trim();
       const err = document.getElementById('formError');
@@ -359,23 +334,18 @@
       if (!get('address') || !get('city') || !get('zip')) return showError('Please complete your shipping address.');
       if (Cart.get().length === 0) return showError('Your cart is empty.');
 
-      const cardRaw = get('cardNumber').replace(/\s/g, '');
-      if (cardRaw.length < 15) return showError('Please enter a valid card number.');
-      if (!get('cardExpiry')) return showError('Please enter your card expiry.');
-      if (!get('cardCvc')) return showError('Please enter your CVC.');
-
       err.style.display = 'none';
 
       // Simulate processing
       const btn = document.getElementById('placeOrderBtn');
-      btn.textContent = 'Processing...';
+      btn.textContent = 'Preparing...';
       btn.disabled = true;
 
       setTimeout(() => {
         // Redeem promo code
         if (appliedPromo) Promo.redeem(appliedPromo.code);
 
-        // Save order to localStorage (admin can view)
+        // Save order request to localStorage (admin can view locally)
         const order = {
           id:       'ORD-' + Date.now(),
           date:     new Date().toISOString(),
@@ -399,12 +369,30 @@
 
         Cart.clear();
 
+        const orderLines = order.items.map(item => `- ${item.qty}x ${item.name} ($${item.price})${item.meta ? ' - ' + item.meta : ''}`).join('\n');
+        const subject = encodeURIComponent(`RELENTLESS order request - ${order.id}`);
+        const body = encodeURIComponent(
+          `Order ID: ${order.id}\n` +
+          `Name: ${order.name}\n` +
+          `Email: ${order.email}\n` +
+          `Phone: ${get('phone') || 'Not provided'}\n` +
+          `Address: ${order.address}\n` +
+          `Sport: ${order.sport}\n` +
+          `Promo: ${order.promo || 'None'}\n` +
+          `Subtotal: ${fmt(order.subtotal)}\n` +
+          `Discount: ${fmt(order.discount)}\n` +
+          `Total: ${fmt(order.total)}\n\n` +
+          `Items:\n${orderLines}\n\n` +
+          `Design Notes:\n${order.notes || 'None'}`
+        );
+
         // Show success
         document.getElementById('checkoutLayout').style.display = 'none';
         const success = document.getElementById('orderSuccess');
         success.classList.add('show');
         document.getElementById('orderNumber').textContent = `Order ID: ${order.id}`;
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.location.href = `mailto:relentlessmouthgaurds@gmail.com?subject=${subject}&body=${body}`;
       }, 1800);
     });
 

@@ -122,13 +122,15 @@ Status: Planned
 
 Status: Planned
 
-- Replace demo checkout behavior with real payment processing.
-- Choose payment provider flow, likely Stripe Checkout or embedded Stripe Elements.
+- Current temporary state: checkout prepares an order request email to relentlessmouthgaurds@gmail.com instead of collecting card details.
+- Replace temporary checkout behavior with real payment processing.
+- Recommended provider flow: Stripe Checkout through a Cloudflare Worker.
 - Decide whether rush order becomes a selectable checkout add-on.
 - Decide whether team/gym orders stay as contact requests or get their own quote form.
 - Send order confirmation emails to the customer and business.
 - Add clearer order status language: kit shipped, impressions received, proof sent, production, shipped.
 - Make sure discount codes are handled server-side before taking real payments.
+- See `projectmanagement/PAYMENTS.md` for the implementation plan and official docs.
 
 ## Phase 8: Orders Database and Admin Dashboard
 
