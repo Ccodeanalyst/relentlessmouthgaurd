@@ -156,7 +156,7 @@ Status: In progress
 Status: In progress
 
 - Add clearer product selection inside the builder: Base Guard, Dual Layer Guard, Full Custom Graphics Guard.
-- Add color combo selection with labels under color circles.
+- Keep builder color selection to one base color for now.
 - Add artwork upload flow for logos or reference images.
 - Add optional rush order toggle if approved.
 - Add team/gym inquiry path from the builder.
@@ -164,13 +164,12 @@ Status: In progress
 
 ## Phase 9 Current Pass
 
-- Rebuilt the builder into a five-step flow: package, base color, color combo, artwork, and details.
+- Rebuilt the builder into a four-step flow: package, base color, artwork, and details.
 - Added package switching for Base Guard, Dual Layer Guard, and Full Custom Graphics Guard.
-- Added labeled color combo controls.
 - Added artwork filename capture for order metadata.
 - Added rush request toggle at estimated `+$30`.
 - Added team/gym/affiliate path from the builder.
-- Builder cart items now include package, sport, color, combo, artwork filename, rush request, custom text, and notes.
+- Builder cart items now include package, sport, color, artwork filename, rush request, custom text, and notes.
 
 ## Phase 10: Content, SEO, and Growth
 

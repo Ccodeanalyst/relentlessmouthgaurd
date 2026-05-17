@@ -107,6 +107,7 @@ Shop hero -> Package comparison -> Kit contents -> Ordering workflow -> Design u
   - Added non-deployed Workers API foundation in `workers/orders-api.mjs`.
   - Expanded local admin order statuses for kit shipped, impressions received, proof sent, production, shipped, delivered, and cancelled.
 - Started Phase 9 builder upgrade:
-  - Rebuilt the builder around package selection, base color, color combo, artwork reference, sport/details, rush request, and team/gym inquiry path.
-  - Builder cart metadata now carries package, sport, color, combo, artwork filename, rush flag, text, and notes into checkout.
+  - Rebuilt the builder around package selection, base color, artwork reference, sport/details, rush request, and team/gym inquiry path.
+  - Builder cart metadata now carries package, sport, color, artwork filename, rush flag, text, and notes into checkout.
+- Removed the builder color-combo step so customers choose one base color for now.
 - Updated broad brand copy from combat-sports-only language to contact sports, including the homepage hero badge.
