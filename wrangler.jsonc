@@ -1,11 +1,16 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "relentlessmouthgaurd",
+  "main": "workers/site-worker.mjs",
   "compatibility_date": "2026-05-15",
   "observability": {
     "enabled": true
   },
+  "vars": {
+    "BUSINESS_EMAIL": "relentlessmouthgaurds@gmail.com"
+  },
   "assets": {
-    "directory": "./public"
+    "directory": "./public",
+    "binding": "ASSETS"
   }
 }

@@ -11,7 +11,7 @@
   <header class="site-header scrolled" id="siteHeader">
     <div class="header-inner">
       <a href="index.html" class="logo" aria-label="RELENTLESS Mouth Guards home">
-        <img src="assets/images/relentless-logo-horizontal.png" alt="RELENTLESS Mouth Guards">
+        <img src="assets/images/relentless-logo-horizontal-transparent.png" alt="RELENTLESS Mouth Guards">
       </a>
       <nav class="nav-links" id="navLinks">
         <a href="index.html">Home</a>
@@ -33,8 +33,8 @@
   <!-- Success State (hidden until order placed) -->
   <div id="orderSuccess" class="order-success" style="padding-top: 140px;">
     <div class="success-icon">&check;</div>
-    <h2>ORDER PLACED!</h2>
-    <p>Your order request has been prepared. RELENTLESS will confirm payment, shipping, and kit details by email.</p>
+    <h2 id="successTitle">ORDER REQUEST READY!</h2>
+    <p id="successMessage">Your order request has been prepared. RELENTLESS will confirm payment, shipping, and kit details by email.</p>
     <p style="color: var(--crimson); font-family: var(--font-accent); font-weight: 700; letter-spacing: 1px;" id="orderNumber"></p>
     <p>Once your kit arrives, follow the included instructions and mail back your impressions. We'll send a design proof before production begins.</p>
     <div style="margin-top: 40px; display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
@@ -52,7 +52,12 @@
       <div>
         <p class="section-label">Checkout</p>
         <h1 class="section-title" style="margin-bottom: 4px;">YOUR ORDER</h1>
-        <p style="color: var(--chrome); font-size: 0.9rem;">Secure checkout. Impression kit ships within 24 hours.</p>
+        <p style="color: var(--chrome); font-size: 0.9rem;">Secure checkout for your custom guard. Shipping and the at-home impression kit are included.</p>
+        <div class="checkout-assurance">
+          <span>Stripe-secured payment</span>
+          <span>Proof review on custom graphics</span>
+          <span>Free kit shipping</span>
+        </div>
       </div>
 
       <!-- Contact Info -->
@@ -141,18 +146,17 @@
       <div class="checkout-card">
         <h3>PAYMENT NEXT STEP</h3>
         <p style="color: var(--chrome); font-size: 0.88rem; margin-bottom: 24px; line-height: 1.6;">
-          Online card payments are being connected. For now, submit your order request and RELENTLESS will reply from
-          relentlessmouthgaurds@gmail.com to confirm payment, shipping, and kit timing.
+          When Stripe is configured, this button opens a secure Stripe-hosted checkout page. Until live keys are connected, it prepares an order request so RELENTLESS can confirm payment, shipping, and kit timing by email.
         </p>
-        <div style="display:flex; align-items:center; gap:8px; margin-top:8px; color: var(--chrome); font-size:0.8rem;">
-          <span aria-hidden="true">Note</span> No card information is collected on this page yet.
+        <div class="payment-note">
+          <strong>Secure payment:</strong> card details are handled by Stripe, not stored on this website.
         </div>
       </div>
 
       <div id="formError" style="color: var(--crimson); font-family: var(--font-accent); font-size:0.88rem; font-weight:700; letter-spacing:1px; display:none; padding: 12px 16px; background: rgba(193,18,31,0.08); border: 1px solid rgba(193,18,31,0.2); border-radius: 6px;"></div>
 
       <button class="btn btn-primary" id="placeOrderBtn" style="width:100%; justify-content:center; padding: 20px; font-size: 1rem;">
-        Prepare Order Email <span class="btn-icon">&rarr;</span>
+        Continue Checkout <span class="btn-icon">&rarr;</span>
       </button>
 
     </div>
@@ -160,11 +164,18 @@
     <!-- Right: Order Summary -->
     <div>
       <div class="order-summary-panel">
-        <h3>ORDER SUMMARY</h3>
+        <div class="summary-panel-header">
+          <p class="section-label">Cart</p>
+          <h3>ORDER SUMMARY</h3>
+          <span>Review package, promo, and final total.</span>
+        </div>
 
         <!-- Cart Items -->
         <div class="cart-line-items" id="cartLineItems">
           <div class="empty-cart-msg" id="emptyCartMsg">
+            <div class="empty-cart-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            </div>
             <p>Your cart is empty.</p>
             <a href="shop.html" class="btn btn-primary btn-sm">Browse Products <span class="btn-icon">&rarr;</span></a>
           </div>
@@ -202,6 +213,12 @@
           </div>
         </div>
 
+        <div class="checkout-trust-list">
+          <span>Impression kit included</span>
+          <span>Shipping included</span>
+          <span>Email confirmation after checkout</span>
+        </div>
+
       </div>
     </div>
 
@@ -222,6 +239,7 @@
   <script src="js/main.js"></script>
   <script>
     let appliedPromo = null;
+    const PENDING_STRIPE_ORDER_KEY = 'relentless_pending_stripe_order';
 
     function fmt(n) { return '$' + n.toFixed(2); }
     function escapeHtml(value) {
@@ -232,6 +250,156 @@
         '"': '&quot;',
         "'": '&#39;'
       }[char]));
+    }
+
+    function getCheckoutOrder() {
+      const get = id => document.getElementById(id).value.trim();
+
+      if (!get('firstName') || !get('lastName')) return { error: 'Please enter your full name.' };
+      if (!get('email') || !get('email').includes('@')) return { error: 'Please enter a valid email address.' };
+      if (!get('address') || !get('city') || !get('zip')) return { error: 'Please complete your shipping address.' };
+      if (Cart.get().length === 0) return { error: 'Your cart is empty.' };
+
+      return {
+        order: {
+          id:       'ORD-' + Date.now(),
+          date:     new Date().toISOString(),
+          name:     get('firstName') + ' ' + get('lastName'),
+          email:    get('email'),
+          phone:    get('phone'),
+          items:    Cart.get(),
+          subtotal: Cart.subtotal(),
+          discount: appliedPromo ? appliedPromo.amount : 0,
+          promo:    appliedPromo ? appliedPromo.code : null,
+          total:    Math.max(0, Cart.subtotal() - (appliedPromo ? appliedPromo.amount : 0)),
+          address:  `${get('address')}, ${get('city')}, ${get('state')} ${get('zip')}`,
+          shipping: {
+            address: get('address'),
+            city: get('city'),
+            state: get('state'),
+            zip: get('zip'),
+            country: get('country')
+          },
+          sport:    get('sport'),
+          notes:    get('designNotes'),
+          emailOptIn: document.getElementById('emailOptIn').checked,
+          status:   'pending'
+        }
+      };
+    }
+
+    function saveLocalOrder(order) {
+      const orders = JSON.parse(localStorage.getItem('relentless_orders') || '[]');
+      orders.unshift(order);
+      localStorage.setItem('relentless_orders', JSON.stringify(orders));
+    }
+
+    function showSuccess({ title, message, orderId }) {
+      document.getElementById('checkoutLayout').style.display = 'none';
+      document.getElementById('successTitle').textContent = title;
+      document.getElementById('successMessage').textContent = message;
+      const success = document.getElementById('orderSuccess');
+      success.classList.add('show');
+      document.getElementById('orderNumber').textContent = orderId ? `Order ID: ${orderId}` : '';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function handlePaymentReturn() {
+      const params = new URLSearchParams(window.location.search);
+      const payment = params.get('payment');
+      if (!payment) return;
+
+      if (payment === 'success') {
+        const pending = JSON.parse(localStorage.getItem(PENDING_STRIPE_ORDER_KEY) || 'null');
+        if (pending) {
+          pending.status = 'paid';
+          pending.stripeSessionId = params.get('session_id');
+          saveLocalOrder(pending);
+          localStorage.removeItem(PENDING_STRIPE_ORDER_KEY);
+        }
+        Cart.clear();
+        showSuccess({
+          title: 'PAYMENT COMPLETE!',
+          message: 'Stripe returned a successful checkout. RELENTLESS will confirm kit timing, artwork proof details, and production status by email.',
+          orderId: pending?.id
+        });
+      } else if (payment === 'cancelled') {
+        showError('Stripe checkout was cancelled. Your cart is still saved.');
+      }
+
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
+    async function startStripeCheckout(order) {
+      let response;
+      let data;
+
+      try {
+        response = await fetch('/api/create-checkout-session', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            items: order.items,
+            promoCode: order.promo,
+            customer: {
+              firstName: order.name.split(' ')[0],
+              lastName: order.name.split(' ').slice(1).join(' '),
+              email: order.email,
+              phone: order.phone
+            },
+            shipping: order.shipping,
+            sport: order.sport,
+            notes: order.notes,
+            emailOptIn: order.emailOptIn
+          })
+        });
+        data = await response.json();
+      } catch {
+        return false;
+      }
+
+      if (response.ok && data.url) {
+        localStorage.setItem(PENDING_STRIPE_ORDER_KEY, JSON.stringify(order));
+        window.location.href = data.url;
+        return true;
+      }
+
+      if (response.status === 404 || data.code === 'PAYMENTS_NOT_CONFIGURED') {
+        return false;
+      }
+
+      throw new Error(data.message || data.error || 'Unable to start Stripe Checkout.');
+    }
+
+    function prepareEmailOrder(order) {
+      if (appliedPromo) Promo.redeem(appliedPromo.code);
+
+      saveLocalOrder(order);
+      Cart.clear();
+
+      const orderLines = order.items.map(item => `- ${item.qty}x ${item.name} ($${item.price})${item.meta ? ' - ' + item.meta : ''}`).join('\n');
+      const subject = encodeURIComponent(`RELENTLESS order request - ${order.id}`);
+      const body = encodeURIComponent(
+        `Order ID: ${order.id}\n` +
+        `Name: ${order.name}\n` +
+        `Email: ${order.email}\n` +
+        `Phone: ${order.phone || 'Not provided'}\n` +
+        `Address: ${order.address}\n` +
+        `Sport: ${order.sport}\n` +
+        `Promo: ${order.promo || 'None'}\n` +
+        `Subtotal: ${fmt(order.subtotal)}\n` +
+        `Discount: ${fmt(order.discount)}\n` +
+        `Total: ${fmt(order.total)}\n\n` +
+        `Items:\n${orderLines}\n\n` +
+        `Design Notes:\n${order.notes || 'None'}`
+      );
+
+      showSuccess({
+        title: 'ORDER REQUEST READY!',
+        message: 'Your order request has been prepared. RELENTLESS will confirm payment, shipping, and kit details by email.',
+        orderId: order.id
+      });
+      window.location.href = `mailto:relentlessmouthgaurds@gmail.com?subject=${subject}&body=${body}`;
     }
 
     function renderCart() {
@@ -323,77 +491,30 @@
       if (e.key === 'Enter') document.getElementById('applyPromoBtn').click();
     });
 
-    // Prepare order request
-    document.getElementById('placeOrderBtn').addEventListener('click', () => {
-      const get = id => document.getElementById(id).value.trim();
+    // Start Stripe Checkout when configured; otherwise prepare an email order request.
+    document.getElementById('placeOrderBtn').addEventListener('click', async () => {
       const err = document.getElementById('formError');
+      const result = getCheckoutOrder();
 
-      // Basic validation
-      if (!get('firstName') || !get('lastName')) return showError('Please enter your full name.');
-      if (!get('email') || !get('email').includes('@')) return showError('Please enter a valid email address.');
-      if (!get('address') || !get('city') || !get('zip')) return showError('Please complete your shipping address.');
-      if (Cart.get().length === 0) return showError('Your cart is empty.');
+      if (result.error) return showError(result.error);
 
       err.style.display = 'none';
 
-      // Simulate processing
       const btn = document.getElementById('placeOrderBtn');
-      btn.textContent = 'Preparing...';
+      btn.textContent = 'Starting checkout...';
       btn.disabled = true;
 
-      setTimeout(() => {
-        // Redeem promo code
-        if (appliedPromo) Promo.redeem(appliedPromo.code);
+      try {
+        const redirected = await startStripeCheckout(result.order);
+        if (redirected) return;
 
-        // Save order request to localStorage (admin can view locally)
-        const order = {
-          id:       'ORD-' + Date.now(),
-          date:     new Date().toISOString(),
-          name:     get('firstName') + ' ' + get('lastName'),
-          email:    get('email'),
-          items:    Cart.get(),
-          subtotal: Cart.subtotal(),
-          discount: appliedPromo ? appliedPromo.amount : 0,
-          promo:    appliedPromo ? appliedPromo.code : null,
-          total:    Math.max(0, Cart.subtotal() - (appliedPromo ? appliedPromo.amount : 0)),
-          address:  `${get('address')}, ${get('city')}, ${get('state')} ${get('zip')}`,
-          sport:    get('sport'),
-          notes:    get('designNotes'),
-          emailOptIn: document.getElementById('emailOptIn').checked,
-          status:   'pending'
-        };
-
-        const orders = JSON.parse(localStorage.getItem('relentless_orders') || '[]');
-        orders.unshift(order);
-        localStorage.setItem('relentless_orders', JSON.stringify(orders));
-
-        Cart.clear();
-
-        const orderLines = order.items.map(item => `- ${item.qty}x ${item.name} ($${item.price})${item.meta ? ' - ' + item.meta : ''}`).join('\n');
-        const subject = encodeURIComponent(`RELENTLESS order request - ${order.id}`);
-        const body = encodeURIComponent(
-          `Order ID: ${order.id}\n` +
-          `Name: ${order.name}\n` +
-          `Email: ${order.email}\n` +
-          `Phone: ${get('phone') || 'Not provided'}\n` +
-          `Address: ${order.address}\n` +
-          `Sport: ${order.sport}\n` +
-          `Promo: ${order.promo || 'None'}\n` +
-          `Subtotal: ${fmt(order.subtotal)}\n` +
-          `Discount: ${fmt(order.discount)}\n` +
-          `Total: ${fmt(order.total)}\n\n` +
-          `Items:\n${orderLines}\n\n` +
-          `Design Notes:\n${order.notes || 'None'}`
-        );
-
-        // Show success
-        document.getElementById('checkoutLayout').style.display = 'none';
-        const success = document.getElementById('orderSuccess');
-        success.classList.add('show');
-        document.getElementById('orderNumber').textContent = `Order ID: ${order.id}`;
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        window.location.href = `mailto:relentlessmouthgaurds@gmail.com?subject=${subject}&body=${body}`;
-      }, 1800);
+        btn.textContent = 'Preparing email...';
+        setTimeout(() => prepareEmailOrder(result.order), 500);
+      } catch (error) {
+        showError(error.message);
+        btn.innerHTML = 'Continue Checkout <span class="btn-icon">&rarr;</span>';
+        btn.disabled = false;
+      }
     });
 
     function showError(msg) {
@@ -408,6 +529,7 @@
 
     // Init
     renderCart();
+    handlePaymentReturn();
   </script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 # Payment Plan
 
-Last updated: May 16, 2026
+Last updated: May 17, 2026
 
 ## Business Email
 
@@ -10,12 +10,12 @@ Primary order/contact email:
 
 ## Current Checkout State
 
-Status: Temporary order-request flow
+Status: Stripe setup started with email fallback
 
 - The site does not collect card details directly.
-- Checkout prepares an order request email to relentlessmouthgaurds@gmail.com.
-- This avoids showing fake card fields while real payment processing is being set up.
-- Promo codes still calculate order totals locally for planning and testing.
+- Checkout now attempts to create a Stripe Checkout Session through `/api/create-checkout-session`.
+- If Stripe secrets are not configured yet, checkout falls back to preparing an order request email to relentlessmouthgaurds@gmail.com.
+- Promo codes still calculate order totals locally for the visible checkout, and the Worker mirrors those promo rules server-side before payment.
 
 ## Recommended Payment Path
 
@@ -60,6 +60,18 @@ Official docs:
 11. Save paid order to database.
 12. Send confirmation email to customer and relentlessmouthgaurds@gmail.com.
 
+## Current Stripe Starter Implementation
+
+- `wrangler.jsonc` now points to `workers/site-worker.mjs` and binds static assets as `ASSETS`.
+- `workers/site-worker.mjs` handles `POST /api/create-checkout-session`.
+- `workers/site-worker.mjs` handles `POST /api/stripe-webhook` for Stripe webhook events.
+- Product pricing is validated server-side before Stripe receives line items.
+- Promo codes are validated server-side before Stripe receives the final payable amount.
+- Stripe webhook signatures are verified with `STRIPE_WEBHOOK_SECRET` before paid-order updates are accepted.
+- If a Cloudflare D1 `DB` binding is configured, checkout-started and payment-succeeded events are written to the orders database.
+- Stripe secret keys are read from Worker secrets only. Use `.dev.vars` locally and Cloudflare secrets in production.
+- `.dev.vars.example` shows the expected local secret name without committing a real secret.
+
 ## Important Rules
 
 - Do not put Stripe secret keys in frontend HTML or JavaScript.
@@ -67,6 +79,16 @@ Official docs:
 - Promo codes must be validated server-side before payment.
 - Orders should move to a real database before or during payment launch.
 - Card details should be handled by Stripe, not by this website.
+
+## Local Secret Setup
+
+1. Copy `.dev.vars.example` to `.dev.vars`.
+2. Put the Stripe test secret key in `.dev.vars` as `STRIPE_SECRET_KEY`.
+3. Put the Stripe CLI or Dashboard webhook signing secret in `.dev.vars` as `STRIPE_WEBHOOK_SECRET`.
+4. Restart `npx wrangler dev --local --port 8787`.
+5. For production, set the secrets with:
+   - `npx wrangler secret put STRIPE_SECRET_KEY`
+   - `npx wrangler secret put STRIPE_WEBHOOK_SECRET`
 
 ## Open Decisions
 

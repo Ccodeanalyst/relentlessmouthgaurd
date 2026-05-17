@@ -1,6 +1,6 @@
 # Project Plan
 
-Last updated: May 16, 2026
+Last updated: May 17, 2026
 
 ## Phase 1: Funnel Structure
 
@@ -66,10 +66,8 @@ Status: In progress
 - Updated package copy to say shipping and the at-home impression kit are included.
 - Renamed the public product option labels to Base Guard, Dual Layer Guard, and Full Custom Graphics Guard.
 - Added available colors: Black, White, Clear, Blue, Red, Green, Yellow, and Pink.
-- Added labeled color combination examples, including Red-Green.
-- Noted purple and orange as coming soon.
 - Removed dental-impression phrasing from the homepage, shop page, and gallery copy.
-- Removed dual-color language from the premium/custom graphics package.
+- Removed multi-color base guard offering language from the premium/custom graphics package.
 - Removed the older AI-style gallery image paths and refreshed the gallery with current product photos.
 - Removed outdated non-product imagery from the homepage/top-photo flow.
 - Added team/gym outreach copy for discounts and affiliate program interest.
@@ -88,7 +86,7 @@ Status: In progress
 
 ## Phase 5: Launch Readiness
 
-Status: Planned
+Status: In progress
 
 - Run a final browser pass across the public pages.
 - Check images load correctly from `assets/images`.
@@ -106,6 +104,13 @@ Status: Planned
 - Reconfirm final pricing, shipping, and rush order language before public launch.
 - Run Cloudflare dry-run deploy before each push.
 
+## Phase 5 Current Pass
+
+- Re-ran desktop and mobile page-load QA across Home, Shop, Builder, Gallery, Contact, Checkout, and Terms.
+- Fixed the hidden gallery lightbox placeholder so it is not counted as a visible broken image.
+- Confirmed checkout fallback creates the email order request cleanly when Stripe is not configured.
+- Ran `npx wrangler deploy --dry-run` after adding the Worker entry point.
+
 ## Phase 6: Deployment, Domain, and Analytics
 
 Status: Planned
@@ -120,10 +125,10 @@ Status: Planned
 
 ## Phase 7: Checkout and Payments
 
-Status: Planned
+Status: In progress
 
-- Current temporary state: checkout prepares an order request email to relentlessmouthgaurds@gmail.com instead of collecting card details.
-- Replace temporary checkout behavior with real payment processing.
+- Current temporary state: checkout attempts Stripe Checkout first when configured, then falls back to an order request email to relentlessmouthgaurds@gmail.com.
+- Replace fallback checkout behavior with full real payment processing once Stripe keys, webhooks, and order persistence are ready.
 - Recommended provider flow: Stripe Checkout through a Cloudflare Worker.
 - Decide whether rush order becomes a selectable checkout add-on.
 - Decide whether team/gym orders stay as contact requests or get their own quote form.
@@ -131,6 +136,16 @@ Status: Planned
 - Add clearer order status language: kit shipped, impressions received, proof sent, production, shipped.
 - Make sure discount codes are handled server-side before taking real payments.
 - See `projectmanagement/PAYMENTS.md` for the implementation plan and official docs.
+
+## Phase 7 Current Pass
+
+- Added a Cloudflare Worker entry point for `/api/create-checkout-session`.
+- Added a server-side product catalog and promo validation before creating Stripe Checkout Sessions.
+- Added `.dev.vars.example` for local Stripe secret setup without committing real secrets.
+- Updated checkout to redirect to Stripe when configured and fall back to the current email request flow when not configured.
+- Added `/api/stripe-webhook` with Stripe signature verification.
+- Added optional D1 writes for checkout-started, payment-succeeded, and payment-failed events when the `DB` binding is configured.
+- Still needed: create the Stripe account/products, set Cloudflare secrets, configure the production webhook endpoint, bind/migrate D1, and send confirmation emails.
 
 ## Phase 8: Orders Database and Admin Dashboard
 
@@ -171,6 +186,7 @@ Status: In progress
 - Added rush request toggle at estimated `+$30`.
 - Added team/gym/affiliate path from the builder.
 - Builder cart items now include package, sport, color, design reference, artwork filename, rush request, custom text, and notes.
+- Removed color-combo examples and coming-soon color copy from the public site so the customer flow only promises one base color.
 
 ## Phase 10: Content, SEO, and Growth
 

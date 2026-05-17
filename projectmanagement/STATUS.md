@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: May 16, 2026
+Last updated: May 17, 2026
 
 ## Completed
 
@@ -46,7 +46,7 @@ Last updated: May 16, 2026
   - Updated pricing to `$99` Single Layer Basic Light Bite, `$119` Dual Layer Basic Heavy Bite, and `$149` Dual Layer Custom Graphics.
   - Updated builder pricing to `$149` for Dual Layer Custom Graphics.
   - Removed dental-impression wording from key sales pages.
-  - Removed dual-color package language.
+  - Removed multi-color base guard offering language.
 - Removed outdated non-product imagery from homepage/top-photo usage.
   - Replaced the gallery's older AI-style images with current product photos.
   - Added team/gym discount and affiliate outreach copy.
@@ -73,8 +73,8 @@ Last updated: May 16, 2026
   - Confirmed no outdated business names, dental-impression wording, old product labels, or old pricing remains in source pages.
   - Renamed public product options to Base Guard, Dual Layer Guard, and Full Custom Graphics Guard.
   - Added clear pricing language for `$99`, `$119`, and `$149` with shipping and at-home impression kit included.
-  - Added available color options and labeled color combination examples on the shop page.
-  - Updated builder color choices to Black, White, Clear, Blue, Red, Green, Yellow, and Pink, with purple and orange noted as coming soon.
+  - Added available single base color options on the shop page.
+  - Updated builder color choices to Black, White, Clear, Blue, Red, Green, Yellow, and Pink.
   - Added team, gym, and affiliate order copy.
   - Added a rush order note as an estimated `$30` option depending on shipping and production timing.
   - Added promo codes for FightEvo, teamSrisuk50, SwaycityMT, and RMGSponsor81.
@@ -97,7 +97,7 @@ Shop hero -> Package comparison -> Kit contents -> Ordering workflow -> Design u
 - Confirm whether the rush order add-on should be active in checkout or remain a contact-before-order note.
 - Reconfirm pricing if it changes tomorrow morning.
 - Add any new real product photos when the final photo folder is available.
-- Start Phase 5 next: final launch QA across all public pages.
+- Continue Phase 5: final launch QA across all public pages and remaining launch checks.
 - After Phase 5, move into Cloudflare/domain/analytics setup, then real checkout, database, and admin dashboard phases.
 - Added primary contact/order email: relentlessmouthgaurds@gmail.com.
 - Changed checkout to a temporary order-request email flow so the site does not show fake Stripe/card fields before real payment processing is connected.
@@ -112,3 +112,16 @@ Shop hero -> Package comparison -> Kit contents -> Ordering workflow -> Design u
 - Removed the builder color-combo step so customers choose one base color for now.
 - Added all real gallery photos as selectable design references in the builder.
 - Updated broad brand copy from combat-sports-only language to contact sports, including the homepage hero badge.
+- Removed remaining color-combo examples and coming-soon color copy from the customer-facing site.
+- Started Phase 7 Stripe setup:
+  - Added a Worker route for `/api/create-checkout-session`.
+  - Added server-side product/promo validation before Stripe session creation.
+  - Updated checkout to try Stripe first and fall back to the current order-request email flow until secrets are configured.
+  - Added `.dev.vars.example` and gitignore rules for local Stripe secret setup.
+  - Added `/api/stripe-webhook` with Stripe webhook signature verification.
+  - Added optional D1 order updates for Stripe checkout-started, payment-succeeded, and payment-failed states.
+- Continued Phase 5 launch QA:
+  - Confirmed desktop and mobile page-load QA passes for Home, Shop, Builder, Gallery, Contact, Checkout, and Terms.
+  - Fixed the hidden gallery lightbox placeholder so it no longer appears as a broken visible image in QA.
+  - Confirmed checkout email fallback works without console errors when Stripe is not configured.
+  - Ran `npx wrangler deploy --dry-run` successfully with the Worker/assets config.

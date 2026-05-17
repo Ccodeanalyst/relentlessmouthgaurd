@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     if (reduceMotion) {
-      hideIntro();
+      intro.remove();
     } else {
       document.body.classList.add('intro-active');
       const introTimer = window.setTimeout(hideIntro, 2600);

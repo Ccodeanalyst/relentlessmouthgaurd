@@ -1,7 +1,7 @@
 {
   "name": "relentloess",
   "version": "1.0.0",
-  "description": "Static website for RELENTLESS custom combat mouthguards.",
+  "description": "Static website for RELENTLESS custom contact sports mouthguards.",
   "main": "index.js",
   "scripts": {
     "deploy": "wrangler deploy",
