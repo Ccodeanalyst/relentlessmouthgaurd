@@ -164,12 +164,13 @@ Status: In progress
 
 ## Phase 9 Current Pass
 
-- Rebuilt the builder into a four-step flow: package, base color, artwork, and details.
+- Rebuilt the builder into a five-step flow: package, base color, design reference, artwork, and details.
 - Added package switching for Base Guard, Dual Layer Guard, and Full Custom Graphics Guard.
+- Added all real gallery photos as selectable design references in the builder.
 - Added artwork filename capture for order metadata.
 - Added rush request toggle at estimated `+$30`.
 - Added team/gym/affiliate path from the builder.
-- Builder cart items now include package, sport, color, artwork filename, rush request, custom text, and notes.
+- Builder cart items now include package, sport, color, design reference, artwork filename, rush request, custom text, and notes.
 
 ## Phase 10: Content, SEO, and Growth
 

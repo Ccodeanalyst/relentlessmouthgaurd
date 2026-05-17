@@ -78,7 +78,14 @@
       gap: 14px;
     }
 
-    .package-option {
+    .reference-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .package-option,
+    .reference-option {
       min-height: 138px;
       padding: 18px;
       border: 1px solid var(--glass-border);
@@ -90,11 +97,50 @@
       transition: border-color 0.2s, transform 0.2s, background 0.2s;
     }
 
+    .reference-option {
+      min-height: 0;
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 1;
+    }
+
+    .reference-option img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      transition: transform 0.25s ease;
+    }
+
+    .reference-option span {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      padding: 7px 9px;
+      background: rgba(10, 10, 15, 0.78);
+      color: var(--white);
+      border-radius: 4px;
+      font-family: var(--font-accent);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
     .package-option:hover,
-    .package-option.selected {
+    .package-option.selected,
+    .reference-option:hover,
+    .reference-option.selected {
       border-color: var(--crimson);
       background: rgba(193, 18, 31, 0.08);
       transform: translateY(-2px);
+    }
+
+    .reference-option:hover img,
+    .reference-option.selected img {
+      transform: scale(1.05);
     }
 
     .package-option strong {
@@ -288,8 +334,15 @@
         position: static;
       }
 
-      .package-grid {
+      .package-grid,
+      .reference-grid {
         grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .reference-grid {
+        grid-template-columns: repeat(2, 1fr);
       }
     }
   </style>
@@ -324,7 +377,7 @@
       <div class="reveal">
         <p class="section-label">Custom Builder</p>
         <h1 class="section-title" style="margin-bottom:8px;">DESIGN YOUR GUARD</h1>
-        <p class="section-desc">Choose package, color, artwork direction, and order notes. Every mouth guard includes shipping and an at-home impression kit.</p>
+        <p class="section-desc">Choose package, color, design reference, artwork direction, and order notes. Every mouth guard includes shipping and an at-home impression kit.</p>
       </div>
 
       <section class="builder-step reveal">
@@ -372,6 +425,48 @@
       <section class="builder-step reveal">
         <div class="step-header">
           <div class="step-badge">3</div>
+          <h3>Design Reference</h3>
+        </div>
+        <div class="reference-grid">
+          <button type="button" class="reference-option" data-reference-name="Mafia Layout" data-reference-image="assets/images/relentless-work-mafia.jpg">
+            <img src="assets/images/relentless-work-mafia.jpg" alt="Mafia Layout mouthguard reference">
+            <span>Mafia Layout</span>
+          </button>
+          <button type="button" class="reference-option" data-reference-name="Green Pop" data-reference-image="assets/images/relentless-work-yoda.jpg">
+            <img src="assets/images/relentless-work-yoda.jpg" alt="Green Pop mouthguard reference">
+            <span>Green Pop</span>
+          </button>
+          <button type="button" class="reference-option" data-reference-name="Destroyer Blue" data-reference-image="assets/images/relentless-work-destroyer.jpg">
+            <img src="assets/images/relentless-work-destroyer.jpg" alt="Destroyer Blue mouthguard reference">
+            <span>Destroyer Blue</span>
+          </button>
+          <button type="button" class="reference-option selected" data-reference-name="Fang Layout" data-reference-image="assets/images/relentless-work-teeth.jpg">
+            <img src="assets/images/relentless-work-teeth.jpg" alt="Fang Layout mouthguard reference">
+            <span>Fang Layout</span>
+          </button>
+          <button type="button" class="reference-option" data-reference-name="Pink Custom" data-reference-image="assets/images/relentless-work-pink.jpg">
+            <img src="assets/images/relentless-work-pink.jpg" alt="Pink Custom mouthguard reference">
+            <span>Pink Custom</span>
+          </button>
+          <button type="button" class="reference-option" data-reference-name="Yellow Strike" data-reference-image="assets/images/relentless-work-yellow.jpg">
+            <img src="assets/images/relentless-work-yellow.jpg" alt="Yellow Strike mouthguard reference">
+            <span>Yellow Strike</span>
+          </button>
+          <button type="button" class="reference-option" data-reference-name="Team Red" data-reference-image="assets/images/relentless-work-usa-red.jpg">
+            <img src="assets/images/relentless-work-usa-red.jpg" alt="Team Red mouthguard reference">
+            <span>Team Red</span>
+          </button>
+          <button type="button" class="reference-option" data-reference-name="Team Blue" data-reference-image="assets/images/relentless-work-usa-blue.jpg">
+            <img src="assets/images/relentless-work-usa-blue.jpg" alt="Team Blue mouthguard reference">
+            <span>Team Blue</span>
+          </button>
+        </div>
+        <p class="builder-note" style="margin-top:16px;">Use these real builds as visual direction. Your final proof can still be customized with your colors, text, and notes.</p>
+      </section>
+
+      <section class="builder-step reveal">
+        <div class="step-header">
+          <div class="step-badge">4</div>
           <h3>Artwork</h3>
         </div>
         <div class="upload-area" id="uploadArea">
@@ -389,7 +484,7 @@
 
       <section class="builder-step reveal">
         <div class="step-header">
-          <div class="step-badge">4</div>
+          <div class="step-badge">5</div>
           <h3>Details</h3>
         </div>
         <div class="form-group">
@@ -428,6 +523,7 @@
           <div class="summary-row"><span>Package</span><span id="summaryPackageName">Full Custom Graphics Guard</span></div>
           <div class="summary-row"><span>Package Price</span><span id="summaryPackagePrice">$149</span></div>
           <div class="summary-row"><span>Base Color</span><span id="summaryColor">Black</span></div>
+          <div class="summary-row"><span>Design Reference</span><span id="summaryReference">Fang Layout</span></div>
           <div class="summary-row"><span>Artwork File</span><span id="summaryArtwork">Optional</span></div>
           <div class="summary-row"><span>Impression Kit</span><span>Included</span></div>
           <div class="summary-row"><span>Shipping</span><span>Included</span></div>
@@ -458,9 +554,11 @@
     document.addEventListener('DOMContentLoaded', () => {
       const colorOptions = document.querySelectorAll('.color-option');
       const packageOptions = document.querySelectorAll('.package-option');
+      const referenceOptions = document.querySelectorAll('.reference-option');
       const previewImage = document.getElementById('previewImage');
       const previewImg = previewImage.querySelector('img');
       const summaryColor = document.getElementById('summaryColor');
+      const summaryReference = document.getElementById('summaryReference');
       const summaryPackageName = document.getElementById('summaryPackageName');
       const summaryPackagePrice = document.getElementById('summaryPackagePrice');
       const summaryArtwork = document.getElementById('summaryArtwork');
@@ -478,6 +576,10 @@
         price: 149,
         image: 'assets/images/relentless-work-teeth.jpg'
       };
+      let selectedReference = {
+        name: 'Fang Layout',
+        image: 'assets/images/relentless-work-teeth.jpg'
+      };
       let selectedArtworkName = '';
 
       function money(value) {
@@ -493,11 +595,12 @@
         const total = selectedPackage.price + rushPrice;
         summaryPackageName.textContent = selectedPackage.name;
         summaryPackagePrice.textContent = money(selectedPackage.price);
+        summaryReference.textContent = selectedReference.name;
         summaryArtwork.textContent = selectedArtworkName || 'Optional';
         summaryRush.textContent = rushPrice ? '+$30' : '$0.00';
         summaryTotal.textContent = money(total);
-        previewImg.src = selectedPackage.image;
-        previewImg.alt = selectedPackage.name + ' preview';
+        previewImg.src = selectedReference.image;
+        previewImg.alt = selectedReference.name + ' design reference';
       }
 
       packageOptions.forEach(option => {
@@ -524,6 +627,18 @@
         });
       });
 
+      referenceOptions.forEach(option => {
+        option.addEventListener('click', () => {
+          referenceOptions.forEach(opt => opt.classList.remove('selected'));
+          option.classList.add('selected');
+          selectedReference = {
+            name: option.dataset.referenceName,
+            image: option.dataset.referenceImage
+          };
+          updateSummary();
+        });
+      });
+
       uploadArea.addEventListener('click', () => artworkFile.click());
       artworkFile.addEventListener('change', () => {
         selectedArtworkName = artworkFile.files[0]?.name || '';
@@ -544,6 +659,7 @@
           selectedPackage.detail,
           'Sport: ' + sport,
           'Color: ' + color,
+          'Design reference: ' + selectedReference.name,
           customText ? 'Text: "' + customText + '"' : '',
           selectedArtworkName ? 'Artwork file: ' + selectedArtworkName : '',
           notes ? 'Notes: ' + notes : '',
@@ -554,7 +670,7 @@
           id: `${selectedPackage.id}-${slug(color)}-${slug(sport)}-${slug(customText || 'no-text')}-${rushOrder.checked ? 'rush' : 'standard'}`,
           name: `${selectedPackage.name} - ${color}`,
           price: selectedPackage.price + rushPrice,
-          img: selectedPackage.image,
+          img: selectedReference.image,
           meta: metaParts.join(' - ')
         });
 
