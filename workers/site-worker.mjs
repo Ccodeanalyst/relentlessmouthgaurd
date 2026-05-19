@@ -3,6 +3,7 @@ const BUSINESS_NAME = 'RELENTLESS Mouth Guards';
 const MAX_ITEMS = 20;
 const MAX_QTY = 10;
 const STRIPE_WEBHOOK_TOLERANCE_SECONDS = 300;
+const ALLOWED_SHIPPING_COUNTRIES = ['US', 'CA', 'GB', 'AU'];
 
 const PRODUCT_CATALOG = [
   {
@@ -52,6 +53,16 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    if (isAdminPath(url.pathname) && env.ADMIN_DASHBOARD_ENABLED !== 'true') {
+      return new Response('Admin dashboard is not publicly available.', {
+        status: 404,
+        headers: {
+          'content-type': 'text/plain; charset=utf-8',
+          'cache-control': 'no-store'
+        }
+      });
+    }
+
     if (url.pathname === '/api/create-checkout-session') {
       if (request.method !== 'POST') {
         return json({ error: 'Method not allowed' }, 405);
@@ -73,7 +84,8 @@ export default {
 };
 
 async function createCheckoutSession(request, env, origin) {
-  if (!env.STRIPE_SECRET_KEY) {
+  const stripeSecretKey = normalizeStripeSecretKey(env.STRIPE_SECRET_KEY);
+  if (!stripeSecretKey) {
     return json({
       error: 'Stripe is not configured yet.',
       code: 'PAYMENTS_NOT_CONFIGURED',
@@ -93,19 +105,47 @@ async function createCheckoutSession(request, env, origin) {
     return json({ error: normalized.error }, 400);
   }
 
-  await savePendingOrder(env, normalized.order);
+  try {
+    await savePendingOrder(env, normalized.order);
+  } catch (error) {
+    console.error('Unable to save pending order before Stripe Checkout.', error);
+  }
 
-  const sessionParams = buildStripeSessionParams(normalized.order, origin, env.BUSINESS_EMAIL);
-  const stripeResponse = await fetch(STRIPE_CHECKOUT_URL, {
-    method: 'POST',
-    headers: {
-      authorization: `Bearer ${env.STRIPE_SECRET_KEY}`,
-      'content-type': 'application/x-www-form-urlencoded'
-    },
-    body: sessionParams
-  });
+  const sessionParams = buildStripeSessionParams(normalized.order, origin, env);
+  let stripeResponse;
+  try {
+    stripeResponse = await fetch(STRIPE_CHECKOUT_URL, {
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${stripeSecretKey}`,
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      body: sessionParams
+    });
+  } catch (error) {
+    console.error('Unable to reach Stripe Checkout API.', error);
+    return json({
+      error: 'Unable to reach Stripe Checkout.',
+      code: 'STRIPE_REQUEST_FAILED',
+      message: 'Check the Stripe secret key and Cloudflare Worker network access.'
+    }, 502);
+  }
 
-  const stripeBody = await stripeResponse.json();
+  let stripeBody;
+  try {
+    stripeBody = await stripeResponse.json();
+  } catch (error) {
+    console.error('Stripe Checkout API returned a non-JSON response.', {
+      status: stripeResponse.status,
+      statusText: stripeResponse.statusText
+    });
+    return json({
+      error: 'Stripe returned an unreadable response.',
+      code: 'STRIPE_RESPONSE_INVALID',
+      status: stripeResponse.status
+    }, 502);
+  }
+
   if (!stripeResponse.ok) {
     return json({
       error: 'Stripe rejected the checkout session request.',
@@ -152,6 +192,8 @@ async function handleStripeWebhook(request, env) {
       sessionId: session.id,
       paymentIntentId: typeof session.payment_intent === 'string' ? session.payment_intent : '',
       amountTotal: session.amount_total,
+      taxCents: session.total_details?.amount_tax,
+      shippingDetails: formatStripeShippingDetails(session.shipping_details),
       customerEmail: session.customer_details?.email || session.customer_email || ''
     });
   }
@@ -176,11 +218,15 @@ function normalizeOrder(payload) {
   const email = text(customer.email).toLowerCase();
   const firstName = text(customer.firstName);
   const lastName = text(customer.lastName);
+  const country = text(shipping.country).toUpperCase() || 'US';
 
   if (!firstName || !lastName) return { error: 'Customer name is required.' };
   if (!email || !email.includes('@')) return { error: 'Valid customer email is required.' };
   if (!text(shipping.address) || !text(shipping.city) || !text(shipping.zip)) {
     return { error: 'Shipping address is required.' };
+  }
+  if (!ALLOWED_SHIPPING_COUNTRIES.includes(country)) {
+    return { error: 'Online checkout is only available for US, Canada, UK, and Australia shipping addresses right now.' };
   }
 
   const normalizedItems = [];
@@ -222,7 +268,7 @@ function normalizeOrder(payload) {
         city: text(shipping.city),
         state: text(shipping.state),
         zip: text(shipping.zip),
-        country: text(shipping.country) || 'US'
+        country
       },
       sport: text(payload.sport),
       notes: text(payload.notes, 700),
@@ -236,8 +282,9 @@ function normalizeOrder(payload) {
   };
 }
 
-function buildStripeSessionParams(order, origin, businessEmail) {
+function buildStripeSessionParams(order, origin, env) {
   const params = new URLSearchParams();
+  const collectTax = shouldCollectStripeTax(env);
   const successUrl = `${origin}/checkout.html?payment=success&session_id={CHECKOUT_SESSION_ID}`;
   const cancelUrl = `${origin}/checkout.html?payment=cancelled`;
   const lineItems = order.discountCents > 0
@@ -254,6 +301,14 @@ function buildStripeSessionParams(order, origin, businessEmail) {
   params.set('cancel_url', cancelUrl);
   params.set('customer_email', order.customer.email);
   params.set('client_reference_id', order.id);
+  if (collectTax) {
+    params.set('automatic_tax[enabled]', 'true');
+    params.set('billing_address_collection', 'required');
+    params.set('customer_creation', 'always');
+    ALLOWED_SHIPPING_COUNTRIES.forEach((country, index) => {
+      params.set(`shipping_address_collection[allowed_countries][${index}]`, country);
+    });
+  }
   params.set('payment_intent_data[metadata][order_id]', order.id);
   params.set('payment_intent_data[metadata][customer_email]', order.customer.email);
   params.set('metadata[order_id]', order.id);
@@ -266,7 +321,8 @@ function buildStripeSessionParams(order, origin, businessEmail) {
   params.set('metadata[shipping_address]', text(formatShipping(order.shipping), 500));
   params.set('metadata[sport]', text(order.sport, 120));
   params.set('metadata[design_notes]', text(order.notes, 500));
-  params.set('metadata[business_email]', businessEmail || '');
+  params.set('metadata[tax_collection]', collectTax ? 'stripe_automatic_tax' : 'disabled');
+  params.set('metadata[business_email]', env.BUSINESS_EMAIL || '');
 
   lineItems.forEach((item, index) => {
     params.set(`line_items[${index}][quantity]`, String(item.quantity));
@@ -365,7 +421,7 @@ async function savePendingOrder(env, order) {
   }
 }
 
-async function markOrderPaid(env, { orderId, sessionId, paymentIntentId, amountTotal, customerEmail }) {
+async function markOrderPaid(env, { orderId, sessionId, paymentIntentId, amountTotal, taxCents, shippingDetails, customerEmail }) {
   if (!env.DB || !orderId) return;
 
   await env.DB.prepare(
@@ -374,16 +430,25 @@ async function markOrderPaid(env, { orderId, sessionId, paymentIntentId, amountT
          payment_status = 'paid',
          payment_provider = 'stripe',
          payment_reference = ?,
+         tax_cents = ?,
+         amount_paid_cents = ?,
+         shipping_address = COALESCE(?, shipping_address),
          updated_at = datetime('now')
      WHERE id = ?`
-  ).bind(sessionId || paymentIntentId || null, orderId).run();
+  ).bind(
+    sessionId || paymentIntentId || null,
+    centsOrZero(taxCents),
+    centsOrZero(amountTotal),
+    shippingDetails || null,
+    orderId
+  ).run();
 
   await env.DB.prepare(
     `INSERT INTO order_events (order_id, event_type, message)
      VALUES (?, 'payment_succeeded', ?)`
   ).bind(
     orderId,
-    `Stripe payment succeeded${amountTotal ? ` for $${(amountTotal / 100).toFixed(2)}` : ''}${customerEmail ? ` (${customerEmail})` : ''}`
+    `Stripe payment succeeded${amountTotal ? ` for $${(amountTotal / 100).toFixed(2)}` : ''}${taxCents ? ` including $${(taxCents / 100).toFixed(2)} tax` : ''}${customerEmail ? ` (${customerEmail})` : ''}`
   ).run();
 }
 
@@ -481,8 +546,45 @@ function formatShipping(shipping) {
   ].filter(Boolean).join(', ');
 }
 
+function formatStripeShippingDetails(shippingDetails) {
+  const address = shippingDetails?.address;
+  if (!address) return '';
+
+  return [
+    shippingDetails.name,
+    address.line1,
+    address.line2,
+    address.city,
+    [address.state, address.postal_code].filter(Boolean).join(' '),
+    address.country
+  ].filter(Boolean).join(', ');
+}
+
 function text(value, max = 240) {
   return String(value || '').trim().slice(0, max);
+}
+
+function isAdminPath(pathname) {
+  return pathname === '/admin' || pathname.startsWith('/admin/');
+}
+
+function shouldCollectStripeTax(env) {
+  const value = String(env.STRIPE_TAX_ENABLED ?? 'true').trim().toLowerCase();
+  return !['0', 'false', 'no', 'off'].includes(value);
+}
+
+function normalizeStripeSecretKey(value) {
+  return String(value || '')
+    .trim()
+    .replace(/^STRIPE_SECRET_KEY\s*=\s*/i, '')
+    .replace(/^["']|["']$/g, '')
+    .replace(/\s+/g, '')
+    .slice(0, 500);
+}
+
+function centsOrZero(value) {
+  const cents = Number(value);
+  return Number.isFinite(cents) ? Math.max(0, Math.round(cents)) : 0;
 }
 
 function clampInt(value, min, max) {

@@ -40,23 +40,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const navOverlay = document.getElementById('navOverlay');
 
   if (hamburger && navLinks) {
+    const closeNav = () => {
+      navLinks.classList.remove('active');
+      hamburger.setAttribute('aria-expanded', 'false');
+      if (navOverlay) navOverlay.classList.remove('active');
+    };
+
     hamburger.addEventListener('click', () => {
-      navLinks.classList.toggle('active');
-      if (navOverlay) navOverlay.classList.toggle('active');
+      const isOpen = navLinks.classList.toggle('active');
+      hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      if (navOverlay) navOverlay.classList.toggle('active', isOpen);
     });
 
     if (navOverlay) {
-      navOverlay.addEventListener('click', () => {
-        navLinks.classList.remove('active');
-        navOverlay.classList.remove('active');
-      });
+      navOverlay.addEventListener('click', closeNav);
     }
 
     navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        navLinks.classList.remove('active');
-        if (navOverlay) navOverlay.classList.remove('active');
-      });
+      link.addEventListener('click', closeNav);
     });
   }
 

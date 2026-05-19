@@ -7,10 +7,24 @@
     "enabled": true
   },
   "vars": {
-    "BUSINESS_EMAIL": "relentlessmouthgaurds@gmail.com"
+    "BUSINESS_EMAIL": "relentlessmouthgaurds@gmail.com",
+    "STRIPE_TAX_ENABLED": "true",
+    "ADMIN_DASHBOARD_ENABLED": "false"
   },
   "assets": {
     "directory": "./public",
-    "binding": "ASSETS"
-  }
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/admin",
+      "/admin/*"
+    ]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "relentless-orders",
+      "database_id": "09316dd3-c87f-44c0-bce5-959526079a04",
+      "migrations_dir": "database/migrations"
+    }
+  ]
 }

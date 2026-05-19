@@ -1,6 +1,4 @@
--- RELENTLESS Mouth Guards order database foundation.
--- Target platform: Cloudflare D1.
--- Payments stay off until the final payment phase.
+-- Initial Cloudflare D1 schema for RELENTLESS orders.
 
 PRAGMA foreign_keys = ON;
 

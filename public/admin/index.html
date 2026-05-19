@@ -73,7 +73,7 @@
         Enter Dashboard <span class="btn-icon">→</span>
       </button>
       <div class="login-error" id="loginError"></div>
-      <p style="margin-top:20px; font-size:0.75rem; color:var(--chrome);">Default password: <code style="color:var(--crimson);">admin123</code></p>
+      <p style="margin-top:20px; font-size:0.75rem; color:var(--chrome);">Admin access is disabled until protected backend auth is connected.</p>
     </div>
   </div>
 
@@ -348,7 +348,7 @@
     /* ── Auth ── */
     const ADMIN_PASS_KEY = 'relentless_admin_pass';
     const ADMIN_SESSION  = 'relentless_admin_session';
-    const DEFAULT_PASS   = 'admin123';
+    const DEFAULT_PASS   = null;
 
     function getAdminPass() { return localStorage.getItem(ADMIN_PASS_KEY) || DEFAULT_PASS; }
 
@@ -362,13 +362,14 @@
 
     document.getElementById('loginBtn').addEventListener('click', () => {
       const pw = document.getElementById('loginPassword').value;
-      if (pw === getAdminPass()) {
+      const configuredPass = getAdminPass();
+      if (configuredPass && pw === configuredPass) {
         sessionStorage.setItem(ADMIN_SESSION, 'true');
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('adminApp').style.display = 'block';
         initDashboard();
       } else {
-        document.getElementById('loginError').textContent = 'Incorrect password.';
+        document.getElementById('loginError').textContent = configuredPass ? 'Incorrect password.' : 'Admin access is not configured.';
         document.getElementById('loginPassword').value = '';
       }
     });

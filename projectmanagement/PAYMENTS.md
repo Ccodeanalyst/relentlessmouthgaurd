@@ -1,6 +1,6 @@
 # Payment Plan
 
-Last updated: May 17, 2026
+Last updated: May 19, 2026
 
 ## Business Email
 
@@ -10,12 +10,18 @@ Primary order/contact email:
 
 ## Current Checkout State
 
-Status: Stripe setup started with email fallback
+Status: Live Stripe Checkout connected; tax and D1 launch work in progress
 
 - The site does not collect card details directly.
 - Checkout now attempts to create a Stripe Checkout Session through `/api/create-checkout-session`.
 - If Stripe secrets are not configured yet, checkout falls back to preparing an order request email to relentlessmouthgaurds@gmail.com.
 - Promo codes still calculate order totals locally for the visible checkout, and the Worker mirrors those promo rules server-side before payment.
+- Live Checkout Session creation has been smoke-tested with Stripe and returned a `cs_live_...` session.
+- A live webhook destination exists for `https://relentlessmouthguards.com/api/stripe-webhook`.
+- Stripe webhook signature verification is enabled with `STRIPE_WEBHOOK_SECRET`.
+- Sandbox `checkout.session.completed` trigger passed; live fake triggers are disabled by Stripe and require a real live payment.
+- Stripe Tax parameters are now prepared in the Worker, but Stripe Tax must be enabled/configured in Stripe before deploying that change.
+- The public `/admin/` path is now blocked by default in the Worker until real backend auth is connected.
 
 ## Recommended Payment Path
 
@@ -67,10 +73,35 @@ Official docs:
 - `workers/site-worker.mjs` handles `POST /api/stripe-webhook` for Stripe webhook events.
 - Product pricing is validated server-side before Stripe receives line items.
 - Promo codes are validated server-side before Stripe receives the final payable amount.
+- Stripe Checkout is prepared for automatic tax collection through Stripe Tax.
 - Stripe webhook signatures are verified with `STRIPE_WEBHOOK_SECRET` before paid-order updates are accepted.
 - If a Cloudflare D1 `DB` binding is configured, checkout-started and payment-succeeded events are written to the orders database.
 - Stripe secret keys are read from Worker secrets only. Use `.dev.vars` locally and Cloudflare secrets in production.
 - `.dev.vars.example` shows the expected local secret name without committing a real secret.
+
+## D1 Order Storage Setup
+
+The D1 schema is ready in `database/migrations/0001_order_foundation.sql`.
+
+Created D1 database:
+
+- Name: `relentless-orders`
+- Database ID: `09316dd3-c87f-44c0-bce5-959526079a04`
+- Worker binding in `wrangler.jsonc`: `DB`
+
+Required Cloudflare token permissions for this step:
+
+- Account: D1 Edit
+- Account: Account Settings Read
+- Worker deploy permissions if deploying from the same token
+
+Apply the migration:
+
+```bash
+npm exec wrangler -- d1 migrations apply relentless-orders --remote
+```
+
+If the API token does not have D1 query access, open the database in Cloudflare, use the D1 Console, paste `database/migrations/0001_order_foundation.sql`, and run it there.
 
 ## Important Rules
 
