@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: May 17, 2026
+Last updated: May 19, 2026
 
 ## Completed
 
@@ -125,3 +125,13 @@ Shop hero -> Package comparison -> Kit contents -> Ordering workflow -> Design u
   - Fixed the hidden gallery lightbox placeholder so it no longer appears as a broken visible image in QA.
   - Confirmed checkout email fallback works without console errors when Stripe is not configured.
   - Ran `npx wrangler deploy --dry-run` successfully with the Worker/assets config.
+- Completed live payment foundation:
+  - Connected live Stripe Checkout through the Cloudflare Worker.
+  - Created and migrated the `relentless-orders` D1 database.
+  - Bound D1 as `env.DB` in Wrangler.
+  - Enabled Stripe Tax parameters in Checkout.
+  - Blocked the unsafe public `/admin/` route.
+- Started the real order operations dashboard:
+  - Added `/dashboard/` as the new admin URL.
+  - Added Worker-managed username/password login with an HttpOnly session cookie.
+  - Added protected D1 order APIs for listing orders and updating statuses.

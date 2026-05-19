@@ -4,6 +4,20 @@ const MAX_ITEMS = 20;
 const MAX_QTY = 10;
 const STRIPE_WEBHOOK_TOLERANCE_SECONDS = 300;
 const ALLOWED_SHIPPING_COUNTRIES = ['US', 'CA', 'GB', 'AU'];
+const ADMIN_SESSION_COOKIE = 'rmg_admin_session';
+const ADMIN_SESSION_TTL_SECONDS = 8 * 60 * 60;
+const ADMIN_STATUSES = new Set([
+  'pending-payment',
+  'paid',
+  'payment-failed',
+  'kit-shipped',
+  'impressions-received',
+  'proof-sent',
+  'in-production',
+  'shipped',
+  'delivered',
+  'cancelled'
+]);
 
 const PRODUCT_CATALOG = [
   {
@@ -41,11 +55,12 @@ const PROMOS = {
   RMGSPONSOR81: { discount: 50, type: 'pct', campaign: 'RMG Sponsor' }
 };
 
-const json = (body, status = 200) => new Response(JSON.stringify(body), {
+const json = (body, status = 200, headers = {}) => new Response(JSON.stringify(body), {
   status,
   headers: {
     'content-type': 'application/json; charset=utf-8',
-    'cache-control': 'no-store'
+    'cache-control': 'no-store',
+    ...headers
   }
 });
 
@@ -61,6 +76,14 @@ export default {
           'cache-control': 'no-store'
         }
       });
+    }
+
+    if (url.pathname === '/dashboard') {
+      return Response.redirect(`${url.origin}/dashboard/`, 302);
+    }
+
+    if (url.pathname.startsWith('/api/admin/')) {
+      return handleAdminApi(request, env, url);
     }
 
     if (url.pathname === '/api/create-checkout-session') {
@@ -82,6 +105,164 @@ export default {
     return env.ASSETS.fetch(request);
   }
 };
+
+async function handleAdminApi(request, env, url) {
+  if (url.pathname === '/api/admin/login') {
+    if (request.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
+    return loginAdmin(request, env);
+  }
+
+  if (url.pathname === '/api/admin/logout') {
+    if (request.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
+    return json({ ok: true }, 200, {
+      'set-cookie': clearAdminCookie()
+    });
+  }
+
+  const session = await verifyAdminSession(request, env);
+  if (!session.valid) {
+    return json({
+      error: session.error || 'Authentication required.',
+      code: session.code || 'ADMIN_AUTH_REQUIRED'
+    }, session.status || 401);
+  }
+
+  if (url.pathname === '/api/admin/me') {
+    if (request.method !== 'GET') return json({ error: 'Method not allowed' }, 405);
+    return json({ authenticated: true, username: session.username });
+  }
+
+  if (url.pathname === '/api/admin/orders') {
+    if (request.method !== 'GET') return json({ error: 'Method not allowed' }, 405);
+    return listAdminOrders(env);
+  }
+
+  const orderMatch = url.pathname.match(/^\/api\/admin\/orders\/([^/]+)$/);
+  if (orderMatch) {
+    const orderId = decodeURIComponent(orderMatch[1]);
+    if (request.method === 'GET') return getAdminOrder(env, orderId);
+    if (request.method === 'PATCH') return updateAdminOrderStatus(request, env, orderId, session.username);
+    return json({ error: 'Method not allowed' }, 405);
+  }
+
+  return json({ error: 'Not found' }, 404);
+}
+
+async function loginAdmin(request, env) {
+  if (!isAdminAuthConfigured(env)) {
+    return json({
+      error: 'Dashboard login is not configured.',
+      code: 'ADMIN_AUTH_NOT_CONFIGURED'
+    }, 503);
+  }
+
+  let payload;
+  try {
+    payload = await request.json();
+  } catch {
+    return json({ error: 'Invalid JSON body.' }, 400);
+  }
+
+  const username = text(payload.username, 120);
+  const password = String(payload.password || '');
+  const valid = await verifyAdminCredentials(env, username, password);
+  if (!valid) {
+    return json({ error: 'Invalid username or password.' }, 401);
+  }
+
+  const cookieValue = await createAdminSession(env, username);
+  return json({ authenticated: true, username }, 200, {
+    'set-cookie': buildAdminCookie(cookieValue)
+  });
+}
+
+async function listAdminOrders(env) {
+  if (!env.DB) return json({ error: 'Order database is not configured.' }, 503);
+
+  const result = await env.DB.prepare(
+    `SELECT
+       o.id, o.created_at, o.updated_at, o.status,
+       o.customer_name, o.customer_email, o.customer_phone,
+       o.shipping_address, o.sport, o.design_notes, o.promo_code,
+       o.subtotal_cents, o.discount_cents, o.total_cents, o.tax_cents,
+       o.amount_paid_cents, o.payment_status, o.payment_provider,
+       o.payment_reference, o.email_opt_in,
+       COUNT(oi.id) AS item_count,
+       COALESCE(SUM(oi.quantity), 0) AS total_quantity,
+       GROUP_CONCAT(oi.product_name || ' x' || oi.quantity, ' | ') AS item_summary
+     FROM orders o
+     LEFT JOIN order_items oi ON oi.order_id = o.id
+     GROUP BY o.id
+     ORDER BY o.created_at DESC
+     LIMIT 100`
+  ).all();
+
+  return json({ orders: result.results || [] });
+}
+
+async function getAdminOrder(env, orderId) {
+  if (!env.DB) return json({ error: 'Order database is not configured.' }, 503);
+
+  const order = await env.DB.prepare(
+    `SELECT *
+     FROM orders
+     WHERE id = ?`
+  ).bind(orderId).first();
+
+  if (!order) return json({ error: 'Order not found.' }, 404);
+
+  const items = await env.DB.prepare(
+    `SELECT *
+     FROM order_items
+     WHERE order_id = ?
+     ORDER BY id ASC`
+  ).bind(orderId).all();
+
+  const events = await env.DB.prepare(
+    `SELECT *
+     FROM order_events
+     WHERE order_id = ?
+     ORDER BY created_at DESC, id DESC`
+  ).bind(orderId).all();
+
+  return json({
+    order,
+    items: items.results || [],
+    events: events.results || []
+  });
+}
+
+async function updateAdminOrderStatus(request, env, orderId, username) {
+  if (!env.DB) return json({ error: 'Order database is not configured.' }, 503);
+
+  let payload;
+  try {
+    payload = await request.json();
+  } catch {
+    return json({ error: 'Invalid JSON body.' }, 400);
+  }
+
+  const status = text(payload.status, 60);
+  if (!ADMIN_STATUSES.has(status)) {
+    return json({ error: 'Invalid order status.' }, 400);
+  }
+
+  const order = await env.DB.prepare('SELECT id FROM orders WHERE id = ?').bind(orderId).first();
+  if (!order) return json({ error: 'Order not found.' }, 404);
+
+  await env.DB.prepare(
+    `UPDATE orders
+     SET status = ?, updated_at = datetime('now')
+     WHERE id = ?`
+  ).bind(status, orderId).run();
+
+  await env.DB.prepare(
+    `INSERT INTO order_events (order_id, event_type, message, created_by)
+     VALUES (?, 'status_changed', ?, ?)`
+  ).bind(orderId, `Status changed to ${status}`, username || 'admin').run();
+
+  return json({ id: orderId, status });
+}
 
 async function createCheckoutSession(request, env, origin) {
   const stripeSecretKey = normalizeStripeSecretKey(env.STRIPE_SECRET_KEY);
@@ -509,6 +690,11 @@ async function hmacSha256Hex(secret, payload) {
   return [...new Uint8Array(digest)].map(byte => byte.toString(16).padStart(2, '0')).join('');
 }
 
+async function sha256Hex(payload) {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(payload));
+  return [...new Uint8Array(digest)].map(byte => byte.toString(16).padStart(2, '0')).join('');
+}
+
 function timingSafeEqual(a, b) {
   if (a.length !== b.length) return false;
 
@@ -517,6 +703,105 @@ function timingSafeEqual(a, b) {
     mismatch |= a.charCodeAt(i) ^ b.charCodeAt(i);
   }
   return mismatch === 0;
+}
+
+function isAdminAuthConfigured(env) {
+  return Boolean(
+    text(env.ADMIN_USERNAME) &&
+    text(env.ADMIN_SESSION_SECRET) &&
+    (text(env.ADMIN_PASSWORD) || text(env.ADMIN_PASSWORD_HASH))
+  );
+}
+
+async function verifyAdminCredentials(env, username, password) {
+  const expectedUsername = text(env.ADMIN_USERNAME);
+  const usernameMatches = timingSafeEqualText(username, expectedUsername);
+  const expectedPasswordHash = text(env.ADMIN_PASSWORD_HASH);
+  const expectedPassword = String(env.ADMIN_PASSWORD || '');
+  const passwordMatches = expectedPasswordHash
+    ? timingSafeEqualText(await sha256Hex(password), expectedPasswordHash.toLowerCase())
+    : timingSafeEqualText(password, expectedPassword);
+
+  return usernameMatches && passwordMatches;
+}
+
+async function createAdminSession(env, username) {
+  const exp = Math.floor(Date.now() / 1000) + ADMIN_SESSION_TTL_SECONDS;
+  const payload = base64UrlEncode(JSON.stringify({ u: username, exp }));
+  const signature = await hmacSha256Hex(env.ADMIN_SESSION_SECRET, payload);
+  return `${payload}.${signature}`;
+}
+
+async function verifyAdminSession(request, env) {
+  if (!isAdminAuthConfigured(env)) {
+    return {
+      valid: false,
+      status: 503,
+      code: 'ADMIN_AUTH_NOT_CONFIGURED',
+      error: 'Dashboard login is not configured.'
+    };
+  }
+
+  const cookie = parseCookies(request.headers.get('cookie') || '')[ADMIN_SESSION_COOKIE];
+  if (!cookie) return { valid: false };
+
+  const [payload, signature] = cookie.split('.');
+  if (!payload || !signature) return { valid: false };
+
+  const expected = await hmacSha256Hex(env.ADMIN_SESSION_SECRET, payload);
+  if (!timingSafeEqual(signature, expected)) return { valid: false };
+
+  let session;
+  try {
+    session = JSON.parse(base64UrlDecode(payload));
+  } catch {
+    return { valid: false };
+  }
+
+  if (!session?.u || !session?.exp || session.exp < Math.floor(Date.now() / 1000)) {
+    return { valid: false };
+  }
+
+  if (!timingSafeEqualText(session.u, text(env.ADMIN_USERNAME))) {
+    return { valid: false };
+  }
+
+  return { valid: true, username: session.u };
+}
+
+function parseCookies(header) {
+  return Object.fromEntries(
+    header
+      .split(';')
+      .map(part => part.trim())
+      .filter(Boolean)
+      .map(part => {
+        const [name, ...value] = part.split('=');
+        return [decodeURIComponent(name), decodeURIComponent(value.join('='))];
+      })
+  );
+}
+
+function buildAdminCookie(value) {
+  return `${ADMIN_SESSION_COOKIE}=${encodeURIComponent(value)}; Max-Age=${ADMIN_SESSION_TTL_SECONDS}; Path=/; HttpOnly; Secure; SameSite=Strict`;
+}
+
+function clearAdminCookie() {
+  return `${ADMIN_SESSION_COOKIE}=; Max-Age=0; Path=/; HttpOnly; Secure; SameSite=Strict`;
+}
+
+function base64UrlEncode(value) {
+  return btoa(value).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+}
+
+function base64UrlDecode(value) {
+  const base64 = value.replace(/-/g, '+').replace(/_/g, '/');
+  const padding = '='.repeat((4 - (base64.length % 4)) % 4);
+  return atob(base64 + padding);
+}
+
+function timingSafeEqualText(a, b) {
+  return timingSafeEqual(String(a || ''), String(b || ''));
 }
 
 function validatePromo(rawCode, subtotalCents) {

@@ -22,6 +22,7 @@ Status: Live Stripe Checkout connected; tax and D1 launch work in progress
 - Sandbox `checkout.session.completed` trigger passed; live fake triggers are disabled by Stripe and require a real live payment.
 - Stripe Tax parameters are now prepared in the Worker, but Stripe Tax must be enabled/configured in Stripe before deploying that change.
 - The public `/admin/` path is now blocked by default in the Worker until real backend auth is connected.
+- A new protected dashboard is being built at `/dashboard/` with Worker-managed username/password login and HttpOnly session cookies.
 
 ## Recommended Payment Path
 
@@ -102,6 +103,32 @@ npm exec wrangler -- d1 migrations apply relentless-orders --remote
 ```
 
 If the API token does not have D1 query access, open the database in Cloudflare, use the D1 Console, paste `database/migrations/0001_order_foundation.sql`, and run it there.
+
+## Dashboard Access
+
+Dashboard URL:
+
+- `https://relentlessmouthguards.com/dashboard/`
+
+Worker secrets required:
+
+- `ADMIN_PASSWORD`
+- `ADMIN_SESSION_SECRET`
+
+Non-secret Worker var:
+
+- `ADMIN_USERNAME=relentless`
+
+The dashboard uses:
+
+- `POST /api/admin/login`
+- `POST /api/admin/logout`
+- `GET /api/admin/me`
+- `GET /api/admin/orders`
+- `GET /api/admin/orders/:id`
+- `PATCH /api/admin/orders/:id`
+
+The old `/admin/` route stays blocked by default.
 
 ## Important Rules
 
