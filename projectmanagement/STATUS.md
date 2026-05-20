@@ -135,3 +135,8 @@ Shop hero -> Package comparison -> Kit contents -> Ordering workflow -> Design u
   - Added `/dashboard/` as the new admin URL.
   - Added Worker-managed username/password login with an HttpOnly session cookie.
   - Added protected D1 order APIs for listing orders and updating statuses.
+- Continued dashboard operations polish:
+  - Added order search and status filtering.
+  - Added CSV export for the visible order list.
+  - Added status badges for faster scanning.
+  - Added an order detail drawer with customer, shipping, item, payment, notes, and timeline data from D1.
