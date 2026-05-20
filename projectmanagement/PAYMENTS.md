@@ -128,6 +128,8 @@ The dashboard uses:
 - `GET /api/admin/orders/:id`
 - `PATCH /api/admin/orders/:id`
 
+Dashboard order updates currently support status changes and protected internal notes. Internal notes are stored in D1, appear in the order timeline, and are included in CSV exports.
+
 The old `/admin/` route stays blocked by default.
 
 ## Important Rules

@@ -378,6 +378,37 @@
       font-size: 0.82rem;
       line-height: 1.45;
     }
+    .detail-form {
+      display: grid;
+      gap: 10px;
+    }
+    .detail-textarea {
+      width: 100%;
+      min-height: 130px;
+      resize: vertical;
+      padding: 12px;
+      background: var(--steel);
+      border: 1px solid var(--glass-border);
+      border-radius: 6px;
+      color: var(--white);
+      font: inherit;
+      line-height: 1.5;
+      outline: none;
+    }
+    .detail-textarea:focus {
+      border-color: var(--crimson);
+    }
+    .detail-form-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .detail-feedback {
+      color: var(--chrome);
+      font-size: 0.82rem;
+    }
     .notice {
       padding: 14px 16px;
       margin-top: 16px;
@@ -657,6 +688,7 @@
           order.sport,
           order.item_summary,
           order.promo_code,
+          order.internal_notes,
           order.payment_reference,
           order.payment_status,
           order.status
@@ -746,6 +778,25 @@
       });
     }
 
+    async function saveInternalNotes(orderId, notes, button, feedback) {
+      button.disabled = true;
+      const originalText = button.textContent;
+      button.textContent = 'Saving...';
+      feedback.textContent = '';
+      try {
+        const data = await requestJson('/api/admin/orders/' + encodeURIComponent(orderId), {
+          method: 'PATCH',
+          body: JSON.stringify({ internalNotes: notes })
+        });
+        renderOrderDetail(data.order, data.items || [], data.events || []);
+        await loadOrders();
+      } catch (error) {
+        feedback.textContent = error.message;
+        button.disabled = false;
+        button.textContent = originalText;
+      }
+    }
+
     async function openOrderDetail(orderId) {
       detailTitle.textContent = orderId;
       detailBody.innerHTML = '<p class="muted">Loading order detail...</p>';
@@ -816,6 +867,16 @@
           </div>
         </section>
         <section class="detail-section">
+          <h3>Internal Notes</h3>
+          <form class="detail-form" id="internalNotesForm">
+            <textarea class="detail-textarea" id="internalNotesInput" maxlength="4000" placeholder="Add production notes, customer follow-up, fit details, artwork reminders, or fulfillment context.">${escapeHtml(order.internal_notes || '')}</textarea>
+            <div class="detail-form-actions">
+              <span class="detail-feedback" id="internalNotesFeedback">Visible only inside this protected dashboard.</span>
+              <button class="btn btn-primary btn-sm" id="internalNotesSaveBtn" type="submit">Save Notes</button>
+            </div>
+          </form>
+        </section>
+        <section class="detail-section">
           <h3>Items</h3>
           <div class="detail-list">${itemsHtml}</div>
         </section>
@@ -824,11 +885,20 @@
           <div class="detail-list">${eventsHtml}</div>
         </section>
       `;
+
+      const notesForm = document.getElementById('internalNotesForm');
+      const notesInput = document.getElementById('internalNotesInput');
+      const notesButton = document.getElementById('internalNotesSaveBtn');
+      const notesFeedback = document.getElementById('internalNotesFeedback');
+      notesForm.addEventListener('submit', event => {
+        event.preventDefault();
+        saveInternalNotes(order.id, notesInput.value, notesButton, notesFeedback);
+      });
     }
 
     function exportVisibleOrders() {
       const rows = [
-        ['Order ID', 'Created', 'Status', 'Payment Status', 'Customer', 'Email', 'Items', 'Pre-tax Total', 'Tax', 'Amount Paid', 'Promo', 'Shipping']
+        ['Order ID', 'Created', 'Status', 'Payment Status', 'Customer', 'Email', 'Items', 'Pre-tax Total', 'Tax', 'Amount Paid', 'Promo', 'Shipping', 'Internal Notes']
       ];
       visibleOrders.forEach(order => {
         rows.push([
@@ -843,7 +913,8 @@
           Number(order.tax_cents || 0) / 100,
           Number(order.amount_paid_cents || 0) / 100,
           order.promo_code || '',
-          order.shipping_address || ''
+          order.shipping_address || '',
+          order.internal_notes || ''
         ]);
       });
       downloadCsv('relentless-orders.csv', rows);

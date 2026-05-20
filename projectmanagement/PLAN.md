@@ -165,6 +165,7 @@ Status: In progress
 - Added `workers/orders-api.mjs` as a non-deployed Workers API foundation.
 - Expanded local admin order statuses to match the future production workflow.
 - Kept live checkout as the email order-request flow until payments/database are ready.
+- Added protected dashboard internal notes so production details can be saved on each D1 order and exported with order CSVs.
 
 ## Phase 9: Design Builder Upgrade
 

@@ -141,7 +141,7 @@ async function handleAdminApi(request, env, url) {
   if (orderMatch) {
     const orderId = decodeURIComponent(orderMatch[1]);
     if (request.method === 'GET') return getAdminOrder(env, orderId);
-    if (request.method === 'PATCH') return updateAdminOrderStatus(request, env, orderId, session.username);
+    if (request.method === 'PATCH') return updateAdminOrder(request, env, orderId, session.username);
     return json({ error: 'Method not allowed' }, 405);
   }
 
@@ -183,7 +183,7 @@ async function listAdminOrders(env) {
     `SELECT
        o.id, o.created_at, o.updated_at, o.status,
        o.customer_name, o.customer_email, o.customer_phone,
-       o.shipping_address, o.sport, o.design_notes, o.promo_code,
+       o.shipping_address, o.sport, o.design_notes, o.internal_notes, o.promo_code,
        o.subtotal_cents, o.discount_cents, o.total_cents, o.tax_cents,
        o.amount_paid_cents, o.payment_status, o.payment_provider,
        o.payment_reference, o.email_opt_in,
@@ -232,7 +232,7 @@ async function getAdminOrder(env, orderId) {
   });
 }
 
-async function updateAdminOrderStatus(request, env, orderId, username) {
+async function updateAdminOrder(request, env, orderId, username) {
   if (!env.DB) return json({ error: 'Order database is not configured.' }, 503);
 
   let payload;
@@ -242,26 +242,53 @@ async function updateAdminOrderStatus(request, env, orderId, username) {
     return json({ error: 'Invalid JSON body.' }, 400);
   }
 
+  const hasStatus = Object.prototype.hasOwnProperty.call(payload, 'status');
+  const hasInternalNotes = Object.prototype.hasOwnProperty.call(payload, 'internalNotes');
   const status = text(payload.status, 60);
-  if (!ADMIN_STATUSES.has(status)) {
+  const internalNotes = text(payload.internalNotes, 4000);
+
+  if (!hasStatus && !hasInternalNotes) {
+    return json({ error: 'No order updates were provided.' }, 400);
+  }
+
+  if (hasStatus && !ADMIN_STATUSES.has(status)) {
     return json({ error: 'Invalid order status.' }, 400);
   }
 
-  const order = await env.DB.prepare('SELECT id FROM orders WHERE id = ?').bind(orderId).first();
+  const order = await env.DB.prepare(
+    'SELECT id, status, internal_notes FROM orders WHERE id = ?'
+  ).bind(orderId).first();
   if (!order) return json({ error: 'Order not found.' }, 404);
 
-  await env.DB.prepare(
-    `UPDATE orders
-     SET status = ?, updated_at = datetime('now')
-     WHERE id = ?`
-  ).bind(status, orderId).run();
+  if (hasStatus) {
+    await env.DB.prepare(
+      `UPDATE orders
+       SET status = ?, updated_at = datetime('now')
+       WHERE id = ?`
+    ).bind(status, orderId).run();
 
-  await env.DB.prepare(
-    `INSERT INTO order_events (order_id, event_type, message, created_by)
-     VALUES (?, 'status_changed', ?, ?)`
-  ).bind(orderId, `Status changed to ${status}`, username || 'admin').run();
+    if (status !== order.status) {
+      await env.DB.prepare(
+        `INSERT INTO order_events (order_id, event_type, message, created_by)
+         VALUES (?, 'status_changed', ?, ?)`
+      ).bind(orderId, `Status changed from ${order.status} to ${status}`, username || 'admin').run();
+    }
+  }
 
-  return json({ id: orderId, status });
+  if (hasInternalNotes && internalNotes !== String(order.internal_notes || '')) {
+    await env.DB.prepare(
+      `UPDATE orders
+       SET internal_notes = ?, updated_at = datetime('now')
+       WHERE id = ?`
+    ).bind(internalNotes || null, orderId).run();
+
+    await env.DB.prepare(
+      `INSERT INTO order_events (order_id, event_type, message, created_by)
+       VALUES (?, 'internal_note', ?, ?)`
+    ).bind(orderId, internalNotes ? `Internal note saved: ${internalNotes}` : 'Internal notes cleared', username || 'admin').run();
+  }
+
+  return getAdminOrder(env, orderId);
 }
 
 async function createCheckoutSession(request, env, origin) {

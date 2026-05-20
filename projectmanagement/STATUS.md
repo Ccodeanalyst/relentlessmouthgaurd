@@ -140,3 +140,7 @@ Shop hero -> Package comparison -> Kit contents -> Ordering workflow -> Design u
   - Added CSV export for the visible order list.
   - Added status badges for faster scanning.
   - Added an order detail drawer with customer, shipping, item, payment, notes, and timeline data from D1.
+- Started production workflow controls:
+  - Added protected internal notes editing for D1 orders.
+  - Internal note changes are saved to the order record and logged in the order timeline.
+  - Included internal notes in dashboard search and CSV export.
