@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: May 19, 2026
+Last updated: May 20, 2026
 
 ## Completed
 
@@ -144,3 +144,7 @@ Shop hero -> Package comparison -> Kit contents -> Ordering workflow -> Design u
   - Added protected internal notes editing for D1 orders.
   - Internal note changes are saved to the order record and logged in the order timeline.
   - Included internal notes in dashboard search and CSV export.
+- Completed dashboard credential setup:
+  - Added local `.env` placeholders for dashboard username/password/session secret input.
+  - Set Cloudflare dashboard secrets from `.env` using `ADMIN_PASSWORD_HASH` and `ADMIN_SESSION_SECRET`.
+  - Verified live `/dashboard/` login after credential rotation.

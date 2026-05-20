@@ -1,6 +1,6 @@
 # Project Plan
 
-Last updated: May 17, 2026
+Last updated: May 20, 2026
 
 ## Phase 1: Funnel Structure
 
@@ -166,6 +166,7 @@ Status: In progress
 - Expanded local admin order statuses to match the future production workflow.
 - Kept live checkout as the email order-request flow until payments/database are ready.
 - Added protected dashboard internal notes so production details can be saved on each D1 order and exported with order CSVs.
+- Confirmed dashboard credential flow: local `.env` input, Cloudflare `ADMIN_PASSWORD_HASH`, and `ADMIN_SESSION_SECRET` with live login verification.
 
 ## Phase 9: Design Builder Upgrade
 
