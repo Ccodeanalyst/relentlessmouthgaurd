@@ -195,6 +195,73 @@
       color: var(--crimson);
       font-size: 0.78rem;
     }
+    .promo-layout {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.85fr) minmax(0, 1.35fr);
+      gap: 18px;
+      padding: 18px;
+    }
+    .promo-form {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+      padding: 16px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+    }
+    .promo-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .promo-form label {
+      display: grid;
+      gap: 6px;
+      color: var(--chrome);
+      font-family: var(--font-accent);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+    .promo-form .dashboard-input,
+    .promo-form .dashboard-select {
+      width: 100%;
+      min-width: 0;
+    }
+    .dashboard-check {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--white);
+      font-size: 0.86rem;
+    }
+    .dashboard-check input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--crimson);
+    }
+    .promo-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .promo-table {
+      min-width: 920px;
+    }
+    .promo-impact {
+      display: grid;
+      gap: 4px;
+    }
+    .promo-impact strong {
+      color: var(--white);
+    }
+    .promo-notice {
+      color: var(--chrome);
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
     .status-select {
       width: 170px;
       padding: 8px 10px;
@@ -445,12 +512,18 @@
       .orders-controls {
         justify-content: flex-start;
       }
+      .promo-layout {
+        grid-template-columns: 1fr;
+      }
     }
     @media (max-width: 520px) {
       .dashboard-grid {
         grid-template-columns: 1fr;
       }
       .detail-grid {
+        grid-template-columns: 1fr;
+      }
+      .promo-form-grid {
         grid-template-columns: 1fr;
       }
       .login-panel {
@@ -542,6 +615,99 @@
           </table>
         </div>
       </section>
+
+      <section style="margin-top:28px;">
+        <p class="section-label">Campaigns</p>
+        <h1 class="dashboard-heading">Promos</h1>
+        <p class="dashboard-subtle">Add, edit, disable, and track checkout promo codes from D1.</p>
+      </section>
+
+      <section class="dashboard-grid" aria-label="Promo metrics">
+        <div class="metric"><span>Active Promos</span><strong id="metricPromoActive">0</strong></div>
+        <div class="metric"><span>Redemptions</span><strong id="metricPromoUses">0</strong></div>
+        <div class="metric"><span>Discount Given</span><strong id="metricPromoDiscount">$0.00</strong></div>
+        <div class="metric"><span>Promo Revenue</span><strong id="metricPromoRevenue">$0.00</strong></div>
+      </section>
+
+      <section class="dashboard-panel">
+        <div class="orders-toolbar">
+          <div>
+            <h2>Promo Manager</h2>
+            <span class="muted" id="promoUpdated">Not loaded</span>
+          </div>
+          <div class="orders-controls">
+            <button class="btn btn-outline btn-sm" id="promoClearBtn" type="button">New Promo</button>
+          </div>
+        </div>
+        <div class="promo-layout">
+          <form class="promo-form" id="promoForm">
+            <div>
+              <h2 style="margin:0;font-family:var(--font-accent);font-size:0.9rem;letter-spacing:2px;text-transform:uppercase;">Promo Setup</h2>
+              <p class="promo-notice" id="promoNotice">Codes normalize to uppercase before saving.</p>
+            </div>
+            <label>
+              Code
+              <input class="dashboard-input" id="promoCode" maxlength="40" placeholder="FIGHTCLUBCRATE15" required>
+            </label>
+            <label>
+              Campaign
+              <input class="dashboard-input" id="promoCampaign" maxlength="120" placeholder="Fight Club Crate" required>
+            </label>
+            <div class="promo-form-grid">
+              <label>
+                Discount Type
+                <select class="dashboard-select" id="promoDiscountType">
+                  <option value="pct">Percent</option>
+                  <option value="amount">Dollar Amount</option>
+                </select>
+              </label>
+              <label>
+                Value
+                <input class="dashboard-input" id="promoDiscountValue" type="number" min="1" step="1" placeholder="15" required>
+              </label>
+              <label>
+                Max Uses
+                <input class="dashboard-input" id="promoMaxUses" type="number" min="1" step="1" placeholder="Unlimited">
+              </label>
+              <label>
+                Starts
+                <input class="dashboard-input" id="promoStartsAt" type="date">
+              </label>
+              <label>
+                Expires
+                <input class="dashboard-input" id="promoExpiresAt" type="date">
+              </label>
+              <label class="dashboard-check" style="align-self:end;">
+                <input id="promoActive" type="checkbox" checked>
+                Active
+              </label>
+            </div>
+            <div class="promo-actions">
+              <button class="btn btn-primary btn-sm" id="promoSaveBtn" type="submit">Save Promo</button>
+              <button class="btn btn-outline btn-sm" id="promoResetBtn" type="button">Clear</button>
+            </div>
+          </form>
+          <div class="table-wrap">
+            <table class="dashboard-table promo-table">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Campaign</th>
+                  <th>Discount</th>
+                  <th>Status</th>
+                  <th>Usage</th>
+                  <th>Window</th>
+                  <th>Impact</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="promosBody">
+                <tr><td colspan="8" class="muted">Loading promos...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
       <div class="notice" id="dashboardNotice"></div>
     </div>
   </main>
@@ -579,12 +745,25 @@
     const ordersBody = document.getElementById('ordersBody');
     const orderSearch = document.getElementById('orderSearch');
     const statusFilter = document.getElementById('statusFilter');
+    const promosBody = document.getElementById('promosBody');
+    const promoForm = document.getElementById('promoForm');
+    const promoNotice = document.getElementById('promoNotice');
+    const promoCodeInput = document.getElementById('promoCode');
+    const promoCampaignInput = document.getElementById('promoCampaign');
+    const promoDiscountTypeInput = document.getElementById('promoDiscountType');
+    const promoDiscountValueInput = document.getElementById('promoDiscountValue');
+    const promoMaxUsesInput = document.getElementById('promoMaxUses');
+    const promoStartsAtInput = document.getElementById('promoStartsAt');
+    const promoExpiresAtInput = document.getElementById('promoExpiresAt');
+    const promoActiveInput = document.getElementById('promoActive');
     const detailBackdrop = document.getElementById('detailBackdrop');
     const detailDrawer = document.getElementById('detailDrawer');
     const detailBody = document.getElementById('detailBody');
     const detailTitle = document.getElementById('detailTitle');
     let allOrders = [];
     let visibleOrders = [];
+    let allPromos = [];
+    let editingPromoCode = '';
 
     statusFilter.innerHTML += STATUSES.map(status => (
       `<option value="${status}">${statusLabel(status)}</option>`
@@ -649,10 +828,15 @@
       try {
         await requestJson('/api/admin/me');
         showDashboard();
-        await loadOrders();
+        await loadDashboardData();
       } catch (error) {
         showLogin(error.message === 'Dashboard login is not configured.' ? error.message : '');
       }
+    }
+
+    async function loadDashboardData() {
+      await loadOrders();
+      await loadPromos();
     }
 
     async function loadOrders() {
@@ -672,6 +856,178 @@
       document.getElementById('metricPaid').textContent = paid.length;
       document.getElementById('metricPending').textContent = pending.length;
       document.getElementById('metricRevenue').textContent = fmtCents(revenue);
+    }
+
+    async function loadPromos() {
+      const { promos } = await requestJson('/api/admin/promos');
+      allPromos = promos || [];
+      renderPromoMetrics(allPromos);
+      renderPromos(allPromos);
+      document.getElementById('promoUpdated').textContent = 'Updated ' + new Date().toLocaleTimeString();
+    }
+
+    function renderPromoMetrics(promos) {
+      const activePromos = promos.filter(promo => promoStatus(promo) === 'active');
+      const uses = promos.reduce((sum, promo) => sum + Number(promo.uses || 0), 0);
+      const discount = promos.reduce((sum, promo) => sum + Number(promo.discount_total_cents || 0), 0);
+      const revenue = promos.reduce((sum, promo) => sum + Number(promo.paid_revenue_cents || 0), 0);
+      document.getElementById('metricPromoActive').textContent = activePromos.length;
+      document.getElementById('metricPromoUses').textContent = uses;
+      document.getElementById('metricPromoDiscount').textContent = fmtCents(discount);
+      document.getElementById('metricPromoRevenue').textContent = fmtCents(revenue);
+    }
+
+    function renderPromos(promos) {
+      if (!promos.length) {
+        promosBody.innerHTML = '<tr><td colspan="8" class="muted">No promo codes in D1 yet.</td></tr>';
+        return;
+      }
+
+      promosBody.innerHTML = promos.map(promo => {
+        const status = promoStatus(promo);
+        const uses = Number(promo.uses || 0);
+        const maxUses = promo.max_uses ? Number(promo.max_uses) : null;
+        const usage = maxUses ? `${uses} / ${maxUses}` : `${uses} / unlimited`;
+        const starts = promo.starts_at || 'Now';
+        const expires = promo.expires_at || 'No expiry';
+        return `
+          <tr>
+            <td><code>${escapeHtml(promo.code)}</code></td>
+            <td>${escapeHtml(promo.campaign)}</td>
+            <td>${escapeHtml(formatPromoDiscount(promo))}</td>
+            <td>${statusBadge(status)}</td>
+            <td>${escapeHtml(usage)}</td>
+            <td>
+              <div>${escapeHtml(starts)}</div>
+              <div class="muted">${escapeHtml(expires)}</div>
+            </td>
+            <td>
+              <div class="promo-impact">
+                <strong>${fmtCents(promo.paid_revenue_cents)}</strong>
+                <span class="muted">${fmtCents(promo.discount_total_cents)} discounted</span>
+                <span class="muted">${Number(promo.order_count || 0)} order(s)</span>
+              </div>
+            </td>
+            <td>
+              <button class="row-action promo-edit-btn" data-promo-code="${escapeHtml(promo.code)}" type="button">Edit</button>
+              <button class="row-action promo-delete-btn" data-promo-code="${escapeHtml(promo.code)}" type="button">${uses > 0 ? 'Disable' : 'Delete'}</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      document.querySelectorAll('.promo-edit-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          const promo = allPromos.find(item => item.code === button.dataset.promoCode);
+          if (promo) editPromo(promo);
+        });
+      });
+
+      document.querySelectorAll('.promo-delete-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          deletePromo(button.dataset.promoCode).catch(error => {
+            promoNotice.textContent = error.message;
+          });
+        });
+      });
+    }
+
+    function promoStatus(promo) {
+      if (Number(promo.active || 0) !== 1) return 'inactive';
+      const today = new Date();
+      const starts = promo.starts_at ? new Date(promo.starts_at + 'T00:00:00') : null;
+      const expires = promo.expires_at ? new Date(promo.expires_at + 'T23:59:59') : null;
+      if (starts && starts > today) return 'scheduled';
+      if (expires && expires < today) return 'expired';
+      if (promo.max_uses && Number(promo.uses || 0) >= Number(promo.max_uses)) return 'maxed-out';
+      return 'active';
+    }
+
+    function formatPromoDiscount(promo) {
+      const value = Number(promo.discount_value || 0);
+      if (promo.discount_type === 'amount') return fmtCents(value);
+      return `${value}% off`;
+    }
+
+    function editPromo(promo) {
+      editingPromoCode = promo.code;
+      promoCodeInput.value = promo.code;
+      promoCodeInput.readOnly = true;
+      promoCampaignInput.value = promo.campaign || '';
+      promoDiscountTypeInput.value = promo.discount_type || 'pct';
+      promoDiscountValueInput.value = promo.discount_type === 'amount'
+        ? (Number(promo.discount_value || 0) / 100).toFixed(2)
+        : Number(promo.discount_value || 0);
+      promoMaxUsesInput.value = promo.max_uses || '';
+      promoStartsAtInput.value = promo.starts_at || '';
+      promoExpiresAtInput.value = promo.expires_at || '';
+      promoActiveInput.checked = Number(promo.active || 0) === 1;
+      promoNotice.textContent = `Editing ${promo.code}.`;
+      document.getElementById('promoSaveBtn').textContent = 'Update Promo';
+      promoCodeInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function resetPromoForm() {
+      editingPromoCode = '';
+      promoForm.reset();
+      promoCodeInput.readOnly = false;
+      promoActiveInput.checked = true;
+      promoNotice.textContent = 'Codes normalize to uppercase before saving.';
+      document.getElementById('promoSaveBtn').textContent = 'Save Promo';
+    }
+
+    async function savePromo(event) {
+      event.preventDefault();
+      const button = document.getElementById('promoSaveBtn');
+      const wasEditing = Boolean(editingPromoCode);
+      button.disabled = true;
+      button.textContent = wasEditing ? 'Updating...' : 'Saving...';
+      promoNotice.textContent = '';
+
+      const type = promoDiscountTypeInput.value;
+      const rawValue = Number(promoDiscountValueInput.value);
+      const discountValue = type === 'amount' ? Math.round(rawValue * 100) : Math.round(rawValue);
+      const payload = {
+        code: promoCodeInput.value,
+        campaign: promoCampaignInput.value,
+        discountType: type,
+        discountValue,
+        maxUses: promoMaxUsesInput.value || null,
+        startsAt: promoStartsAtInput.value || null,
+        expiresAt: promoExpiresAtInput.value || null,
+        active: promoActiveInput.checked
+      };
+
+      try {
+        const path = editingPromoCode
+          ? '/api/admin/promos/' + encodeURIComponent(editingPromoCode)
+          : '/api/admin/promos';
+        await requestJson(path, {
+          method: wasEditing ? 'PATCH' : 'POST',
+          body: JSON.stringify(payload)
+        });
+        resetPromoForm();
+        await loadPromos();
+        promoNotice.textContent = 'Promo saved.';
+      } catch (error) {
+        promoNotice.textContent = error.message;
+      } finally {
+        button.disabled = false;
+        button.textContent = editingPromoCode ? 'Update Promo' : 'Save Promo';
+      }
+    }
+
+    async function deletePromo(code) {
+      const promo = allPromos.find(item => item.code === code);
+      const action = promo && Number(promo.uses || 0) > 0 ? 'disable' : 'delete';
+      if (!window.confirm(`Really ${action} ${code}?`)) return;
+
+      await requestJson('/api/admin/promos/' + encodeURIComponent(code), {
+        method: 'DELETE'
+      });
+      if (editingPromoCode === code) resetPromoForm();
+      await loadPromos();
+      promoNotice.textContent = action === 'disable' ? 'Promo disabled.' : 'Promo deleted.';
     }
 
     function applyFilters() {
@@ -951,7 +1307,7 @@
         });
         document.getElementById('password').value = '';
         showDashboard();
-        await loadOrders();
+        await loadDashboardData();
       } catch (error) {
         loginNotice.textContent = error.message;
       } finally {
@@ -966,9 +1322,20 @@
     });
 
     document.getElementById('refreshBtn').addEventListener('click', () => {
-      loadOrders().catch(error => {
+      loadDashboardData().catch(error => {
         dashboardNotice.textContent = error.message;
       });
+    });
+
+    promoForm.addEventListener('submit', savePromo);
+    document.getElementById('promoResetBtn').addEventListener('click', resetPromoForm);
+    document.getElementById('promoClearBtn').addEventListener('click', resetPromoForm);
+    promoCodeInput.addEventListener('input', () => {
+      promoCodeInput.value = promoCodeInput.value.toUpperCase().replace(/[^A-Z0-9_-]/g, '');
+    });
+    promoDiscountTypeInput.addEventListener('change', () => {
+      promoDiscountValueInput.placeholder = promoDiscountTypeInput.value === 'amount' ? '25.00' : '15';
+      promoDiscountValueInput.step = promoDiscountTypeInput.value === 'amount' ? '0.01' : '1';
     });
 
     orderSearch.addEventListener('input', applyFilters);

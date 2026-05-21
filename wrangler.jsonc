@@ -20,7 +20,10 @@
       "/admin/*",
       "/dashboard",
       "/dashboard/*",
-      "/api/admin/*"
+      "/api/admin/*",
+      "/api/validate-promo",
+      "/api/create-checkout-session",
+      "/api/stripe-webhook"
     ]
   },
   "d1_databases": [

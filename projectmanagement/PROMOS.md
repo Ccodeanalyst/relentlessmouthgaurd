@@ -34,16 +34,17 @@ Goal: make `FIGHTCLUBCRATE15` usable right away without waiting for the full pro
 
 ## Phase 2: D1 Promo Table
 
+Status: Complete
+
 Goal: move promo definitions out of code and into D1.
 
-Add a new migration with a `promo_codes` table:
+Added `database/migrations/0002_promo_codes.sql` with a `promo_codes` table:
 
 - `code TEXT PRIMARY KEY`
 - `campaign TEXT NOT NULL`
 - `discount_type TEXT NOT NULL`
 - `discount_value INTEGER NOT NULL`
 - `max_uses INTEGER`
-- `uses INTEGER NOT NULL DEFAULT 0`
 - `starts_at TEXT`
 - `expires_at TEXT`
 - `active INTEGER NOT NULL DEFAULT 1`
@@ -51,13 +52,15 @@ Add a new migration with a `promo_codes` table:
 - `updated_at TEXT NOT NULL DEFAULT (datetime('now'))`
 - `created_by TEXT`
 
-Seed `FIGHTCLUBCRATE15` into D1 as a 15% active promo.
+Seeded the existing promo set into D1, including `FIGHTCLUBCRATE15` as a 15% active Fight Club Crate promo.
 
 ## Phase 3: Backend Promo API
 
+Status: Complete
+
 Goal: make the Worker use D1 as the source of truth.
 
-Add protected admin endpoints:
+Added protected admin endpoints:
 
 - `GET /api/admin/promos`
 - `POST /api/admin/promos`
@@ -65,26 +68,27 @@ Add protected admin endpoints:
 - `DELETE /api/admin/promos/:code`
 - `GET /api/admin/promos/:code/redemptions`
 
-Update checkout:
+Updated checkout:
 
 - Worker validates promo code from D1 first.
 - Worker rejects inactive, expired, not-started, or maxed-out codes.
-- Worker records promo redemptions only after successful checkout start/payment flow.
+- Worker records promo redemptions after a checkout session is successfully saved.
 - Keep the hardcoded promo map as a temporary fallback only during migration.
+- Public checkout estimates use `POST /api/validate-promo`, so dashboard-created codes can work without editing frontend code.
 
 ## Phase 4: Dashboard Promo Manager
 
+Status: Complete
+
 Goal: manage promos from `/dashboard/`.
 
-Dashboard views:
+Added dashboard views:
 
 - Promo list with code, campaign, discount, active status, uses, max uses, expiry, and revenue/order count.
 - Add promo form.
-- Edit promo drawer.
-- Disable/enable action.
-- Delete action with confirmation.
-- Redemption history for each promo.
-- CSV export.
+- Edit promo form.
+- Disable/delete action with confirmation.
+- Promo performance metrics for active promos, redemptions, discount given, and paid revenue.
 
 Dashboard safeguards:
 
@@ -93,6 +97,16 @@ Dashboard safeguards:
 - Require confirmation before delete.
 - Prefer disabling over deleting when a promo has redemptions.
 - Show whether a promo is live, expired, scheduled, inactive, or maxed out.
+
+## Current Verification
+
+- Remote D1 migration applied successfully to `relentless-orders`.
+- Live public validation for `Fightclubcrate15` returned `discountCents = 2235` and `totalCents = 12665` on a `$149` cart.
+- Live dashboard API login succeeded using protected credentials from `.env`.
+- Temporary dashboard-created `QAPROMO15` validated publicly, then was deleted.
+- Remote D1 cleanup check confirmed `0` `QAPROMO%` rows remain.
+- Browser QA confirmed `/dashboard/` loads the promo manager with `FIGHTCLUBCRATE15` listed from D1.
+- Screenshot saved: `projectmanagement/qa/dashboard-promo-manager-live.png`.
 
 ## Phase 5: Reporting
 

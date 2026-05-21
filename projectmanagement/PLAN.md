@@ -203,9 +203,11 @@ Status: Planned
 
 ## Phase 11: Promo Management
 
-Status: Planned
+Status: Complete
 
-- Add `Fightclubcrate15` as a 15% Fight Club Crate promo.
-- Move promo definitions from hardcoded frontend/Worker maps into D1.
-- Add protected dashboard promo management for add, edit, disable, delete, redemption tracking, and campaign reporting.
+- Added `Fightclubcrate15` as a 15% Fight Club Crate promo.
+- Moved promo definitions into D1 with a seeded `promo_codes` table.
+- Added protected dashboard promo management for add, edit, disable/delete, usage tracking, and campaign reporting metrics.
+- Added public backend promo validation for checkout estimates.
+- Verified the live dashboard and D1-backed checkout promo flow.
 - See `projectmanagement/PROMOS.md` for the implementation phases.

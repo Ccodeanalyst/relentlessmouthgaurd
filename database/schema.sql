@@ -65,8 +65,25 @@ CREATE TABLE IF NOT EXISTS promo_redemptions (
   FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS promo_codes (
+  code TEXT PRIMARY KEY,
+  campaign TEXT NOT NULL,
+  discount_type TEXT NOT NULL DEFAULT 'pct',
+  discount_value INTEGER NOT NULL,
+  max_uses INTEGER,
+  starts_at TEXT,
+  expires_at TEXT,
+  active INTEGER NOT NULL DEFAULT 1,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+  created_by TEXT
+);
+
 CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status);
 CREATE INDEX IF NOT EXISTS idx_orders_email ON orders(customer_email);
 CREATE INDEX IF NOT EXISTS idx_orders_created_at ON orders(created_at);
 CREATE INDEX IF NOT EXISTS idx_order_items_order_id ON order_items(order_id);
 CREATE INDEX IF NOT EXISTS idx_order_events_order_id ON order_events(order_id);
+CREATE INDEX IF NOT EXISTS idx_promo_codes_active ON promo_codes(active);
+CREATE INDEX IF NOT EXISTS idx_promo_codes_campaign ON promo_codes(campaign);
+CREATE INDEX IF NOT EXISTS idx_promo_redemptions_code ON promo_redemptions(promo_code);

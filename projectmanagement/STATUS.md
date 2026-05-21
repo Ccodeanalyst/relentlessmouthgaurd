@@ -151,3 +151,11 @@ Shop hero -> Package comparison -> Kit contents -> Ordering workflow -> Design u
 - Started promo management phase:
   - Added `projectmanagement/PROMOS.md` with D1-backed promo management phases.
   - Added `Fightclubcrate15` / `FIGHTCLUBCRATE15` as a 15% Fight Club Crate promo in the frontend estimate and Worker backend validation.
+- Completed D1-backed promo management:
+  - Added the `promo_codes` D1 migration and seeded existing active promo codes.
+  - Added protected dashboard promo APIs for list, create, edit, disable/delete, and redemption lookup.
+  - Added public `/api/validate-promo` so checkout estimates use backend promo validation.
+  - Added `/dashboard/` promo manager UI with add/edit controls, active status, usage limits, discount impact, and revenue metrics.
+  - Deployed the update to Cloudflare and verified `FIGHTCLUBCRATE15` live against D1.
+  - Confirmed dashboard-created promo validation with temporary `QAPROMO15`, then removed the QA code from D1.
+  - Saved live dashboard QA screenshot in `projectmanagement/qa/dashboard-promo-manager-live.png`.
