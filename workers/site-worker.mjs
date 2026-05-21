@@ -48,6 +48,7 @@ const PROMOS = {
   WELCOME10: { discount: 10, type: 'pct', campaign: 'Welcome' },
   FIGHTCLUB501: { discount: 20, type: 'pct', campaign: 'Fight Club Crate' },
   FC15OFF: { discount: 15, type: 'pct', campaign: 'Fight Club Crate' },
+  FIGHTCLUBCRATE15: { discount: 15, type: 'pct', campaign: 'Fight Club Crate' },
   IM1120: { discount: 20, type: 'pct', campaign: 'Fight Club Crate' },
   FIGHTEVO: { discount: 15, type: 'pct', campaign: 'FightEvo' },
   TEAMSRISUK50: { discount: 50, type: 'pct', campaign: 'Team Srisuk' },

@@ -10,6 +10,7 @@ const SEED_PROMOS = {
   'WELCOME10':    { discount: 10, type: 'pct', maxUses: 9999, uses: 0, expiry: '2028-12-31', campaign: 'Welcome',           created: '2026-01-01' },
   'FIGHTCLUB501': { discount: 20, type: 'pct', maxUses:    1, uses: 0, expiry: '2027-06-30', campaign: 'Fight Club Crate',  created: '2026-01-01' },
   'FC15OFF':      { discount: 15, type: 'pct', maxUses:    1, uses: 0, expiry: '2027-06-30', campaign: 'Fight Club Crate',  created: '2026-01-01' },
+  'FIGHTCLUBCRATE15': { discount: 15, type: 'pct', maxUses: 9999, uses: 0, expiry: '2028-12-31', campaign: 'Fight Club Crate', created: '2026-05-20' },
   'IM1120':       { discount: 20, type: 'pct', maxUses:    1, uses: 0, expiry: '2027-06-30', campaign: 'Fight Club Crate',  created: '2026-01-01' },
   'FIGHTEVO':     { discount: 15, type: 'pct', maxUses: 9999, uses: 0, expiry: '2028-12-31', campaign: 'FightEvo',          created: '2026-05-16' },
   'TEAMSRISUK50': { discount: 50, type: 'pct', maxUses: 9999, uses: 0, expiry: '2028-12-31', campaign: 'Team Srisuk',       created: '2026-05-16' },

@@ -148,3 +148,6 @@ Shop hero -> Package comparison -> Kit contents -> Ordering workflow -> Design u
   - Added local `.env` placeholders for dashboard username/password/session secret input.
   - Set Cloudflare dashboard secrets from `.env` using `ADMIN_PASSWORD_HASH` and `ADMIN_SESSION_SECRET`.
   - Verified live `/dashboard/` login after credential rotation.
+- Started promo management phase:
+  - Added `projectmanagement/PROMOS.md` with D1-backed promo management phases.
+  - Added `Fightclubcrate15` / `FIGHTCLUBCRATE15` as a 15% Fight Club Crate promo in the frontend estimate and Worker backend validation.

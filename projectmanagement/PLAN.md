@@ -200,3 +200,12 @@ Status: Planned
 - Add FAQ content for shipping time, impression kit process, proof review, fit concerns, and care instructions.
 - Review Terms & Safety Disclaimer with a qualified professional before launch.
 - Build promo campaign tracking for gyms, affiliates, and sponsored athletes.
+
+## Phase 11: Promo Management
+
+Status: Planned
+
+- Add `Fightclubcrate15` as a 15% Fight Club Crate promo.
+- Move promo definitions from hardcoded frontend/Worker maps into D1.
+- Add protected dashboard promo management for add, edit, disable, delete, redemption tracking, and campaign reporting.
+- See `projectmanagement/PROMOS.md` for the implementation phases.
