@@ -159,3 +159,7 @@ Shop hero -> Package comparison -> Kit contents -> Ordering workflow -> Design u
   - Deployed the update to Cloudflare and verified `FIGHTCLUBCRATE15` live against D1.
   - Confirmed dashboard-created promo validation with temporary `QAPROMO15`, then removed the QA code from D1.
   - Saved live dashboard QA screenshot in `projectmanagement/qa/dashboard-promo-manager-live.png`.
+- Improved the live backend dashboard layout:
+  - Added a compact operations console overview, collapsible Orders and Promo Manager modules, bounded table scroll regions, sticky table headers, visible row counts, and order date range filters.
+  - Made the order detail drawer's Items and Timeline sections collapsible so long records stay manageable.
+  - Deployed the dashboard layout update to Cloudflare and saved QA screenshot `projectmanagement/qa/dashboard-backend-layout-live.png`.

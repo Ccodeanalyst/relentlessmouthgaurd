@@ -8,20 +8,26 @@
   <style>
     body {
       min-height: 100vh;
-      background: #08090d;
+      background: #07080c;
       color: var(--white);
     }
     .dashboard-shell {
       min-height: 100vh;
-      padding: 28px;
+      padding: 0;
     }
     .dashboard-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 20px;
-      padding-bottom: 24px;
+      padding: 18px 28px;
+      margin: 0 -28px;
       border-bottom: 1px solid var(--glass-border);
+      background: rgba(7,8,12,0.94);
+      backdrop-filter: blur(14px);
     }
     .dashboard-brand {
       display: flex;
@@ -30,7 +36,7 @@
       min-width: 0;
     }
     .dashboard-brand img {
-      width: 180px;
+      width: 160px;
       max-width: 48vw;
       height: auto;
     }
@@ -51,14 +57,56 @@
       justify-content: flex-end;
     }
     .dashboard-page {
-      max-width: 1440px;
+      width: min(1480px, 100%);
       margin: 0 auto;
+      padding: 0 28px 28px;
     }
     .dashboard-panel {
       margin-top: 24px;
       background: rgba(255,255,255,0.035);
       border: 1px solid var(--glass-border);
       border-radius: 8px;
+      overflow: hidden;
+    }
+    .dashboard-panel.is-collapsed .section-body {
+      display: none;
+    }
+    .dashboard-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+      gap: 18px;
+      align-items: stretch;
+      margin-top: 28px;
+    }
+    .dashboard-hero-card {
+      display: grid;
+      align-content: center;
+      gap: 8px;
+      padding: 18px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+    }
+    .dashboard-hero-card span {
+      color: var(--chrome);
+      font-family: var(--font-accent);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .dashboard-hero-card strong {
+      color: var(--white);
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .dashboard-hero-card p {
+      margin: 0;
+      color: var(--chrome);
+      font-size: 0.86rem;
+      line-height: 1.5;
     }
     .login-wrap {
       min-height: calc(100vh - 56px);
@@ -129,6 +177,7 @@
       padding: 18px;
       border-bottom: 1px solid var(--glass-border);
       flex-wrap: wrap;
+      background: rgba(255,255,255,0.02);
     }
     .orders-toolbar h2 {
       margin: 0;
@@ -145,6 +194,12 @@
       gap: 10px;
       flex-wrap: wrap;
     }
+    .toolbar-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
     .dashboard-input,
     .dashboard-select {
       min-height: 38px;
@@ -159,6 +214,9 @@
       width: min(320px, 70vw);
       padding: 8px 12px;
     }
+    .dashboard-input.date-input {
+      width: 150px;
+    }
     .dashboard-select {
       width: 180px;
       padding: 8px 10px;
@@ -168,7 +226,9 @@
       border-color: var(--crimson);
     }
     .table-wrap {
-      overflow-x: auto;
+      max-height: min(540px, 58vh);
+      overflow: auto;
+      scrollbar-color: rgba(255,255,255,0.22) rgba(255,255,255,0.04);
     }
     .dashboard-table {
       width: 100%;
@@ -184,6 +244,10 @@
       font-size: 0.86rem;
     }
     .dashboard-table th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: #11131a;
       color: var(--chrome);
       font-family: var(--font-accent);
       font-size: 0.72rem;
@@ -194,6 +258,28 @@
     .dashboard-table code {
       color: var(--crimson);
       font-size: 0.78rem;
+    }
+    .table-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 18px;
+      border-top: 1px solid var(--glass-border);
+      color: var(--chrome);
+      font-size: 0.82rem;
+      flex-wrap: wrap;
+    }
+    .panel-table-stack {
+      min-width: 0;
+    }
+    .module-toggle {
+      min-width: 104px;
+    }
+    .collapse-indicator {
+      display: inline-block;
+      width: 12px;
+      margin-right: 6px;
+      text-align: center;
     }
     .promo-layout {
       display: grid;
@@ -395,6 +481,34 @@
       letter-spacing: 2px;
       text-transform: uppercase;
     }
+    .detail-accordion {
+      padding: 0;
+    }
+    .detail-accordion summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 0;
+      color: var(--chrome);
+      font-family: var(--font-accent);
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .detail-accordion summary::after {
+      content: "+";
+      color: var(--white);
+      font-size: 1rem;
+    }
+    .detail-accordion[open] summary::after {
+      content: "-";
+    }
+    .detail-accordion-body {
+      padding-bottom: 18px;
+    }
     .detail-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -497,11 +611,16 @@
     }
     @media (max-width: 820px) {
       .dashboard-shell {
-        padding: 18px;
+        padding: 0;
+      }
+      .dashboard-page {
+        padding: 0 18px 18px;
       }
       .dashboard-topbar {
         align-items: flex-start;
         flex-direction: column;
+        padding: 18px;
+        margin: 0 -18px;
       }
       .dashboard-actions {
         justify-content: flex-start;
@@ -511,6 +630,9 @@
       }
       .orders-controls {
         justify-content: flex-start;
+      }
+      .dashboard-hero {
+        grid-template-columns: 1fr;
       }
       .promo-layout {
         grid-template-columns: 1fr;
@@ -568,10 +690,17 @@
         </div>
       </header>
 
-      <section style="margin-top:28px;">
-        <p class="section-label">Operations</p>
-        <h1 class="dashboard-heading">Orders</h1>
-        <p class="dashboard-subtle">Paid, pending, and production statuses from the Cloudflare D1 database.</p>
+      <section class="dashboard-hero">
+        <div>
+          <p class="section-label">Operations Console</p>
+          <h1 class="dashboard-heading">Backend Dashboard</h1>
+          <p class="dashboard-subtle">Orders, production status, customer notes, promo codes, and campaign performance from the Cloudflare D1 database.</p>
+        </div>
+        <aside class="dashboard-hero-card">
+          <span>Live System</span>
+          <strong>Stripe + D1</strong>
+          <p id="consoleTimestamp">Loading dashboard state...</p>
+        </aside>
       </section>
 
       <section class="dashboard-grid" aria-label="Order metrics">
@@ -581,45 +710,53 @@
         <div class="metric"><span>Revenue</span><strong id="metricRevenue">$0.00</strong></div>
       </section>
 
-      <section class="dashboard-panel">
+      <section class="dashboard-panel" id="ordersPanel">
         <div class="orders-toolbar">
-          <div>
-            <h2>Recent Orders</h2>
-            <span class="muted" id="lastUpdated">Not loaded</span>
+          <div class="toolbar-title">
+            <div>
+              <h2>Recent Orders</h2>
+              <span class="muted" id="lastUpdated">Not loaded</span>
+            </div>
+            <button class="row-action module-toggle" data-collapse-target="ordersPanel" type="button" aria-expanded="true">
+              <span class="collapse-indicator">-</span><span class="collapse-label">Collapse</span>
+            </button>
           </div>
           <div class="orders-controls">
             <input class="dashboard-input" id="orderSearch" type="search" placeholder="Search orders, customers, email, items">
             <select class="dashboard-select" id="statusFilter" aria-label="Filter by status">
               <option value="">All statuses</option>
             </select>
+            <input class="dashboard-input date-input" id="orderStartDate" type="date" aria-label="Start date">
+            <input class="dashboard-input date-input" id="orderEndDate" type="date" aria-label="End date">
+            <button class="btn btn-outline btn-sm" id="clearOrderDatesBtn" type="button">Clear Dates</button>
             <button class="btn btn-outline btn-sm" id="exportBtn" type="button">Export CSV</button>
           </div>
         </div>
-        <div class="table-wrap">
-          <table class="dashboard-table">
-            <thead>
-              <tr>
-                <th>Order</th>
-                <th>Customer</th>
-                <th>Items</th>
-                <th>Amount</th>
-                <th>Payment</th>
-                <th>Status</th>
-                <th>Created</th>
-                <th>Details</th>
-              </tr>
-            </thead>
-            <tbody id="ordersBody">
-              <tr><td colspan="8" class="muted">Loading orders...</td></tr>
-            </tbody>
-          </table>
+        <div class="section-body">
+          <div class="table-wrap">
+            <table class="dashboard-table">
+              <thead>
+                <tr>
+                  <th>Order</th>
+                  <th>Customer</th>
+                  <th>Items</th>
+                  <th>Amount</th>
+                  <th>Payment</th>
+                  <th>Status</th>
+                  <th>Created</th>
+                  <th>Details</th>
+                </tr>
+              </thead>
+              <tbody id="ordersBody">
+                <tr><td colspan="8" class="muted">Loading orders...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-footer">
+            <span id="ordersCount">0 orders visible</span>
+            <span class="muted">Use filters above; scroll inside this table instead of the whole page.</span>
+          </div>
         </div>
-      </section>
-
-      <section style="margin-top:28px;">
-        <p class="section-label">Campaigns</p>
-        <h1 class="dashboard-heading">Promos</h1>
-        <p class="dashboard-subtle">Add, edit, disable, and track checkout promo codes from D1.</p>
       </section>
 
       <section class="dashboard-grid" aria-label="Promo metrics">
@@ -629,17 +766,22 @@
         <div class="metric"><span>Promo Revenue</span><strong id="metricPromoRevenue">$0.00</strong></div>
       </section>
 
-      <section class="dashboard-panel">
+      <section class="dashboard-panel" id="promosPanel">
         <div class="orders-toolbar">
-          <div>
-            <h2>Promo Manager</h2>
-            <span class="muted" id="promoUpdated">Not loaded</span>
+          <div class="toolbar-title">
+            <div>
+              <h2>Promo Manager</h2>
+              <span class="muted" id="promoUpdated">Not loaded</span>
+            </div>
+            <button class="row-action module-toggle" data-collapse-target="promosPanel" type="button" aria-expanded="true">
+              <span class="collapse-indicator">-</span><span class="collapse-label">Collapse</span>
+            </button>
           </div>
           <div class="orders-controls">
             <button class="btn btn-outline btn-sm" id="promoClearBtn" type="button">New Promo</button>
           </div>
         </div>
-        <div class="promo-layout">
+        <div class="promo-layout section-body">
           <form class="promo-form" id="promoForm">
             <div>
               <h2 style="margin:0;font-family:var(--font-accent);font-size:0.9rem;letter-spacing:2px;text-transform:uppercase;">Promo Setup</h2>
@@ -687,24 +829,30 @@
               <button class="btn btn-outline btn-sm" id="promoResetBtn" type="button">Clear</button>
             </div>
           </form>
-          <div class="table-wrap">
-            <table class="dashboard-table promo-table">
-              <thead>
-                <tr>
-                  <th>Code</th>
-                  <th>Campaign</th>
-                  <th>Discount</th>
-                  <th>Status</th>
-                  <th>Usage</th>
-                  <th>Window</th>
-                  <th>Impact</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="promosBody">
-                <tr><td colspan="8" class="muted">Loading promos...</td></tr>
-              </tbody>
-            </table>
+          <div class="panel-table-stack">
+            <div class="table-wrap">
+              <table class="dashboard-table promo-table">
+                <thead>
+                  <tr>
+                    <th>Code</th>
+                    <th>Campaign</th>
+                    <th>Discount</th>
+                    <th>Status</th>
+                    <th>Usage</th>
+                    <th>Window</th>
+                    <th>Impact</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="promosBody">
+                  <tr><td colspan="8" class="muted">Loading promos...</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="table-footer">
+              <span id="promosCount">0 promos visible</span>
+              <span class="muted">Redeemed promos disable instead of deleting history.</span>
+            </div>
           </div>
         </div>
       </section>
@@ -745,6 +893,11 @@
     const ordersBody = document.getElementById('ordersBody');
     const orderSearch = document.getElementById('orderSearch');
     const statusFilter = document.getElementById('statusFilter');
+    const orderStartDate = document.getElementById('orderStartDate');
+    const orderEndDate = document.getElementById('orderEndDate');
+    const ordersCount = document.getElementById('ordersCount');
+    const promosCount = document.getElementById('promosCount');
+    const consoleTimestamp = document.getElementById('consoleTimestamp');
     const promosBody = document.getElementById('promosBody');
     const promoForm = document.getElementById('promoForm');
     const promoNotice = document.getElementById('promoNotice');
@@ -787,6 +940,27 @@
       if (!value) return '';
       const date = new Date(value.replace(' ', 'T') + 'Z');
       return Number.isNaN(date.getTime()) ? value : date.toLocaleString();
+    }
+
+    function shortDate(value) {
+      if (!value) return '';
+      const date = new Date(value.replace(' ', 'T') + 'Z');
+      if (Number.isNaN(date.getTime())) return value;
+      return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function orderCreatedTimestamp(order) {
+      const value = String(order.created_at || '');
+      if (!value) return 0;
+      const date = new Date(value.replace(' ', 'T') + 'Z');
+      return Number.isNaN(date.getTime()) ? 0 : date.getTime();
+    }
+
+    function dateInputTimestamp(value, endOfDay = false) {
+      if (!value) return 0;
+      const suffix = endOfDay ? 'T23:59:59' : 'T00:00:00';
+      const date = new Date(value + suffix);
+      return Number.isNaN(date.getTime()) ? 0 : date.getTime();
     }
 
     function statusLabel(status) {
@@ -837,6 +1011,7 @@
     async function loadDashboardData() {
       await loadOrders();
       await loadPromos();
+      consoleTimestamp.textContent = 'Last refreshed ' + new Date().toLocaleString();
     }
 
     async function loadOrders() {
@@ -880,6 +1055,7 @@
     function renderPromos(promos) {
       if (!promos.length) {
         promosBody.innerHTML = '<tr><td colspan="8" class="muted">No promo codes in D1 yet.</td></tr>';
+        promosCount.textContent = '0 promos visible';
         return;
       }
 
@@ -915,6 +1091,8 @@
           </tr>
         `;
       }).join('');
+
+      promosCount.textContent = `${promos.length} promo${promos.length === 1 ? '' : 's'} visible`;
 
       document.querySelectorAll('.promo-edit-btn').forEach(button => {
         button.addEventListener('click', () => {
@@ -1033,8 +1211,14 @@
     function applyFilters() {
       const search = orderSearch.value.trim().toLowerCase();
       const selectedStatus = statusFilter.value;
+      const startTime = dateInputTimestamp(orderStartDate.value);
+      const endTime = dateInputTimestamp(orderEndDate.value, true);
       visibleOrders = allOrders.filter(order => {
         const matchesStatus = !selectedStatus || order.status === selectedStatus || order.payment_status === selectedStatus;
+        const createdTime = orderCreatedTimestamp(order);
+        const matchesDate =
+          (!startTime || (createdTime && createdTime >= startTime)) &&
+          (!endTime || (createdTime && createdTime <= endTime));
         const haystack = [
           order.id,
           order.customer_name,
@@ -1049,7 +1233,7 @@
           order.payment_status,
           order.status
         ].join(' ').toLowerCase();
-        return matchesStatus && (!search || haystack.includes(search));
+        return matchesStatus && matchesDate && (!search || haystack.includes(search));
       });
       renderOrders(visibleOrders);
     }
@@ -1057,11 +1241,13 @@
     function renderOrders(orders) {
       if (!allOrders.length) {
         ordersBody.innerHTML = '<tr><td colspan="8" class="muted">No orders in D1 yet.</td></tr>';
+        ordersCount.textContent = '0 orders visible';
         return;
       }
 
       if (!orders.length) {
         ordersBody.innerHTML = '<tr><td colspan="8" class="muted">No orders match the current filters.</td></tr>';
+        ordersCount.textContent = `0 of ${allOrders.length} orders visible`;
         return;
       }
 
@@ -1102,11 +1288,16 @@
                 ${statusOptions}
               </select>
             </td>
-            <td>${fmtDate(order.created_at)}</td>
+            <td>
+              <strong>${shortDate(order.created_at)}</strong>
+              <div class="muted">${fmtDate(order.created_at)}</div>
+            </td>
             <td><button class="row-action detail-btn" data-order-id="${escapeHtml(order.id)}" type="button">Open</button></td>
           </tr>
         `;
       }).join('');
+
+      ordersCount.textContent = `${orders.length} of ${allOrders.length} order${allOrders.length === 1 ? '' : 's'} visible`;
 
       document.querySelectorAll('.status-select').forEach(select => {
         select.addEventListener('change', async () => {
@@ -1232,14 +1423,14 @@
             </div>
           </form>
         </section>
-        <section class="detail-section">
-          <h3>Items</h3>
-          <div class="detail-list">${itemsHtml}</div>
-        </section>
-        <section class="detail-section">
-          <h3>Timeline</h3>
-          <div class="detail-list">${eventsHtml}</div>
-        </section>
+        <details class="detail-section detail-accordion" open>
+          <summary>Items</summary>
+          <div class="detail-accordion-body"><div class="detail-list">${itemsHtml}</div></div>
+        </details>
+        <details class="detail-section detail-accordion">
+          <summary>Timeline</summary>
+          <div class="detail-accordion-body"><div class="detail-list">${eventsHtml}</div></div>
+        </details>
       `;
 
       const notesForm = document.getElementById('internalNotesForm');
@@ -1327,6 +1518,17 @@
       });
     });
 
+    document.querySelectorAll('[data-collapse-target]').forEach(button => {
+      button.addEventListener('click', () => {
+        const panel = document.getElementById(button.dataset.collapseTarget);
+        if (!panel) return;
+        const collapsed = panel.classList.toggle('is-collapsed');
+        button.setAttribute('aria-expanded', String(!collapsed));
+        button.querySelector('.collapse-label').textContent = collapsed ? 'Expand' : 'Collapse';
+        button.querySelector('.collapse-indicator').textContent = collapsed ? '+' : '-';
+      });
+    });
+
     promoForm.addEventListener('submit', savePromo);
     document.getElementById('promoResetBtn').addEventListener('click', resetPromoForm);
     document.getElementById('promoClearBtn').addEventListener('click', resetPromoForm);
@@ -1340,6 +1542,13 @@
 
     orderSearch.addEventListener('input', applyFilters);
     statusFilter.addEventListener('change', applyFilters);
+    orderStartDate.addEventListener('change', applyFilters);
+    orderEndDate.addEventListener('change', applyFilters);
+    document.getElementById('clearOrderDatesBtn').addEventListener('click', () => {
+      orderStartDate.value = '';
+      orderEndDate.value = '';
+      applyFilters();
+    });
     document.getElementById('exportBtn').addEventListener('click', exportVisibleOrders);
     document.getElementById('detailCloseBtn').addEventListener('click', closeOrderDetail);
     detailBackdrop.addEventListener('click', closeOrderDetail);
