@@ -192,14 +192,25 @@ Status: In progress
 
 ## Phase 10: Content, SEO, and Growth
 
-Status: Planned
+Status: In progress
 
+- See `projectmanagement/seo/` for the Month 1 SEO roadmap, Tacoma / greater Seattle local SEO plan, and implementation checklist.
 - Add more real product photos as they come in.
 - Add team/gym landing content when partnerships are ready.
 - Add contact-sport specific copy for MMA, boxing, Muay Thai, football, BJJ, and other sports.
 - Add FAQ content for shipping time, impression kit process, proof review, fit concerns, and care instructions.
 - Review Terms & Safety Disclaimer with a qualified professional before launch.
 - Build promo campaign tracking for gyms, affiliates, and sponsored athletes.
+
+## Phase 10 Current Pass
+
+- Added baseline page titles, descriptions, canonical URLs, social preview tags, and index controls.
+- Added `robots.txt` and `sitemap.xml`.
+- Added Blog navigation and a public blog archive at `/blog.html`.
+- Published two first SEO guides:
+  - `/blog/custom-mouthguards-tacoma-seattle.html`
+  - `/blog/mouthguards-near-me-contact-sports.html`
+- Added SEO keyword mapping, landing page plan, and blog content plan in `projectmanagement/seo/`.
 
 ## Phase 11: Promo Management
 

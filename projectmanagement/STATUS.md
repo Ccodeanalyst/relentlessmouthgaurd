@@ -163,3 +163,10 @@ Shop hero -> Package comparison -> Kit contents -> Ordering workflow -> Design u
   - Added a compact operations console overview, collapsible Orders and Promo Manager modules, bounded table scroll regions, sticky table headers, visible row counts, and order date range filters.
   - Made the order detail drawer's Items and Timeline sections collapsible so long records stay manageable.
   - Deployed the dashboard layout update to Cloudflare and saved QA screenshot `projectmanagement/qa/dashboard-backend-layout-live.png`.
+- Started SEO planning:
+  - Added `projectmanagement/seo/` with the Month 1 roadmap, Tacoma / greater Seattle local SEO plan, and implementation checklist.
+  - Linked the SEO folder from the main project plan.
+- Completed the first basic SEO implementation pass:
+  - Added canonical URLs, social preview tags, crawl controls, `robots.txt`, and `sitemap.xml`.
+  - Added Blog navigation, `/blog.html`, and two first keyword-targeted blog posts for Tacoma / Seattle custom mouthguards and "mouthguards near me".
+  - Added `KEYWORDS.md`, `LANDING-PAGES.md`, and `BLOG-CONTENT.md` to the SEO project management folder.

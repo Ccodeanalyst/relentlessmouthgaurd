@@ -4,6 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkout - RELENTLESS Mouthguards</title>
+  <meta name="description" content="Secure checkout for RELENTLESS custom sports mouthguard orders.">
+  <meta name="robots" content="noindex,follow">
+  <link rel="canonical" href="https://relentlessmouthguards.com/checkout.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="RELENTLESS Mouth Guards">
+  <meta property="og:title" content="Checkout | RELENTLESS Mouth Guards">
+  <meta property="og:description" content="Secure checkout for RELENTLESS custom sports mouthguard orders.">
+  <meta property="og:url" content="https://relentlessmouthguards.com/checkout.html">
+  <meta property="og:image" content="https://relentlessmouthguards.com/assets/images/relentless-logo-full.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Checkout | RELENTLESS Mouth Guards">
+  <meta name="twitter:description" content="Secure checkout for RELENTLESS custom sports mouthguard orders.">
+  <meta name="twitter:image" content="https://relentlessmouthguards.com/assets/images/relentless-logo-full.png">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -17,6 +30,7 @@
         <a href="index.html">Home</a>
         <a href="shop.html">Shop</a>
         <a href="gallery.html">Gallery</a>
+        <a href="blog.html">Blog</a>
         <a href="contact.html">Contact</a>
         <a href="shop.html" class="nav-cta">Start Order</a>
       </nav>
@@ -357,7 +371,7 @@
         });
         data = await response.json();
       } catch {
-        return false;
+        throw new Error('Unable to reach secure checkout. Please try again in a moment.');
       }
 
       if (response.ok && data.url) {
@@ -471,23 +485,66 @@
       }
     }
 
-    // Promo code
-    document.getElementById('applyPromoBtn').addEventListener('click', () => {
-      const code     = document.getElementById('promoInput').value;
+    async function applyPromoCode() {
+      const input = document.getElementById('promoInput');
+      const button = document.getElementById('applyPromoBtn');
       const feedback = document.getElementById('promoFeedback');
-      const result   = Promo.validate(code, Cart.subtotal());
+      const code = input.value.trim();
 
-      if (result.valid) {
-        appliedPromo = result;
-        feedback.textContent = `${result.label} applied! (${result.campaign})`;
-        feedback.className   = 'promo-feedback success';
-      } else {
+      if (!code) {
         appliedPromo = null;
-        feedback.textContent = result.msg;
-        feedback.className   = 'promo-feedback error';
+        feedback.textContent = 'Please enter a code.';
+        feedback.className = 'promo-feedback error';
+        updateTotals();
+        return;
       }
-      updateTotals();
-    });
+
+      button.disabled = true;
+      button.textContent = 'Checking...';
+
+      try {
+        const response = await fetch('/api/validate-promo', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ promoCode: code, items: Cart.get() })
+        });
+        const result = await response.json().catch(() => ({}));
+
+        if (response.ok && result.valid) {
+          appliedPromo = {
+            valid: true,
+            code: result.code,
+            amount: Number(result.discountAmount || 0),
+            label: result.label,
+            campaign: result.campaign
+          };
+          feedback.textContent = `${result.label} applied! (${result.campaign})`;
+          feedback.className = 'promo-feedback success';
+        } else {
+          appliedPromo = null;
+          feedback.textContent = result.msg || result.error || 'Code not recognised.';
+          feedback.className = 'promo-feedback error';
+        }
+      } catch {
+        const result = Promo.validate(code, Cart.subtotal());
+        if (result.valid) {
+          appliedPromo = result;
+          feedback.textContent = `${result.label} applied! (${result.campaign})`;
+          feedback.className = 'promo-feedback success';
+        } else {
+          appliedPromo = null;
+          feedback.textContent = 'Unable to validate code right now.';
+          feedback.className = 'promo-feedback error';
+        }
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Apply';
+        updateTotals();
+      }
+    }
+
+    // Promo code
+    document.getElementById('applyPromoBtn').addEventListener('click', applyPromoCode);
 
     document.getElementById('promoInput').addEventListener('keydown', e => {
       if (e.key === 'Enter') document.getElementById('applyPromoBtn').click();
