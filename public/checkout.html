@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkout - RELENTLESS Mouthguards</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="/assets/images/relentless-logo-full-transparent.png">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -230,7 +232,8 @@
     <div class="container">
       <div class="footer-bottom">
         <p class="footer-disclaimer">Disclaimer: RELENTLESS mouthguards are intended to reduce the risk of oral injury during sports. No mouthguard can prevent all injuries, concussions, or dental trauma. Follow fitting and care instructions before use.</p>
-        <a class="footer-legal-link" href="terms.html">Terms & Safety Disclaimer</a>
+        <a class="footer-legal-link" href="terms.html">Terms &amp; Safety Disclaimer</a>
+        <a href="https://www.instagram.com/relentlessmouthguards/" target="_blank" rel="noopener noreferrer" style="color:var(--chrome);font-family:var(--font-accent);font-size:0.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;" aria-label="RELENTLESS on Instagram">@relentlessmouthguards</a>
         <span>&copy; 2026 Relentless Mouth Guards. All rights reserved.</span>
       </div>
     </div>
@@ -306,30 +309,53 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function handlePaymentReturn() {
+    async function handlePaymentReturn() {
       const params = new URLSearchParams(window.location.search);
       const payment = params.get('payment');
       if (!payment) return;
 
       if (payment === 'success') {
+        const sessionId = params.get('session_id');
+        if (!sessionId) {
+          showError('Payment could not be verified — missing session ID. If you were charged, contact us at relentlessmouthgaurds@gmail.com.');
+          window.history.replaceState({}, document.title, window.location.pathname);
+          return;
+        }
+
+        let verifyData = null;
+        try {
+          const res = await fetch(`/api/verify-checkout?session_id=${encodeURIComponent(sessionId)}`);
+          verifyData = await res.json();
+        } catch {
+          // Network error — fall through to show an error
+        }
+
+        window.history.replaceState({}, document.title, window.location.pathname);
+
+        if (!verifyData?.verified) {
+          showError('Payment verification failed. If you were charged, please contact us at relentlessmouthgaurds@gmail.com with your session details.');
+          return;
+        }
+
         const pending = JSON.parse(localStorage.getItem(PENDING_STRIPE_ORDER_KEY) || 'null');
         if (pending) {
           pending.status = 'paid';
-          pending.stripeSessionId = params.get('session_id');
+          pending.stripeSessionId = sessionId;
+          pending.serverOrderId = verifyData.orderId;
           saveLocalOrder(pending);
           localStorage.removeItem(PENDING_STRIPE_ORDER_KEY);
         }
         Cart.clear();
         showSuccess({
           title: 'PAYMENT COMPLETE!',
-          message: 'Stripe returned a successful checkout. RELENTLESS will confirm kit timing, artwork proof details, and production status by email.',
-          orderId: pending?.id
+          message: 'Stripe confirmed your payment. RELENTLESS will follow up with kit shipping timing and production updates by email.',
+          orderId: verifyData.orderId || pending?.id
         });
+
       } else if (payment === 'cancelled') {
         showError('Stripe checkout was cancelled. Your cart is still saved.');
+        window.history.replaceState({}, document.title, window.location.pathname);
       }
-
-      window.history.replaceState({}, document.title, window.location.pathname);
     }
 
     async function startStripeCheckout(order) {
@@ -344,8 +370,8 @@
             items: order.items,
             promoCode: order.promo,
             customer: {
-              firstName: order.name.split(' ')[0],
-              lastName: order.name.split(' ').slice(1).join(' '),
+              firstName: document.getElementById('firstName').value.trim(),
+              lastName: document.getElementById('lastName').value.trim(),
               email: order.email,
               phone: order.phone
             },
@@ -435,8 +461,9 @@
               <div class="cart-line-meta">Qty: ${item.qty}${meta}</div>
             </div>
             <div class="cart-line-price">${fmt(item.price * item.qty)}</div>
-            <button class="cart-line-remove" onclick="removeItem('${item.id}')" title="Remove">&times;</button>
+            <button class="cart-line-remove" title="Remove">&times;</button>
           `;
+          line.querySelector('.cart-line-remove').addEventListener('click', () => removeItem(item.id));
           lineItems.insertBefore(line, emptyMsg);
         });
       }
@@ -472,10 +499,18 @@
     }
 
     // Promo code
-    document.getElementById('applyPromoBtn').addEventListener('click', () => {
+    document.getElementById('applyPromoBtn').addEventListener('click', async () => {
       const code     = document.getElementById('promoInput').value;
       const feedback = document.getElementById('promoFeedback');
-      const result   = Promo.validate(code, Cart.subtotal());
+      const btn      = document.getElementById('applyPromoBtn');
+
+      btn.disabled    = true;
+      btn.textContent = '...';
+
+      const result = await Promo.validate(code, Cart.subtotal());
+
+      btn.disabled    = false;
+      btn.textContent = 'Apply';
 
       if (result.valid) {
         appliedPromo = result;
@@ -531,7 +566,7 @@
 
     // Init
     renderCart();
-    handlePaymentReturn();
+    handlePaymentReturn().catch(err => showError('Payment return error: ' + err.message));
   </script>
 </body>
 </html>

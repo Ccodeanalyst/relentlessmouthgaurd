@@ -1,63 +1,51 @@
 /* ============================================
    RELENTLESS — Promo Code Engine
+   Validation is performed server-side via /api/validate-promo.
+   No promo codes or discount values are stored in this file.
    ============================================ */
 
 const PROMO_KEY = 'relentless_promos';
 
-/* Seed codes — always present unless overridden in localStorage */
-const SEED_PROMOS = {
-  'RELENTLESS15':  { discount: 15, type: 'pct', maxUses: 9999, uses: 0, expiry: '2028-12-31', campaign: 'General Launch',    created: '2026-01-01' },
-  'WELCOME10':    { discount: 10, type: 'pct', maxUses: 9999, uses: 0, expiry: '2028-12-31', campaign: 'Welcome',           created: '2026-01-01' },
-  'FIGHTCLUB501': { discount: 20, type: 'pct', maxUses:    1, uses: 0, expiry: '2027-06-30', campaign: 'Fight Club Crate',  created: '2026-01-01' },
-  'FC15OFF':      { discount: 15, type: 'pct', maxUses:    1, uses: 0, expiry: '2027-06-30', campaign: 'Fight Club Crate',  created: '2026-01-01' },
-  'IM1120':       { discount: 20, type: 'pct', maxUses:    1, uses: 0, expiry: '2027-06-30', campaign: 'Fight Club Crate',  created: '2026-01-01' },
-  'FIGHTEVO':     { discount: 15, type: 'pct', maxUses: 9999, uses: 0, expiry: '2028-12-31', campaign: 'FightEvo',          created: '2026-05-16' },
-  'TEAMSRISUK50': { discount: 50, type: 'pct', maxUses: 9999, uses: 0, expiry: '2028-12-31', campaign: 'Team Srisuk',       created: '2026-05-16' },
-  'SWAYCITYMT':   { discount: 30, type: 'pct', maxUses: 9999, uses: 0, expiry: '2028-12-31', campaign: 'Sway City Muay Thai', created: '2026-05-16' },
-  'RMGSPONSOR81': { discount: 50, type: 'pct', maxUses: 9999, uses: 0, expiry: '2028-12-31', campaign: 'RMG Sponsor',       created: '2026-05-16' },
-};
-
 const Promo = {
   getCodes() {
-    try {
-      const stored = JSON.parse(localStorage.getItem(PROMO_KEY) || '{}');
-      return { ...SEED_PROMOS, ...stored };
-    } catch { return { ...SEED_PROMOS }; }
+    try { return JSON.parse(localStorage.getItem(PROMO_KEY) || '{}'); }
+    catch { return {}; }
   },
 
   saveCodes(codes) {
     localStorage.setItem(PROMO_KEY, JSON.stringify(codes));
   },
 
-  validate(raw, subtotal) {
-    const key = raw.trim().toUpperCase();
+  /* Validate a promo code against the server. Returns a result object.
+     subtotalDollars — the current cart subtotal in dollars (e.g. 99.00). */
+  async validate(raw, subtotalDollars) {
+    const key = String(raw || '').trim().toUpperCase();
     if (!key) return { valid: false, msg: 'Please enter a code.' };
-    const all = this.getCodes();
-    const p   = all[key];
-    if (!p)                  return { valid: false, msg: 'Code not recognised.' };
-    if (p.uses >= p.maxUses) return { valid: false, msg: 'Code has reached its usage limit.' };
-    if (new Date(p.expiry) < new Date()) return { valid: false, msg: 'Code has expired.' };
 
-    const amount = p.type === 'pct'
-      ? parseFloat(((subtotal * p.discount) / 100).toFixed(2))
-      : Math.min(p.discount, subtotal);
-
-    return {
-      valid:    true,
-      code:     key,
-      amount,
-      label:    p.type === 'pct' ? `${p.discount}% off` : `$${p.discount} off`,
-      campaign: p.campaign
-    };
+    try {
+      const response = await fetch('/api/validate-promo', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ code: key, subtotalCents: Math.round(subtotalDollars * 100) })
+      });
+      const data = await response.json();
+      if (!data.valid) return { valid: false, msg: data.msg || 'Code not recognised.' };
+      return {
+        valid:    true,
+        code:     data.code,
+        amount:   data.discountCents / 100,
+        label:    data.label,
+        campaign: data.campaign
+      };
+    } catch {
+      return { valid: false, msg: 'Unable to validate code. Please try again.' };
+    }
   },
 
-  redeem(code) {
-    const key   = code.trim().toUpperCase();
-    const codes = this.getCodes();
-    if (codes[key]) { codes[key].uses += 1; this.saveCodes(codes); }
-  },
+  /* Usage redemption is enforced server-side. This is a no-op kept for call-site compatibility. */
+  redeem(_code) {},
 
-  /* Generate bulk codes for a campaign */
+  /* Generate bulk codes for a campaign (stored locally for admin tracking). */
   generate({ campaign, count = 1, discount = 15, type = 'pct', maxUses = 1, expiry = '2027-12-31' }) {
     const codes  = this.getCodes();
     const prefix = campaign.replace(/[^A-Z0-9]/gi, '').toUpperCase().slice(0, 8);

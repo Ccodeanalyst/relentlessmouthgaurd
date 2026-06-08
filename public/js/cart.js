@@ -38,6 +38,7 @@ const Cart = {
   clear() {
     localStorage.removeItem(CART_KEY);
     this._updateBadges();
+    window.dispatchEvent(new CustomEvent('cart:updated', { detail: { items: [], count: 0 } }));
   },
 
   count(items) {

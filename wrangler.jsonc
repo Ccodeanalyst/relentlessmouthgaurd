@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "relentlessmouthgaurd",
+  "name": "relentlessmouthguard",
   "main": "workers/site-worker.mjs",
   "compatibility_date": "2026-05-15",
   "observability": {
@@ -9,7 +9,7 @@
   "vars": {
     "BUSINESS_EMAIL": "relentlessmouthgaurds@gmail.com",
     "STRIPE_TAX_ENABLED": "true",
-    "ADMIN_DASHBOARD_ENABLED": "false",
+    "ADMIN_DASHBOARD_ENABLED": "true",
     "ADMIN_USERNAME": "relentless"
   },
   "assets": {
@@ -20,9 +20,17 @@
       "/admin/*",
       "/dashboard",
       "/dashboard/*",
-      "/api/admin/*"
+      "/api/admin/*",
+      "/api/upload-artwork",
+      "/api/artwork/*"
     ]
   },
+  "r2_buckets": [
+    {
+      "binding": "ARTWORK_BUCKET",
+      "bucket_name": "relentless-artwork"
+    }
+  ],
   "d1_databases": [
     {
       "binding": "DB",

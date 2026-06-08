@@ -6,6 +6,28 @@ const STRIPE_WEBHOOK_TOLERANCE_SECONDS = 300;
 const ALLOWED_SHIPPING_COUNTRIES = ['US', 'CA', 'GB', 'AU'];
 const ADMIN_SESSION_COOKIE = 'rmg_admin_session';
 const ADMIN_SESSION_TTL_SECONDS = 8 * 60 * 60;
+const LOGIN_RATE_LIMIT_WINDOW_SECONDS = 15 * 60;
+const LOGIN_RATE_LIMIT_MAX_FAILURES = 10;
+const API_RATE_LIMIT_WINDOW_SECONDS = 60;
+const API_RATE_LIMIT_MAX_REQUESTS = 20;
+
+const SECURITY_HEADERS = {
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'SAMEORIGIN',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
+  'Content-Security-Policy': [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' https://js.stripe.com",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com data:",
+    "connect-src 'self' https://api.stripe.com https://api.resend.com",
+    "frame-src https://js.stripe.com https://hooks.stripe.com",
+    "img-src 'self' data: https: blob:",
+    "object-src 'none'",
+    "base-uri 'self'"
+  ].join('; ')
+};
 const ADMIN_STATUSES = new Set([
   'pending-payment',
   'paid',
@@ -44,15 +66,15 @@ const PRODUCT_CATALOG = [
 ];
 
 const PROMOS = {
-  RELENTLESS15: { discount: 15, type: 'pct', campaign: 'General Launch' },
-  WELCOME10: { discount: 10, type: 'pct', campaign: 'Welcome' },
-  FIGHTCLUB501: { discount: 20, type: 'pct', campaign: 'Fight Club Crate' },
-  FC15OFF: { discount: 15, type: 'pct', campaign: 'Fight Club Crate' },
-  IM1120: { discount: 20, type: 'pct', campaign: 'Fight Club Crate' },
-  FIGHTEVO: { discount: 15, type: 'pct', campaign: 'FightEvo' },
-  TEAMSRISUK50: { discount: 50, type: 'pct', campaign: 'Team Srisuk' },
-  SWAYCITYMT: { discount: 30, type: 'pct', campaign: 'Sway City Muay Thai' },
-  RMGSPONSOR81: { discount: 50, type: 'pct', campaign: 'RMG Sponsor' }
+  RELENTLESS15:  { discount: 15, type: 'pct', campaign: 'General Launch',       maxUses: null },
+  WELCOME10:     { discount: 10, type: 'pct', campaign: 'Welcome',               maxUses: null },
+  FIGHTCLUB501:  { discount: 20, type: 'pct', campaign: 'Fight Club Crate',      maxUses: 1    },
+  FC15OFF:       { discount: 15, type: 'pct', campaign: 'Fight Club Crate',      maxUses: 1    },
+  IM1120:        { discount: 20, type: 'pct', campaign: 'Fight Club Crate',      maxUses: 1    },
+  FIGHTEVO:      { discount: 15, type: 'pct', campaign: 'FightEvo',              maxUses: null },
+  TEAMSRISUK50:  { discount: 50, type: 'pct', campaign: 'Team Srisuk',           maxUses: 200  },
+  SWAYCITYMT:    { discount: 30, type: 'pct', campaign: 'Sway City Muay Thai',   maxUses: null },
+  RMGSPONSOR81:  { discount: 50, type: 'pct', campaign: 'RMG Sponsor',           maxUses: 50   }
 };
 
 const json = (body, status = 200, headers = {}) => new Response(JSON.stringify(body), {
@@ -82,6 +104,9 @@ export default {
       return Response.redirect(`${url.origin}/dashboard/`, 302);
     }
 
+    if (url.pathname === '/admin' || url.pathname.startsWith('/admin/')) {
+      return Response.redirect(`${url.origin}/dashboard/`, 301);
+    }
     if (url.pathname.startsWith('/api/admin/')) {
       return handleAdminApi(request, env, url);
     }
@@ -90,7 +115,9 @@ export default {
       if (request.method !== 'POST') {
         return json({ error: 'Method not allowed' }, 405);
       }
-
+      if (env.DB && await checkApiRateLimit(env, request, 'create-checkout')) {
+        return json({ error: 'Too many requests. Please slow down.', code: 'RATE_LIMITED' }, 429);
+      }
       return createCheckoutSession(request, env, url.origin);
     }
 
@@ -102,7 +129,45 @@ export default {
       return handleStripeWebhook(request, env);
     }
 
-    return env.ASSETS.fetch(request);
+    if (url.pathname === '/api/validate-promo') {
+      if (request.method !== 'POST') {
+        return json({ error: 'Method not allowed' }, 405);
+      }
+      if (env.DB && await checkApiRateLimit(env, request, 'validate-promo')) {
+        return json({ error: 'Too many requests. Please slow down.', code: 'RATE_LIMITED' }, 429);
+      }
+      return validatePromoEndpoint(request, env);
+    }
+
+    if (url.pathname === '/api/verify-checkout') {
+      if (request.method !== 'GET') {
+        return json({ error: 'Method not allowed' }, 405);
+      }
+      return verifyCheckoutEndpoint(request, env);
+    }
+
+    if (url.pathname === '/api/upload-artwork') {
+      if (request.method !== 'POST') {
+        return json({ error: 'Method not allowed' }, 405);
+      }
+      return uploadArtwork(request, env);
+    }
+
+    if (url.pathname.startsWith('/api/artwork/')) {
+      if (request.method !== 'GET') {
+        return json({ error: 'Method not allowed' }, 405);
+      }
+      return serveArtwork(request, env, url);
+    }
+
+    const assetResponse = await env.ASSETS.fetch(request);
+    const contentType = assetResponse.headers.get('content-type') || '';
+    if (contentType.startsWith('text/html')) {
+      const headers = new Headers(assetResponse.headers);
+      Object.entries(SECURITY_HEADERS).forEach(([k, v]) => headers.set(k, v));
+      return new Response(assetResponse.body, { status: assetResponse.status, statusText: assetResponse.statusText, headers });
+    }
+    return assetResponse;
   }
 };
 
@@ -134,7 +199,7 @@ async function handleAdminApi(request, env, url) {
 
   if (url.pathname === '/api/admin/orders') {
     if (request.method !== 'GET') return json({ error: 'Method not allowed' }, 405);
-    return listAdminOrders(env);
+    return listAdminOrders(env, url);
   }
 
   const orderMatch = url.pathname.match(/^\/api\/admin\/orders\/([^/]+)$/);
@@ -156,6 +221,21 @@ async function loginAdmin(request, env) {
     }, 503);
   }
 
+  const ip =
+    request.headers.get('cf-connecting-ip') ||
+    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+    'unknown';
+
+  if (env.DB) {
+    const limited = await checkLoginRateLimit(env, ip);
+    if (limited) {
+      return json({
+        error: 'Too many failed login attempts. Try again in 15 minutes.',
+        code: 'RATE_LIMITED'
+      }, 429);
+    }
+  }
+
   let payload;
   try {
     payload = await request.json();
@@ -166,6 +246,11 @@ async function loginAdmin(request, env) {
   const username = text(payload.username, 120);
   const password = String(payload.password || '');
   const valid = await verifyAdminCredentials(env, username, password);
+
+  if (env.DB) {
+    await recordLoginAttempt(env, ip, valid);
+  }
+
   if (!valid) {
     return json({ error: 'Invalid username or password.' }, 401);
   }
@@ -176,8 +261,11 @@ async function loginAdmin(request, env) {
   });
 }
 
-async function listAdminOrders(env) {
+async function listAdminOrders(env, url) {
   if (!env.DB) return json({ error: 'Order database is not configured.' }, 503);
+
+  const offset = Math.max(0, parseInt(url.searchParams.get('offset') || '0', 10) || 0);
+  const limit = 100;
 
   const result = await env.DB.prepare(
     `SELECT
@@ -194,10 +282,12 @@ async function listAdminOrders(env) {
      LEFT JOIN order_items oi ON oi.order_id = o.id
      GROUP BY o.id
      ORDER BY o.created_at DESC
-     LIMIT 100`
-  ).all();
+     LIMIT ? OFFSET ?`
+  ).bind(limit + 1, offset).all();
 
-  return json({ orders: result.results || [] });
+  const rows = result.results || [];
+  const hasMore = rows.length > limit;
+  return json({ orders: hasMore ? rows.slice(0, limit) : rows, hasMore, offset });
 }
 
 async function getAdminOrder(env, orderId) {
@@ -285,7 +375,7 @@ async function updateAdminOrder(request, env, orderId, username) {
     await env.DB.prepare(
       `INSERT INTO order_events (order_id, event_type, message, created_by)
        VALUES (?, 'internal_note', ?, ?)`
-    ).bind(orderId, internalNotes ? `Internal note saved: ${internalNotes}` : 'Internal notes cleared', username || 'admin').run();
+    ).bind(orderId, internalNotes ? `Internal notes updated (${internalNotes.length} chars)` : 'Internal notes cleared', username || 'admin').run();
   }
 
   return getAdminOrder(env, orderId);
@@ -445,6 +535,7 @@ function normalizeOrder(payload) {
     const qty = clampInt(item.qty, 1, MAX_QTY);
     const hasRush = String(item.id || '').endsWith('-rush') || /rush requested/i.test(String(item.meta || ''));
     const unitCents = product.cents + (hasRush ? 3000 : 0);
+    const { baseColor, customText, artworkFileName } = parseBuilderMeta(text(item.meta, 400));
 
     normalizedItems.push({
       productId: product.id,
@@ -453,6 +544,9 @@ function normalizeOrder(payload) {
       quantity: qty,
       unitCents,
       meta: text(item.meta, 400),
+      baseColor,
+      customText,
+      artworkFileName,
       rush: hasRush
     });
   }
@@ -602,8 +696,9 @@ async function savePendingOrder(env, order) {
     await env.DB.prepare(
       `INSERT INTO order_items (
         order_id, product_id, product_name, product_detail, quantity,
-        unit_price_cents, rush_requested, meta
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+        unit_price_cents, base_color, custom_text, artwork_file_name,
+        rush_requested, meta
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     ).bind(
       order.id,
       item.productId,
@@ -611,6 +706,9 @@ async function savePendingOrder(env, order) {
       item.detail,
       item.quantity,
       item.unitCents,
+      item.baseColor || null,
+      item.customText || null,
+      item.artworkFileName || null,
       item.rush ? 1 : 0,
       item.meta || null
     ).run();
@@ -658,6 +756,17 @@ async function markOrderPaid(env, { orderId, sessionId, paymentIntentId, amountT
     orderId,
     `Stripe payment succeeded${amountTotal ? ` for $${(amountTotal / 100).toFixed(2)}` : ''}${taxCents ? ` including $${(taxCents / 100).toFixed(2)} tax` : ''}${customerEmail ? ` (${customerEmail})` : ''}`
   ).run();
+
+  if (customerEmail) {
+    const order = await env.DB.prepare('SELECT customer_name, total_cents, tax_cents FROM orders WHERE id = ?').bind(orderId).first();
+    await sendCustomerConfirmation(env, {
+      orderId,
+      customerEmail,
+      customerName: order?.customer_name || '',
+      totalCents: centsOrZero(amountTotal || order?.total_cents),
+      taxCents: centsOrZero(taxCents || order?.tax_cents)
+    });
+  }
 }
 
 async function markOrderPaymentFailed(env, { orderId, sessionId }) {
@@ -675,6 +784,50 @@ async function markOrderPaymentFailed(env, { orderId, sessionId }) {
     `INSERT INTO order_events (order_id, event_type, message)
      VALUES (?, 'payment_failed', 'Stripe asynchronous payment failed')`
   ).bind(orderId).run();
+}
+
+async function sendCustomerConfirmation(env, { orderId, customerEmail, customerName, totalCents, taxCents }) {
+  if (!env.RESEND_API_KEY) return;
+
+  const total = `$${(totalCents / 100).toFixed(2)}`;
+  const taxNote = taxCents ? ` (includes $${(taxCents / 100).toFixed(2)} tax)` : '';
+  const name = customerName ? customerName.split(' ')[0] : 'there';
+
+  const html = [
+    '<div style="font-family:sans-serif;max-width:520px;margin:0 auto;color:#111;">',
+    '<h2 style="color:#C1121F;letter-spacing:1px;">RELENTLESS Mouth Guards</h2>',
+    `<p>Hi ${escapeHtmlEmail(name)},</p>`,
+    `<p>Your payment was received. Order <strong>${escapeHtmlEmail(orderId)}</strong> is confirmed — total <strong>${total}${taxNote}</strong>.</p>`,
+    '<p>Your at-home impression kit will ship soon. We\'ll follow up with tracking and, for Custom Graphics orders, a design proof before production begins.</p>',
+    '<p>Questions? Reply to this email or contact <a href="mailto:relentlessmouthgaurds@gmail.com">relentlessmouthgaurds@gmail.com</a>.</p>',
+    '<p>Follow our latest builds on Instagram: <a href="https://www.instagram.com/relentlessmouthguards/">@relentlessmouthguards</a></p>',
+    '<hr style="border:none;border-top:1px solid #eee;margin:24px 0;">',
+    '<p style="font-size:0.8em;color:#888;">RELENTLESS Mouth Guards · Custom contact sports protection</p>',
+    '</div>'
+  ].join('');
+
+  try {
+    const fromAddress = env.RESEND_FROM_ADDRESS || 'orders@relentlessmouthguards.com';
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${env.RESEND_API_KEY}`,
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        from: `RELENTLESS Mouth Guards <${fromAddress}>`,
+        to: [customerEmail],
+        subject: `Order confirmed — ${orderId}`,
+        html
+      })
+    });
+  } catch (error) {
+    console.error('Failed to send customer confirmation email.', error);
+  }
+}
+
+function escapeHtmlEmail(value) {
+  return String(value || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
 async function verifyStripeSignature(rawBody, signatureHeader, secret) {
@@ -831,6 +984,140 @@ function timingSafeEqualText(a, b) {
   return timingSafeEqual(String(a || ''), String(b || ''));
 }
 
+async function uploadArtwork(request, env) {
+  if (!env.ARTWORK_BUCKET) {
+    return json({ error: 'Artwork storage is not configured.', code: 'ARTWORK_NOT_CONFIGURED' }, 503);
+  }
+
+  let formData;
+  try {
+    formData = await request.formData();
+  } catch {
+    return json({ error: 'Invalid multipart form data.' }, 400);
+  }
+
+  const file = formData.get('file');
+  if (!file || typeof file === 'string') {
+    return json({ error: 'No file provided.' }, 400);
+  }
+
+  const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/webp'];
+  const EXT_MAP = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp' };
+  const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
+
+  if (!ALLOWED_TYPES.includes(file.type)) {
+    return json({ error: 'Only PNG, JPEG, and WebP images are accepted.' }, 400);
+  }
+
+  const arrayBuffer = await file.arrayBuffer();
+  if (arrayBuffer.byteLength > MAX_BYTES) {
+    return json({ error: 'File exceeds the 10 MB size limit.' }, 400);
+  }
+
+  const ext = EXT_MAP[file.type] || 'bin';
+  const key = `artwork/${Date.now()}-${crypto.randomUUID().slice(0, 8)}.${ext}`;
+
+  await env.ARTWORK_BUCKET.put(key, arrayBuffer, {
+    httpMetadata: { contentType: file.type },
+    customMetadata: { originalName: text(file.name, 200) }
+  });
+
+  return json({ key, url: `/api/artwork/${key}` }, 201);
+}
+
+async function serveArtwork(request, env, url) {
+  if (!env.ARTWORK_BUCKET) {
+    return new Response('Artwork storage is not configured.', { status: 503 });
+  }
+
+  const session = await verifyAdminSession(request, env);
+  if (!session.valid) {
+    return new Response('Authentication required.', { status: 401 });
+  }
+
+  const key = url.pathname.replace('/api/artwork/', '');
+  if (!key) return new Response('Not found.', { status: 404 });
+
+  const object = await env.ARTWORK_BUCKET.get(key);
+  if (!object) return new Response('Artwork not found.', { status: 404 });
+
+  return new Response(object.body, {
+    headers: {
+      'content-type': object.httpMetadata?.contentType || 'application/octet-stream',
+      'cache-control': 'private, max-age=3600',
+      'content-disposition': `inline; filename="${object.customMetadata?.originalName || key}"`
+    }
+  });
+}
+
+async function verifyCheckoutEndpoint(request, env) {
+  const url = new URL(request.url);
+  const sessionId = text(url.searchParams.get('session_id') || '', 200);
+  if (!sessionId) return json({ error: 'session_id is required.' }, 400);
+
+  const stripeKey = normalizeStripeSecretKey(env.STRIPE_SECRET_KEY);
+  if (!stripeKey) return json({ verified: false, error: 'Stripe not configured.', code: 'PAYMENTS_NOT_CONFIGURED' });
+
+  let session;
+  try {
+    const res = await fetch(`https://api.stripe.com/v1/checkout/sessions/${encodeURIComponent(sessionId)}`, {
+      headers: { authorization: `Bearer ${stripeKey}` }
+    });
+    if (!res.ok) return json({ verified: false, error: 'Unable to verify session with Stripe.' }, 502);
+    session = await res.json();
+  } catch {
+    return json({ verified: false, error: 'Unable to reach Stripe.' }, 502);
+  }
+
+  if (session.payment_status !== 'paid') {
+    return json({ verified: false, paymentStatus: session.payment_status });
+  }
+
+  const orderId = session.client_reference_id || session.metadata?.order_id || null;
+  let dbStatus = null;
+  if (env.DB && orderId) {
+    const row = await env.DB.prepare('SELECT status FROM orders WHERE id = ?').bind(orderId).first();
+    dbStatus = row?.status || null;
+  }
+
+  return json({ verified: true, orderId, orderStatus: dbStatus, customerEmail: session.customer_details?.email || '' });
+}
+
+async function checkApiRateLimit(env, request, endpoint) {
+  const ip = request.headers.get('cf-connecting-ip') ||
+             request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+  const windowStart = new Date(Date.now() - API_RATE_LIMIT_WINDOW_SECONDS * 1000).toISOString();
+  try {
+    const row = await env.DB.prepare(
+      'SELECT COUNT(*) as cnt FROM api_requests WHERE ip = ? AND endpoint = ? AND created_at > ?'
+    ).bind(ip, endpoint, windowStart).first();
+    if ((row?.cnt || 0) >= API_RATE_LIMIT_MAX_REQUESTS) return true;
+    await env.DB.prepare('INSERT INTO api_requests (ip, endpoint) VALUES (?, ?)').bind(ip, endpoint).run();
+    await env.DB.prepare("DELETE FROM api_requests WHERE created_at < datetime('now', '-1 hour')").run();
+    return false;
+  } catch {
+    return false;
+  }
+}
+
+function parseBuilderMeta(metaString) {
+  const result = { baseColor: null, customText: null, artworkFileName: null };
+  if (!metaString) return result;
+
+  for (const part of metaString.split(' - ')) {
+    const lower = part.toLowerCase();
+    if (lower.startsWith('color: ')) {
+      result.baseColor = part.slice('color: '.length).trim() || null;
+    } else if (lower.startsWith('text: ')) {
+      const val = part.slice('text: '.length).trim();
+      result.customText = val.replace(/^"(.*)"$/, '$1') || null;
+    } else if (lower.startsWith('artwork file: ')) {
+      result.artworkFileName = part.slice('artwork file: '.length).trim() || null;
+    }
+  }
+  return result;
+}
+
 function validatePromo(rawCode, subtotalCents) {
   const code = text(rawCode).toUpperCase();
   if (!code) return null;
@@ -847,6 +1134,66 @@ function validatePromo(rawCode, subtotalCents) {
     campaign: promo.campaign,
     discountCents
   };
+}
+
+async function validatePromoEndpoint(request, env) {
+  let payload;
+  try {
+    payload = await request.json();
+  } catch {
+    return json({ error: 'Invalid JSON body.' }, 400);
+  }
+
+  const code = text(payload.code).toUpperCase();
+  const subtotalCents = Math.max(0, Math.round(Number(payload.subtotalCents) || 0));
+
+  if (!code) {
+    return json({ valid: false, msg: 'Please enter a code.' });
+  }
+
+  const result = validatePromo(code, subtotalCents);
+  if (!result) {
+    return json({ valid: false, msg: 'Code not recognised.' });
+  }
+
+  const promo = PROMOS[code];
+
+  if (promo.maxUses !== null && env.DB) {
+    const row = await env.DB.prepare(
+      'SELECT COUNT(*) as cnt FROM promo_redemptions WHERE promo_code = ?'
+    ).bind(code).first();
+    if ((row?.cnt || 0) >= promo.maxUses) {
+      return json({ valid: false, msg: 'This code has reached its usage limit.' });
+    }
+  }
+
+  const label = promo.type === 'pct' ? `${promo.discount}% off` : `$${promo.discount} off`;
+  return json({ valid: true, code: result.code, discountCents: result.discountCents, label, campaign: result.campaign });
+}
+
+async function checkLoginRateLimit(env, ip) {
+  const windowStart = new Date(Date.now() - LOGIN_RATE_LIMIT_WINDOW_SECONDS * 1000).toISOString();
+  try {
+    const result = await env.DB.prepare(
+      `SELECT COUNT(*) as cnt FROM login_attempts WHERE ip = ? AND created_at > ? AND success = 0`
+    ).bind(ip, windowStart).first();
+    return (result?.cnt || 0) >= LOGIN_RATE_LIMIT_MAX_FAILURES;
+  } catch {
+    return false;
+  }
+}
+
+async function recordLoginAttempt(env, ip, success) {
+  try {
+    await env.DB.prepare(
+      `INSERT INTO login_attempts (ip, success) VALUES (?, ?)`
+    ).bind(ip, success ? 1 : 0).run();
+    await env.DB.prepare(
+      `DELETE FROM login_attempts WHERE created_at < datetime('now', '-30 days')`
+    ).run();
+  } catch {
+    // Non-fatal: don't block login if attempt recording fails.
+  }
 }
 
 function formatShipping(shipping) {
@@ -877,7 +1224,8 @@ function text(value, max = 240) {
 }
 
 function isAdminPath(pathname) {
-  return pathname === '/admin' || pathname.startsWith('/admin/');
+  return pathname === '/admin' || pathname.startsWith('/admin/') ||
+         pathname === '/dashboard' || pathname.startsWith('/dashboard/');
 }
 
 function shouldCollectStripeTax(env) {

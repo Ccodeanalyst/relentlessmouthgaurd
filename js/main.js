@@ -225,21 +225,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- Email form submission (demo) ---
+  // --- Email list signup (coming soon — not yet connected to a backend) ---
   const emailForms = document.querySelectorAll('.email-form');
   emailForms.forEach(form => {
     const btn = form.querySelector('.btn');
     const input = form.querySelector('input');
+    const note = document.createElement('p');
+    note.style.cssText = 'font-size:0.78rem;color:var(--chrome);margin-top:8px;';
+    note.textContent = 'Email list coming soon. For now, reach us at relentlessmouthgaurds@gmail.com.';
+    form.appendChild(note);
+
     if (btn && input) {
       btn.addEventListener('click', () => {
         if (input.value && input.value.includes('@')) {
-          btn.textContent = '✓ Joined!';
-          btn.style.background = '#22C55E';
+          note.textContent = 'Thanks! We\'ll be in touch when the list launches.';
+          note.style.color = 'var(--success)';
           input.value = '';
-          setTimeout(() => {
-            btn.textContent = 'Join List';
-            btn.style.background = '';
-          }, 3000);
         } else {
           input.style.borderColor = '#C1121F';
           input.setAttribute('placeholder', 'Enter a valid email');

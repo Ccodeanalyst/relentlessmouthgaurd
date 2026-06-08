@@ -4,6 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Design Your Guard - RELENTLESS</title>
+  <meta name="description" content="Build your custom RELENTLESS mouthguard. Choose your package, base color, design reference, and artwork. Impression kit included.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="RELENTLESS Mouth Guards">
+  <meta property="og:title" content="Design Your Guard — RELENTLESS Mouthguards">
+  <meta property="og:description" content="Build your custom mouthguard. Choose package, color, design reference, and artwork. Impression kit and shipping included.">
+  <meta property="og:image" content="/assets/images/relentless-work-usa-red.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Design Your Guard — RELENTLESS Mouthguards">
+  <meta name="twitter:description" content="Build your custom mouthguard. Choose package, color, design reference, and artwork. Impression kit and shipping included.">
+  <meta name="twitter:image" content="/assets/images/relentless-work-usa-red.jpg">
+  <link rel="icon" type="image/png" href="/assets/images/relentless-logo-full-transparent.png">
   <link rel="stylesheet" href="css/style.css">
   <style>
     .builder-container {
@@ -457,6 +468,174 @@
         grid-template-columns: repeat(2, 1fr);
       }
     }
+
+    /* ── Mouthguard 3-D Canvas ── */
+    .mg-canvas-wrap {
+      margin-bottom: 20px;
+    }
+
+    .mg-canvas-wrap svg {
+      width: 100%;
+      display: block;
+      filter: drop-shadow(0 14px 32px rgba(0,0,0,0.55));
+      border-radius: 4px;
+    }
+
+    .mg-zone-tabs {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .mg-zone-tab {
+      flex: 1;
+      padding: 7px 4px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(8,8,12,0.55);
+      border-radius: 4px;
+      color: var(--chrome);
+      font-family: var(--font-accent);
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: border-color 0.18s, color 0.18s, background 0.18s;
+    }
+
+    .mg-zone-tab:hover {
+      border-color: rgba(255,255,255,0.3);
+      color: var(--white);
+    }
+
+    .mg-zone-tab.active {
+      border-color: var(--crimson);
+      color: var(--white);
+      background: rgba(193,18,31,0.14);
+    }
+
+    .mg-assign-prompt {
+      display: none;
+      margin-top: 10px;
+      padding: 9px 14px;
+      background: rgba(193,18,31,0.1);
+      border: 1px solid rgba(193,18,31,0.28);
+      border-radius: 4px;
+      color: var(--chrome);
+      font-size: 0.8rem;
+      text-align: center;
+      line-height: 1.45;
+    }
+
+    .mg-assign-prompt.visible { display: block; }
+
+    .mg-label {
+      font-family: var(--font-accent);
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      fill: rgba(255,255,255,0.38);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .mg-preview-3d-btn {
+      width: 100%;
+      margin-top: 8px;
+      padding: 8px 14px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(8,8,12,0.55);
+      border-radius: 4px;
+      color: var(--chrome);
+      font-family: var(--font-accent);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: border-color 0.18s, color 0.18s, background 0.18s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    .mg-preview-3d-btn:hover {
+      border-color: var(--crimson);
+      color: var(--white);
+      background: rgba(193,18,31,0.12);
+    }
+
+    .mg-threed-overlay {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: #06060a;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .mg-threed-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .mg-threed-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 10;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(0,0,0,0.62);
+      color: var(--white);
+      font-size: 0.78rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.18s;
+    }
+
+    .mg-threed-close:hover { background: rgba(193,18,31,0.75); }
+
+    .mg-threed-status {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--chrome);
+      font-family: var(--font-accent);
+      font-size: 0.72rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      pointer-events: none;
+      margin: 0;
+    }
+
+    .mg-threed-status.hidden { display: none; }
+
+    .mg-threed-hint {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: rgba(255,255,255,0.22);
+      font-family: var(--font-accent);
+      font-size: 0.6rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      pointer-events: none;
+      margin: 0;
+    }
   </style>
 </head>
 <body>
@@ -526,14 +705,14 @@
           <h3>Base Color</h3>
         </div>
         <div class="color-grid">
-          <div class="color-choice"><div class="color-option selected" style="background-color:#050505;" data-color="Black" data-filter="drop-shadow(0 20px 40px rgba(0,0,0,0.5))"></div><span>Black</span></div>
-          <div class="color-choice"><div class="color-option" style="background-color:#f5f5f0;" data-color="White" data-filter="drop-shadow(0 20px 40px rgba(255,255,255,0.2)) brightness(2) contrast(0.8)"></div><span>White</span></div>
-          <div class="color-choice"><div class="color-option clear-swatch" data-color="Clear" data-filter="drop-shadow(0 20px 40px rgba(255,255,255,0.22)) brightness(1.35) contrast(0.8)"></div><span>Clear</span></div>
-          <div class="color-choice"><div class="color-option" style="background-color:#1d5fd1;" data-color="Blue" data-filter="drop-shadow(0 20px 40px rgba(29,95,209,0.35)) sepia(1) hue-rotate(170deg) saturate(4)"></div><span>Blue</span></div>
-          <div class="color-choice"><div class="color-option" style="background-color:#c1121f;" data-color="Red" data-filter="drop-shadow(0 20px 40px rgba(193,18,31,0.4)) sepia(1) hue-rotate(330deg) saturate(5)"></div><span>Red</span></div>
-          <div class="color-choice"><div class="color-option" style="background-color:#22c55e;" data-color="Green" data-filter="drop-shadow(0 20px 40px rgba(34,197,94,0.3)) sepia(1) hue-rotate(80deg) saturate(4)"></div><span>Green</span></div>
-          <div class="color-choice"><div class="color-option" style="background-color:#facc15;" data-color="Yellow" data-filter="drop-shadow(0 20px 40px rgba(250,204,21,0.28)) sepia(1) hue-rotate(5deg) saturate(3) brightness(1.2)"></div><span>Yellow</span></div>
-          <div class="color-choice"><div class="color-option" style="background-color:#ff5da8;" data-color="Pink" data-filter="drop-shadow(0 20px 40px rgba(255,93,168,0.3)) sepia(1) hue-rotate(290deg) saturate(3)"></div><span>Pink</span></div>
+          <div class="color-choice"><div class="color-option selected" style="background-color:#050505;" data-color="Black" data-hex="#050505" data-filter="drop-shadow(0 20px 40px rgba(0,0,0,0.5))"></div><span>Black</span></div>
+          <div class="color-choice"><div class="color-option" style="background-color:#f5f5f0;" data-color="White" data-hex="#f5f5f0" data-filter="drop-shadow(0 20px 40px rgba(255,255,255,0.2)) brightness(2) contrast(0.8)"></div><span>White</span></div>
+          <div class="color-choice"><div class="color-option clear-swatch" data-color="Clear" data-hex="#d6eaf8" data-filter="drop-shadow(0 20px 40px rgba(255,255,255,0.22)) brightness(1.35) contrast(0.8)"></div><span>Clear</span></div>
+          <div class="color-choice"><div class="color-option" style="background-color:#1d5fd1;" data-color="Blue" data-hex="#1d5fd1" data-filter="drop-shadow(0 20px 40px rgba(29,95,209,0.35)) sepia(1) hue-rotate(170deg) saturate(4)"></div><span>Blue</span></div>
+          <div class="color-choice"><div class="color-option" style="background-color:#c1121f;" data-color="Red" data-hex="#c1121f" data-filter="drop-shadow(0 20px 40px rgba(193,18,31,0.4)) sepia(1) hue-rotate(330deg) saturate(5)"></div><span>Red</span></div>
+          <div class="color-choice"><div class="color-option" style="background-color:#22c55e;" data-color="Green" data-hex="#22c55e" data-filter="drop-shadow(0 20px 40px rgba(34,197,94,0.3)) sepia(1) hue-rotate(80deg) saturate(4)"></div><span>Green</span></div>
+          <div class="color-choice"><div class="color-option" style="background-color:#facc15;" data-color="Yellow" data-hex="#facc15" data-filter="drop-shadow(0 20px 40px rgba(250,204,21,0.28)) sepia(1) hue-rotate(5deg) saturate(3) brightness(1.2)"></div><span>Yellow</span></div>
+          <div class="color-choice"><div class="color-option" style="background-color:#ff5da8;" data-color="Pink" data-hex="#ff5da8" data-filter="drop-shadow(0 20px 40px rgba(255,93,168,0.3)) sepia(1) hue-rotate(290deg) saturate(3)"></div><span>Pink</span></div>
         </div>
         <p class="builder-note" style="margin-top:16px;">Choose one base color for now.</p>
       </section>
@@ -638,8 +817,182 @@
           </div>
           <span class="preview-pill">Included Kit</span>
         </div>
-        <div class="preview-image" id="previewImage">
-          <img src="assets/images/relentless-work-teeth.jpg" alt="Full Custom Graphics Guard preview">
+        <!-- Interactive 3-zone mouthguard preview -->
+        <div class="mg-canvas-wrap">
+          <svg id="mgPreviewSvg" viewBox="0 0 480 200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Mouthguard design preview">
+            <defs>
+              <!-- ── Clip paths (match base paths exactly) ── -->
+              <clipPath id="clipLeft">
+                <path d="M 8,52 C 8,28 60,16 115,22 L 115,178 C 60,182 8,168 8,148 Z"/>
+              </clipPath>
+              <clipPath id="clipFront">
+                <path d="M 115,22 Q 200,2 240,2 Q 280,2 365,22 L 365,178 Q 280,192 240,192 Q 200,192 115,178 Z"/>
+              </clipPath>
+              <clipPath id="clipRight">
+                <path d="M 472,52 C 472,28 420,16 365,22 L 365,178 C 420,182 472,168 472,148 Z"/>
+              </clipPath>
+
+              <!-- Front face: radial convex-surface illusion (stronger) -->
+              <radialGradient id="gradFront" cx="50%" cy="40%" r="58%">
+                <stop offset="0%"   stop-color="rgba(255,255,255,0.28)"/>
+                <stop offset="60%"  stop-color="rgba(255,255,255,0.0)"/>
+                <stop offset="100%" stop-color="rgba(0,0,0,0.30)"/>
+              </radialGradient>
+
+              <!-- Top shine on front face -->
+              <linearGradient id="gradShine" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%"   stop-color="rgba(255,255,255,0.34)"/>
+                <stop offset="22%"  stop-color="rgba(255,255,255,0.05)"/>
+                <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+              </linearGradient>
+
+              <!-- Left wing: horizontal recession (stronger) -->
+              <linearGradient id="gradLeft" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"   stop-color="rgba(0,0,0,0.65)"/>
+                <stop offset="100%" stop-color="rgba(0,0,0,0.0)"/>
+              </linearGradient>
+
+              <!-- Left wing: vertical curvature pass -->
+              <linearGradient id="gradLeftV" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%"   stop-color="rgba(255,255,255,0.12)"/>
+                <stop offset="50%"  stop-color="rgba(0,0,0,0.0)"/>
+                <stop offset="100%" stop-color="rgba(0,0,0,0.24)"/>
+              </linearGradient>
+
+              <!-- Right wing: horizontal recession -->
+              <linearGradient id="gradRight" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"   stop-color="rgba(0,0,0,0.0)"/>
+                <stop offset="100%" stop-color="rgba(0,0,0,0.65)"/>
+              </linearGradient>
+
+              <!-- Right wing: vertical curvature pass -->
+              <linearGradient id="gradRightV" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%"   stop-color="rgba(255,255,255,0.12)"/>
+                <stop offset="50%"  stop-color="rgba(0,0,0,0.0)"/>
+                <stop offset="100%" stop-color="rgba(0,0,0,0.24)"/>
+              </linearGradient>
+
+              <!-- Seam shadow at left-front join (wing side darkens) -->
+              <linearGradient id="gradSeamLeft" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"   stop-color="rgba(0,0,0,0.72)"/>
+                <stop offset="100%" stop-color="rgba(0,0,0,0.0)"/>
+              </linearGradient>
+
+              <!-- Seam shadow at front-right join (wing side darkens) -->
+              <linearGradient id="gradSeamRight" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"   stop-color="rgba(0,0,0,0.0)"/>
+                <stop offset="100%" stop-color="rgba(0,0,0,0.72)"/>
+              </linearGradient>
+
+              <!-- Clear swatch: glass/translucent EVA -->
+              <radialGradient id="gradClear" cx="50%" cy="42%" r="62%">
+                <stop offset="0%"   stop-color="rgba(180,222,248,0.78)"/>
+                <stop offset="65%"  stop-color="rgba(155,205,238,0.54)"/>
+                <stop offset="100%" stop-color="rgba(120,178,220,0.36)"/>
+              </radialGradient>
+            </defs>
+
+            <!-- ── LEFT SIDE WING ── -->
+            <path id="zoneLeftBase"
+                  d="M 8,52 C 8,28 60,16 115,22 L 115,178 C 60,182 8,168 8,148 Z"
+                  fill="#050505" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+            <image id="imgLeft" clip-path="url(#clipLeft)"
+                   href="" x="8" y="22" width="107" height="156"
+                   preserveAspectRatio="xMidYMid slice" style="display:none"/>
+            <path d="M 8,52 C 8,28 60,16 115,22 L 115,178 C 60,182 8,168 8,148 Z"
+                  fill="url(#gradLeft)" pointer-events="none"/>
+            <path d="M 8,52 C 8,28 60,16 115,22 L 115,178 C 60,182 8,168 8,148 Z"
+                  fill="url(#gradLeftV)" pointer-events="none"/>
+            <text id="labelLeft" class="mg-label" x="42" y="100" text-anchor="middle"
+                  transform="rotate(-10 42 100)" style="transition:opacity 0.3s">Side</text>
+            <path id="zoneLeftBorder"
+                  d="M 8,52 C 8,28 60,16 115,22 L 115,178 C 60,182 8,168 8,148 Z"
+                  fill="none" stroke="transparent" stroke-width="2.5"/>
+
+            <!-- ── FRONT FACE ── -->
+            <path id="zoneFrontBase"
+                  d="M 115,22 Q 200,2 240,2 Q 280,2 365,22 L 365,178 Q 280,192 240,192 Q 200,192 115,178 Z"
+                  fill="#050505" stroke="rgba(255,255,255,0.09)" stroke-width="1"/>
+            <!-- Design Reference ghost (faint layer behind user artwork) -->
+            <image id="imgFrontRef" clip-path="url(#clipFront)"
+                   href="" x="115" y="2" width="250" height="190"
+                   preserveAspectRatio="xMidYMid slice" opacity="0.4" style="display:none"/>
+            <image id="imgFront" clip-path="url(#clipFront)"
+                   href="" x="115" y="2" width="250" height="190"
+                   preserveAspectRatio="xMidYMid slice" style="display:none"/>
+            <text id="textFront" x="240" y="100" text-anchor="middle" dominant-baseline="middle"
+                  font-family="'Bebas Neue','Black Han Sans','Impact',sans-serif"
+                  font-size="28" font-weight="900" fill="rgba(255,255,255,0.9)"
+                  letter-spacing="4" clip-path="url(#clipFront)"
+                  paint-order="stroke fill"
+                  stroke="rgba(0,0,0,0.5)" stroke-width="5"
+                  style="text-transform:uppercase;pointer-events:none;"></text>
+            <path d="M 115,22 Q 200,2 240,2 Q 280,2 365,22 L 365,178 Q 280,192 240,192 Q 200,192 115,178 Z"
+                  fill="url(#gradFront)" pointer-events="none"/>
+            <path d="M 115,22 Q 200,2 240,2 Q 280,2 365,22 L 365,178 Q 280,192 240,192 Q 200,192 115,178 Z"
+                  fill="url(#gradShine)" pointer-events="none"/>
+            <text id="labelFront" class="mg-label" x="240" y="180" text-anchor="middle"
+                  style="transition:opacity 0.3s">Front Face</text>
+            <path id="zoneFrontBorder"
+                  d="M 115,22 Q 200,2 240,2 Q 280,2 365,22 L 365,178 Q 280,192 240,192 Q 200,192 115,178 Z"
+                  fill="none" stroke="rgba(193,18,31,0.8)" stroke-width="2.5"/>
+
+            <!-- ── RIGHT SIDE WING ── -->
+            <path id="zoneRightBase"
+                  d="M 472,52 C 472,28 420,16 365,22 L 365,178 C 420,182 472,168 472,148 Z"
+                  fill="#050505" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+            <image id="imgRight" clip-path="url(#clipRight)"
+                   href="" x="365" y="22" width="107" height="156"
+                   preserveAspectRatio="xMidYMid slice" style="display:none"/>
+            <path d="M 472,52 C 472,28 420,16 365,22 L 365,178 C 420,182 472,168 472,148 Z"
+                  fill="url(#gradRight)" pointer-events="none"/>
+            <path d="M 472,52 C 472,28 420,16 365,22 L 365,178 C 420,182 472,168 472,148 Z"
+                  fill="url(#gradRightV)" pointer-events="none"/>
+            <text id="labelRight" class="mg-label" x="438" y="100" text-anchor="middle"
+                  transform="rotate(10 438 100)" style="transition:opacity 0.3s">Side</text>
+            <path id="zoneRightBorder"
+                  d="M 472,52 C 472,28 420,16 365,22 L 365,178 C 420,182 472,168 472,148 Z"
+                  fill="none" stroke="transparent" stroke-width="2.5"/>
+
+            <!-- ── SEAM SHADOWS at zone joins ── -->
+            <rect x="104" y="14" width="18" height="174"
+                  fill="url(#gradSeamLeft)" opacity="0.8" pointer-events="none"/>
+            <rect x="358" y="14" width="18" height="174"
+                  fill="url(#gradSeamRight)" opacity="0.8" pointer-events="none"/>
+
+            <!-- ── OUTER RIM HIGHLIGHT ── -->
+            <path d="M 8,52 C 8,28 60,16 115,22 Q 200,2 240,2 Q 280,2 365,22 C 420,16 472,28 472,52
+                     L 472,148 C 472,168 420,182 365,178 Q 280,192 240,192 Q 200,192 115,178
+                     C 60,182 8,168 8,148 Z"
+                  fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="3"
+                  stroke-linejoin="round" pointer-events="none"/>
+          </svg>
+
+          <!-- Zone selector tabs -->
+          <div class="mg-zone-tabs">
+            <button class="mg-zone-tab" data-zone="left"  type="button">Left Side</button>
+            <button class="mg-zone-tab active" data-zone="front" type="button">Front Face</button>
+            <button class="mg-zone-tab" data-zone="right" type="button">Right Side</button>
+          </div>
+
+          <!-- Artwork assignment hint (shown after file is selected) -->
+          <p class="mg-assign-prompt" id="mgAssignPrompt">
+            Artwork loaded — click a zone tab above to place it on that surface.
+          </p>
+
+          <!-- Preview 3D button -->
+          <button id="mgPreview3DBtn" type="button" class="mg-preview-3d-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            Preview in 3D
+          </button>
+        </div>
+
+        <!-- Three.js 3D overlay (hidden until button click) -->
+        <div id="mgThreeDOverlay" class="mg-threed-overlay" style="display:none;">
+          <button id="mgThreeDClose" class="mg-threed-close" type="button" aria-label="Close 3D preview">&#x2715;</button>
+          <p id="mgThreeDStatus" class="mg-threed-status">Loading 3D engine&hellip;</p>
+          <canvas id="mgThreeDCanvas" class="mg-threed-canvas"></canvas>
+          <p class="mg-threed-hint">Drag to rotate &nbsp;&middot;&nbsp; Scroll to zoom</p>
         </div>
         <div class="builder-summary">
           <h4>Order Summary</h4>
@@ -670,7 +1023,8 @@
     <div class="container">
       <div class="footer-bottom">
         <p class="footer-disclaimer">Disclaimer: RELENTLESS mouthguards are intended to reduce the risk of oral injury during sports. No mouthguard can prevent all injuries, concussions, or dental trauma. Follow fitting and care instructions before use.</p>
-        <a class="footer-legal-link" href="terms.html">Terms & Safety Disclaimer</a>
+        <a class="footer-legal-link" href="terms.html">Terms &amp; Safety Disclaimer</a>
+        <a href="https://www.instagram.com/relentlessmouthguards/" target="_blank" rel="noopener noreferrer" style="color:var(--chrome);font-family:var(--font-accent);font-size:0.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;" aria-label="RELENTLESS on Instagram">@relentlessmouthguards</a>
         <span>&copy; 2026 Relentless Mouth Guards. All rights reserved.</span>
       </div>
     </div>
@@ -679,130 +1033,587 @@
   <script src="js/cart.js"></script>
   <script src="js/main.js"></script>
   <script>
+    // ── Phase 2: Three.js state (module-level, outside DOMContentLoaded) ────────
+    let threeState = null;
+
+    function loadScript(src) {
+      return new Promise((resolve, reject) => {
+        if (document.querySelector('script[src="' + src + '"]')) { resolve(); return; }
+        const s = document.createElement('script');
+        s.src = src; s.onload = resolve; s.onerror = reject;
+        document.head.appendChild(s);
+      });
+    }
+
+    async function buildZoneTextureCanvas(artworkZones, hexColor, isClear, customText) {
+      const W = 1024, H = 256;
+      const canvas = document.createElement('canvas');
+      canvas.width = W; canvas.height = H;
+      const ctx = canvas.getContext('2d');
+
+      async function loadImg(url) {
+        if (!url) return null;
+        return new Promise(res => {
+          const img = new Image();
+          img.onload = () => res(img);
+          img.onerror = () => res(null);
+          img.src = url;
+        });
+      }
+
+      const [iL, iF, iR] = await Promise.all([
+        loadImg(artworkZones.left),
+        loadImg(artworkZones.front),
+        loadImg(artworkZones.right)
+      ]);
+
+      const zones = [
+        { x: 0,   w: 256, img: iL, text: null,       side: 'left'  },
+        { x: 256, w: 512, img: iF, text: customText,  side: 'front' },
+        { x: 768, w: 256, img: iR, text: null,        side: 'right' }
+      ];
+
+      for (const z of zones) {
+        // Base fill
+        if (isClear) {
+          const g = ctx.createLinearGradient(z.x, 0, z.x + z.w, H);
+          g.addColorStop(0,   'rgba(180,222,248,0.68)');
+          g.addColorStop(1,   'rgba(145,198,232,0.48)');
+          ctx.fillStyle = g;
+        } else {
+          ctx.fillStyle = hexColor;
+        }
+        ctx.fillRect(z.x, 0, z.w, H);
+
+        // Artwork (cover-fit)
+        if (z.img) {
+          const sc = Math.max(z.w / z.img.naturalWidth, H / z.img.naturalHeight);
+          const iw = z.img.naturalWidth * sc, ih = z.img.naturalHeight * sc;
+          ctx.save();
+          ctx.globalAlpha = 0.9;
+          ctx.drawImage(z.img, z.x + (z.w - iw) / 2, (H - ih) / 2, iw, ih);
+          ctx.restore();
+        }
+
+        // Custom text (front zone)
+        if (z.text) {
+          ctx.save();
+          ctx.font = '900 54px Impact, "Bebas Neue", sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.strokeStyle = 'rgba(0,0,0,0.65)';
+          ctx.lineWidth = 8;
+          ctx.strokeText(z.text.toUpperCase(), z.x + z.w / 2, H / 2);
+          ctx.fillStyle = 'rgba(255,255,255,0.92)';
+          ctx.fillText(z.text.toUpperCase(), z.x + z.w / 2, H / 2);
+          ctx.restore();
+        }
+
+        // Top shine
+        const shine = ctx.createLinearGradient(z.x, 0, z.x, H);
+        shine.addColorStop(0,    'rgba(255,255,255,0.24)');
+        shine.addColorStop(0.28, 'rgba(255,255,255,0.0)');
+        ctx.fillStyle = shine; ctx.fillRect(z.x, 0, z.w, H);
+
+        // Side darkening + seam shadows
+        if (z.side === 'left') {
+          const dark = ctx.createLinearGradient(z.x, 0, z.x + z.w, 0);
+          dark.addColorStop(0,   'rgba(0,0,0,0.62)');
+          dark.addColorStop(0.7, 'rgba(0,0,0,0.0)');
+          ctx.fillStyle = dark; ctx.fillRect(z.x, 0, z.w, H);
+          // right-edge seam crease
+          const seam = ctx.createLinearGradient(z.x + z.w - 22, 0, z.x + z.w, 0);
+          seam.addColorStop(0, 'rgba(0,0,0,0.0)');
+          seam.addColorStop(1, 'rgba(0,0,0,0.72)');
+          ctx.fillStyle = seam; ctx.fillRect(z.x + z.w - 22, 0, 22, H);
+        } else if (z.side === 'right') {
+          const dark = ctx.createLinearGradient(z.x, 0, z.x + z.w, 0);
+          dark.addColorStop(0.3, 'rgba(0,0,0,0.0)');
+          dark.addColorStop(1,   'rgba(0,0,0,0.62)');
+          ctx.fillStyle = dark; ctx.fillRect(z.x, 0, z.w, H);
+          // left-edge seam crease
+          const seam = ctx.createLinearGradient(z.x, 0, z.x + 22, 0);
+          seam.addColorStop(0, 'rgba(0,0,0,0.72)');
+          seam.addColorStop(1, 'rgba(0,0,0,0.0)');
+          ctx.fillStyle = seam; ctx.fillRect(z.x, 0, 22, H);
+        } else {
+          // Front: radial convex highlight
+          const rad = ctx.createRadialGradient(z.x + z.w/2, H/2, 18, z.x + z.w/2, H/2, z.w/2);
+          rad.addColorStop(0, 'rgba(255,255,255,0.10)');
+          rad.addColorStop(1, 'rgba(0,0,0,0.18)');
+          ctx.fillStyle = rad; ctx.fillRect(z.x, 0, z.w, H);
+        }
+      }
+      return canvas;
+    }
+
+    async function buildMouthguardMesh(THREE, texCanvas) {
+      // Realistic dental arch — wider, proper horseshoe proportions
+      const curve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(-2.55, 0, -1.15),
+        new THREE.Vector3(-2.25, 0, -0.35),
+        new THREE.Vector3(-1.70, 0,  0.50),
+        new THREE.Vector3(-0.88, 0,  1.10),
+        new THREE.Vector3( 0,    0,  1.28),
+        new THREE.Vector3( 0.88, 0,  1.10),
+        new THREE.Vector3( 1.70, 0,  0.50),
+        new THREE.Vector3( 2.25, 0, -0.35),
+        new THREE.Vector3( 2.55, 0, -1.15)
+      ]);
+
+      // Custom cross-section: flat superellipse (looks like real EVA stock)
+      // W = half-depth (front-face to bite channel), H = half-thickness
+      const SEGS   = 140;   // spine segments — smooth arch
+      const CS     = 22;    // cross-section segments
+      const W      = 0.58;  // wide (≈front-to-back depth of real guard)
+      const H      = 0.17;  // thin (≈guard thickness)
+      const POWER  = 3.2;   // superellipse exponent — rounder than rect, flatter than ellipse
+
+      const frames = curve.computeFrenetFrames(SEGS, false);
+      const pos = [], uvArr = [], idx = [];
+
+      for (let i = 0; i <= SEGS; i++) {
+        const t  = i / SEGS;
+        const p  = curve.getPointAt(t);
+        const N  = frames.normals  [Math.min(i, SEGS - 1)];
+        const B  = frames.binormals[Math.min(i, SEGS - 1)];
+
+        for (let j = 0; j <= CS; j++) {
+          const theta = (j / CS) * Math.PI * 2;
+          const ct = Math.cos(theta), st = Math.sin(theta);
+          // Superellipse: sign(cos)·|cos|^(2/n)·W, sign(sin)·|sin|^(2/n)·H
+          const cx = Math.sign(ct) * Math.pow(Math.abs(ct), 2 / POWER) * W;
+          const cy = Math.sign(st) * Math.pow(Math.abs(st), 2 / POWER) * H;
+
+          pos.push(
+            p.x + N.x * cx + B.x * cy,
+            p.y + N.y * cx + B.y * cy,
+            p.z + N.z * cx + B.z * cy
+          );
+          uvArr.push(t, j / CS);
+        }
+      }
+
+      for (let i = 0; i < SEGS; i++) {
+        for (let j = 0; j < CS; j++) {
+          const a = i * (CS + 1) + j,  b = a + 1;
+          const c = (i + 1) * (CS + 1) + j, d = c + 1;
+          idx.push(a, b, c,  b, d, c);
+        }
+      }
+
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+      geo.setAttribute('uv',       new THREE.Float32BufferAttribute(uvArr, 2));
+      geo.setIndex(idx);
+      geo.computeVertexNormals();
+
+      const texture = new THREE.CanvasTexture(texCanvas);
+      texture.wrapS = THREE.ClampToEdgeWrapping;
+      texture.wrapT = THREE.ClampToEdgeWrapping;
+
+      // MeshPhysicalMaterial — glossy EVA plastic (clearcoat = the shiny outer shell)
+      const mat = new THREE.MeshPhysicalMaterial({
+        map:                texture,
+        roughness:          0.18,
+        metalness:          0.0,
+        clearcoat:          0.92,
+        clearcoatRoughness: 0.10,
+        reflectivity:       0.55
+      });
+
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.rotation.x = -0.10;   // slight forward tilt for natural view angle
+      return mesh;
+    }
+
+    async function initThreeD(artworkZones, hexColor, isClear, customText) {
+      const overlay = document.getElementById('mgThreeDOverlay');
+      const status  = document.getElementById('mgThreeDStatus');
+      const canvas  = document.getElementById('mgThreeDCanvas');
+
+      overlay.style.display = 'block';
+
+      if (threeState) {
+        // already running — just refresh texture
+        refreshTexture(artworkZones, hexColor, isClear, customText);
+        return;
+      }
+
+      status.classList.remove('hidden');
+      status.textContent = 'Loading 3D engine\u2026';
+
+      try {
+        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js');
+        await loadScript('https://cdn.jsdelivr.net/npm/three@0.134.0/examples/js/controls/OrbitControls.js');
+      } catch {
+        status.textContent = '3D engine failed to load. Check your connection.';
+        return;
+      }
+
+      status.classList.add('hidden');
+
+      const THREE = window.THREE;
+      const W = overlay.clientWidth  || 400;
+      const H = overlay.clientHeight || 300;
+
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, physicallyCorrectLights: true });
+      renderer.setSize(W, H);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setClearColor(0x0e0e14, 1);
+      renderer.shadowMap.enabled = true;
+
+      const scene = new THREE.Scene();
+      // Subtle dark-to-slightly-lighter fog gives depth without washing out the guard
+      scene.fog = new THREE.Fog(0x0e0e14, 18, 40);
+
+      const camera = new THREE.PerspectiveCamera(38, W / H, 0.1, 100);
+      camera.position.set(0, 2.6, 7.8);
+      camera.lookAt(0, 0.1, 0.4);
+
+      // Studio 3-point lighting rig
+      // 1. Soft ambient fill
+      scene.add(new THREE.AmbientLight(0xd0d8f0, 0.45));
+
+      // 2. Key light — front-top-right, warm white (simulates overhead studio strobe)
+      const keyLight = new THREE.DirectionalLight(0xfff8f0, 1.8);
+      keyLight.position.set(2.5, 6, 6);
+      keyLight.castShadow = true;
+      scene.add(keyLight);
+
+      // 3. Fill light — left side, cooler/softer
+      const fillLight = new THREE.DirectionalLight(0xc8d8ff, 0.7);
+      fillLight.position.set(-6, 2, 3);
+      scene.add(fillLight);
+
+      // 4. Rim/back light — gives the glossy clearcoat edge highlight
+      const rimLight = new THREE.DirectionalLight(0xffffff, 0.55);
+      rimLight.position.set(0, -3, -6);
+      scene.add(rimLight);
+
+      // 5. Top bounce — softens top face of guard
+      const topBounce = new THREE.DirectionalLight(0xeeeeff, 0.30);
+      topBounce.position.set(0, 8, 0);
+      scene.add(topBounce);
+
+      const texCanvas = await buildZoneTextureCanvas(artworkZones, hexColor, isClear, customText);
+      const mesh = await buildMouthguardMesh(THREE, texCanvas);
+      scene.add(mesh);
+
+      const controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping   = true;
+      controls.dampingFactor   = 0.07;
+      controls.autoRotate      = true;
+      controls.autoRotateSpeed = 0.7;
+      controls.minDistance     = 4;
+      controls.maxDistance     = 16;
+      controls.maxPolarAngle   = Math.PI * 0.72;  // don't go fully underneath
+      controls.target.set(0, 0, 0.3);
+      controls.addEventListener('start', () => { controls.autoRotate = false; });
+
+      let animId;
+      function animate() {
+        animId = requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      function onResize() {
+        const w = overlay.clientWidth, h = overlay.clientHeight;
+        if (!w || !h) return;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+      }
+      window.addEventListener('resize', onResize);
+
+      threeState = { renderer, scene, camera, controls, mesh, animId, onResize };
+    }
+
+    async function refreshTexture(artworkZones, hexColor, isClear, customText) {
+      if (!threeState) return;
+      const newCanvas = await buildZoneTextureCanvas(artworkZones, hexColor, isClear, customText);
+      const tex = threeState.mesh.material.map;
+      tex.image = newCanvas;
+      tex.needsUpdate = true;
+    }
+
+    function closeThreeD() {
+      const overlay = document.getElementById('mgThreeDOverlay');
+      if (overlay) overlay.style.display = 'none';
+      if (!threeState) return;
+      cancelAnimationFrame(threeState.animId);
+      window.removeEventListener('resize', threeState.onResize);
+      threeState.controls.dispose();
+      threeState.mesh.geometry.dispose();
+      threeState.mesh.material.map.dispose();
+      threeState.mesh.material.dispose();
+      threeState.renderer.dispose();
+      threeState = null;
+    }
+
+    // ── Builder logic ────────────────────────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', () => {
-      const colorOptions = document.querySelectorAll('.color-option');
-      const packageOptions = document.querySelectorAll('.package-option');
+      // ── DOM refs ───────────────────────────────────────────────────────────────
+      const colorOptions     = document.querySelectorAll('.color-option');
+      const packageOptions   = document.querySelectorAll('.package-option');
       const referenceOptions = document.querySelectorAll('.reference-option');
-      const previewImage = document.getElementById('previewImage');
-      const previewImg = previewImage.querySelector('img');
-      const summaryColor = document.getElementById('summaryColor');
+      const summaryColor     = document.getElementById('summaryColor');
       const summaryReference = document.getElementById('summaryReference');
-      const summaryPackageName = document.getElementById('summaryPackageName');
+      const summaryPackageName  = document.getElementById('summaryPackageName');
       const summaryPackagePrice = document.getElementById('summaryPackagePrice');
-      const summaryArtwork = document.getElementById('summaryArtwork');
-      const summaryRush = document.getElementById('summaryRush');
-      const summaryTotal = document.getElementById('summaryTotal');
-      const uploadArea = document.getElementById('uploadArea');
-      const artworkFile = document.getElementById('artworkFile');
-      const artworkFileName = document.getElementById('artworkFileName');
-      const rushOrder = document.getElementById('rushOrder');
+      const summaryArtwork   = document.getElementById('summaryArtwork');
+      const summaryRush      = document.getElementById('summaryRush');
+      const summaryTotal     = document.getElementById('summaryTotal');
+      const uploadArea       = document.getElementById('uploadArea');
+      const artworkFile      = document.getElementById('artworkFile');
+      const artworkFileName  = document.getElementById('artworkFileName');
+      const rushOrder        = document.getElementById('rushOrder');
 
+      // ── Builder state ──────────────────────────────────────────────────────────
       let selectedPackage = {
-        id: 'full-custom-graphics-guard',
-        name: 'Full Custom Graphics Guard',
-        detail: 'Dual Layer Custom Graphics',
-        price: 149,
+        id: 'full-custom-graphics-guard', name: 'Full Custom Graphics Guard',
+        detail: 'Dual Layer Custom Graphics', price: 149,
         image: 'assets/images/relentless-work-teeth.jpg'
       };
-      let selectedReference = {
-        name: 'Fang Layout',
-        image: 'assets/images/relentless-work-teeth.jpg'
-      };
+      let selectedReference  = { name: 'Fang Layout', image: 'assets/images/relentless-work-teeth.jpg' };
       let selectedArtworkName = '';
+      let activeZone   = 'front';
+      let artworkDataUrl = null;
+      let artworkZones   = { front: null, left: null, right: null };
+      let currentHex     = '#050505';
+      let currentIsClear = false;
 
-      function money(value) {
-        return '$' + Number(value).toFixed(2).replace('.00', '');
+      // ── Helpers ────────────────────────────────────────────────────────────────
+      function money(v) { return '$' + Number(v).toFixed(2).replace('.00', ''); }
+      function slug(v)  { return String(v).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'none'; }
+      function mgEl(id) { return document.getElementById(id); }
+
+      function getCustomText() { return (document.getElementById('customText')?.value || '').trim(); }
+
+      // ── SVG preview ────────────────────────────────────────────────────────────
+      function updateZoneColor(hex, isClear) {
+        currentHex = hex; currentIsClear = isClear;
+        const fill = isClear ? 'url(#gradClear)' : hex;
+        ['zoneLeftBase', 'zoneFrontBase', 'zoneRightBase'].forEach(id => {
+          const el = mgEl(id);
+          if (el) el.setAttribute('fill', fill);
+        });
+        if (threeState) refreshTexture(artworkZones, currentHex, currentIsClear, getCustomText());
       }
 
-      function slug(value) {
-        return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'none';
+      function applyArtworkToZone(zone, dataUrl) {
+        const key = zone.charAt(0).toUpperCase() + zone.slice(1);
+        const img = mgEl('img' + key);
+        if (!img) return;
+        img.setAttribute('href', dataUrl);
+        img.style.display = '';
+        artworkZones[zone] = dataUrl;
+        // Fade label for this zone
+        const lbl = mgEl('label' + key);
+        if (lbl) lbl.style.opacity = '0';
+        if (threeState) refreshTexture(artworkZones, currentHex, currentIsClear, getCustomText());
       }
 
+      function updatePreviewText(text) {
+        const el = mgEl('textFront');
+        if (el) el.textContent = text.toUpperCase();
+        // Fade front label when text is present
+        const lbl = mgEl('labelFront');
+        if (lbl) lbl.style.opacity = text ? '0' : '';
+        if (threeState) refreshTexture(artworkZones, currentHex, currentIsClear, text.trim());
+      }
+
+      function setActiveZoneBorder(zone) {
+        ['left', 'front', 'right'].forEach(z => {
+          const key    = z.charAt(0).toUpperCase() + z.slice(1);
+          const border = mgEl('zone' + key + 'Border');
+          if (!border) return;
+          if (z === zone) {
+            border.setAttribute('stroke', 'rgba(193,18,31,0.85)');
+            border.setAttribute('stroke-width', '2.5');
+          } else {
+            border.setAttribute('stroke', 'transparent');
+          }
+        });
+      }
+
+      function initMouthguardPreview() {
+        document.querySelectorAll('.mg-zone-tab').forEach(tab => {
+          tab.addEventListener('click', () => {
+            activeZone = tab.dataset.zone;
+            document.querySelectorAll('.mg-zone-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            setActiveZoneBorder(activeZone);
+            if (artworkDataUrl) {
+              applyArtworkToZone(activeZone, artworkDataUrl);
+              const prompt = mgEl('mgAssignPrompt');
+              if (prompt) prompt.textContent = '\u2713 Artwork placed on ' + tab.textContent.trim() + ' \u2014 click another zone to copy there too.';
+            }
+          });
+        });
+        setActiveZoneBorder('front');
+        updateZoneColor('#050505', false);
+      }
+
+      // ── Summary ────────────────────────────────────────────────────────────────
       function updateSummary() {
         const rushPrice = rushOrder.checked ? 30 : 0;
-        const total = selectedPackage.price + rushPrice;
-        summaryPackageName.textContent = selectedPackage.name;
+        summaryPackageName.textContent  = selectedPackage.name;
         summaryPackagePrice.textContent = money(selectedPackage.price);
-        summaryReference.textContent = selectedReference.name;
-        summaryArtwork.textContent = selectedArtworkName || 'Optional';
-        summaryRush.textContent = rushPrice ? '+$30' : '$0.00';
-        summaryTotal.textContent = money(total);
-        previewImg.src = selectedReference.image;
-        previewImg.alt = selectedReference.name + ' design reference';
+        summaryReference.textContent    = selectedReference.name;
+        summaryArtwork.textContent      = selectedArtworkName || 'Optional';
+        summaryRush.textContent         = rushPrice ? '+$30' : '$0.00';
+        summaryTotal.textContent        = money(selectedPackage.price + rushPrice);
       }
 
-      packageOptions.forEach(option => {
-        option.addEventListener('click', () => {
-          packageOptions.forEach(opt => opt.classList.remove('selected'));
-          option.classList.add('selected');
+      // ── Package ────────────────────────────────────────────────────────────────
+      packageOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          packageOptions.forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
           selectedPackage = {
-            id: option.dataset.packageId,
-            name: option.dataset.packageName,
-            detail: option.dataset.packageDetail,
-            price: parseFloat(option.dataset.price),
-            image: option.dataset.image
+            id: opt.dataset.packageId, name: opt.dataset.packageName,
+            detail: opt.dataset.packageDetail, price: parseFloat(opt.dataset.price),
+            image: opt.dataset.image
           };
           updateSummary();
         });
       });
 
-      colorOptions.forEach(option => {
-        option.addEventListener('click', () => {
-          colorOptions.forEach(opt => opt.classList.remove('selected'));
-          option.classList.add('selected');
-          summaryColor.textContent = option.dataset.color;
-          previewImage.style.filter = option.dataset.filter;
+      // ── Color ──────────────────────────────────────────────────────────────────
+      colorOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          colorOptions.forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+          summaryColor.textContent = opt.dataset.color;
+          const isClear = opt.dataset.color === 'Clear';
+          if (opt.dataset.hex) updateZoneColor(opt.dataset.hex, isClear);
         });
       });
 
-      referenceOptions.forEach(option => {
-        option.addEventListener('click', () => {
-          referenceOptions.forEach(opt => opt.classList.remove('selected'));
-          option.classList.add('selected');
-          selectedReference = {
-            name: option.dataset.referenceName,
-            image: option.dataset.referenceImage
-          };
+      // ── Design reference (p1-refimg: ghost on front zone) ──────────────────────
+      referenceOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          referenceOptions.forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+          selectedReference = { name: opt.dataset.referenceName, image: opt.dataset.referenceImage };
           updateSummary();
+          // Show faint reference ghost on SVG front zone
+          const ghost = mgEl('imgFrontRef');
+          if (ghost) {
+            ghost.setAttribute('href', opt.dataset.referenceImage);
+            ghost.style.display = '';
+          }
         });
       });
 
+      // ── Artwork upload ─────────────────────────────────────────────────────────
       uploadArea.addEventListener('click', () => artworkFile.click());
+
       artworkFile.addEventListener('change', () => {
-        selectedArtworkName = artworkFile.files[0]?.name || '';
+        const file = artworkFile.files[0];
+        selectedArtworkName = file?.name || '';
         artworkFileName.textContent = selectedArtworkName ? 'Selected: ' + selectedArtworkName : 'No file selected yet.';
         uploadArea.classList.toggle('has-file', Boolean(selectedArtworkName));
         updateSummary();
+        const prompt = mgEl('mgAssignPrompt');
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = e => {
+            artworkDataUrl = e.target.result;
+            applyArtworkToZone(activeZone, artworkDataUrl);
+            if (prompt) {
+              prompt.classList.add('visible');
+              prompt.textContent = '\u2713 Artwork placed on ' + activeZone + ' \u2014 click another zone tab to copy it there too.';
+            }
+          };
+          reader.readAsDataURL(file);
+        } else {
+          artworkDataUrl = null;
+          artworkZones = { front: null, left: null, right: null };
+          ['imgLeft', 'imgFront', 'imgRight'].forEach(id => {
+            const el = mgEl(id);
+            if (el) { el.setAttribute('href', ''); el.style.display = 'none'; }
+          });
+          // Restore all zone labels
+          ['labelLeft', 'labelFront', 'labelRight'].forEach(id => {
+            const el = mgEl(id); if (el) el.style.opacity = '';
+          });
+          if (prompt) prompt.classList.remove('visible');
+          if (threeState) refreshTexture(artworkZones, currentHex, currentIsClear, getCustomText());
+        }
       });
 
+      // ── Custom text ────────────────────────────────────────────────────────────
+      document.getElementById('customText').addEventListener('input', e => {
+        updatePreviewText(e.target.value);
+      });
+
+      // ── Rush ───────────────────────────────────────────────────────────────────
       rushOrder.addEventListener('change', updateSummary);
 
-      document.getElementById('addToCartBtn').addEventListener('click', () => {
-        const color = summaryColor.textContent;
-        const sport = document.getElementById('sport').value;
+      // ── 3D Preview button ──────────────────────────────────────────────────────
+      document.getElementById('mgPreview3DBtn').addEventListener('click', () => {
+        initThreeD(artworkZones, currentHex, currentIsClear, getCustomText());
+      });
+
+      document.getElementById('mgThreeDClose').addEventListener('click', closeThreeD);
+
+      // ── Add to cart ────────────────────────────────────────────────────────────
+      document.getElementById('addToCartBtn').addEventListener('click', async () => {
+        const btn = document.getElementById('addToCartBtn');
+        const color      = summaryColor.textContent;
+        const sport      = document.getElementById('sport').value;
         const customText = document.getElementById('customText').value.trim();
-        const notes = document.getElementById('notes').value.trim();
-        const rushPrice = rushOrder.checked ? 30 : 0;
+        const notes      = document.getElementById('notes').value.trim();
+        const rushPrice  = rushOrder.checked ? 30 : 0;
+
+        let artworkUrl = null;
+        if (artworkFile.files && artworkFile.files[0]) {
+          btn.textContent = 'Uploading artwork...';
+          btn.disabled = true;
+          try {
+            const fd = new FormData();
+            fd.append('file', artworkFile.files[0]);
+            const res  = await fetch('/api/upload-artwork', { method: 'POST', body: fd });
+            const data = await res.json();
+            if (res.ok && data.url) {
+              artworkUrl = data.url;
+            } else {
+              artworkFileName.textContent = 'Upload failed \u2014 artwork name saved, file not uploaded.';
+            }
+          } catch {
+            artworkFileName.textContent = 'Upload failed \u2014 artwork name saved, file not uploaded.';
+          }
+          btn.disabled = false;
+        }
+
+        const zonePlacements = Object.entries(artworkZones)
+          .filter(([, v]) => v !== null).map(([z]) => z).join(', ');
+
         const metaParts = [
           selectedPackage.detail,
           'Sport: ' + sport,
           'Color: ' + color,
           'Design reference: ' + selectedReference.name,
-          customText ? 'Text: "' + customText + '"' : '',
+          customText     ? 'Text: "' + customText + '"' : '',
           selectedArtworkName ? 'Artwork file: ' + selectedArtworkName : '',
-          notes ? 'Notes: ' + notes : '',
+          zonePlacements ? 'Artwork zones: ' + zonePlacements : '',
+          artworkUrl     ? 'Artwork URL: ' + artworkUrl : '',
+          notes          ? 'Notes: ' + notes : '',
           rushOrder.checked ? 'Rush requested' : ''
         ].filter(Boolean);
 
         Cart.add({
-          id: `${selectedPackage.id}-${slug(color)}-${slug(sport)}-${slug(customText || 'no-text')}-${rushOrder.checked ? 'rush' : 'standard'}`,
-          name: `${selectedPackage.name} - ${color}`,
+          id:    `${selectedPackage.id}-${slug(color)}-${slug(sport)}-${slug(customText || 'no-text')}-${rushOrder.checked ? 'rush' : 'standard'}`,
+          name:  `${selectedPackage.name} - ${color}`,
           price: selectedPackage.price + rushPrice,
-          img: selectedReference.image,
-          meta: metaParts.join(' - ')
+          img:   selectedReference.image,
+          meta:  metaParts.join(' - ')
         });
 
-        const btn = document.getElementById('addToCartBtn');
         btn.textContent = 'Added to Cart!';
         btn.style.background = 'var(--success)';
         setTimeout(() => {
@@ -811,6 +1622,8 @@
         }, 2500);
       });
 
+      // ── Init ───────────────────────────────────────────────────────────────────
+      initMouthguardPreview();
       updateSummary();
     });
   </script>

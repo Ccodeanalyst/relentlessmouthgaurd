@@ -70,3 +70,13 @@ CREATE INDEX IF NOT EXISTS idx_orders_email ON orders(customer_email);
 CREATE INDEX IF NOT EXISTS idx_orders_created_at ON orders(created_at);
 CREATE INDEX IF NOT EXISTS idx_order_items_order_id ON order_items(order_id);
 CREATE INDEX IF NOT EXISTS idx_order_events_order_id ON order_events(order_id);
+
+-- Rate-limiting for admin login (enforces lockout after repeated failures).
+CREATE TABLE IF NOT EXISTS login_attempts (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  ip         TEXT    NOT NULL,
+  created_at TEXT    NOT NULL DEFAULT (datetime('now')),
+  success    INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE INDEX IF NOT EXISTS idx_login_attempts_ip ON login_attempts(ip, created_at);
