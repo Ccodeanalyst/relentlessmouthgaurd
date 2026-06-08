@@ -22,7 +22,10 @@
       "/dashboard/*",
       "/api/admin/*",
       "/api/upload-artwork",
-      "/api/artwork/*"
+      "/api/artwork/*",
+      "/api/validate-promo",
+      "/api/create-checkout-session",
+      "/api/stripe-webhook"
     ]
   },
   "r2_buckets": [

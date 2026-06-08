@@ -1,6 +1,6 @@
 # Project Plan
 
-Last updated: May 17, 2026
+Last updated: May 20, 2026
 
 ## Phase 1: Funnel Structure
 
@@ -166,6 +166,7 @@ Status: In progress
 - Expanded local admin order statuses to match the future production workflow.
 - Kept live checkout as the email order-request flow until payments/database are ready.
 - Added protected dashboard internal notes so production details can be saved on each D1 order and exported with order CSVs.
+- Confirmed dashboard credential flow: local `.env` input, Cloudflare `ADMIN_PASSWORD_HASH`, and `ADMIN_SESSION_SECRET` with live login verification.
 
 ## Phase 9: Design Builder Upgrade
 
@@ -191,11 +192,33 @@ Status: In progress
 
 ## Phase 10: Content, SEO, and Growth
 
-Status: Planned
+Status: In progress
 
+- See `projectmanagement/seo/` for the Month 1 SEO roadmap, Tacoma / greater Seattle local SEO plan, and implementation checklist.
 - Add more real product photos as they come in.
 - Add team/gym landing content when partnerships are ready.
 - Add contact-sport specific copy for MMA, boxing, Muay Thai, football, BJJ, and other sports.
 - Add FAQ content for shipping time, impression kit process, proof review, fit concerns, and care instructions.
 - Review Terms & Safety Disclaimer with a qualified professional before launch.
 - Build promo campaign tracking for gyms, affiliates, and sponsored athletes.
+
+## Phase 10 Current Pass
+
+- Added baseline page titles, descriptions, canonical URLs, social preview tags, and index controls.
+- Added `robots.txt` and `sitemap.xml`.
+- Added Blog navigation and a public blog archive at `/blog.html`.
+- Published two first SEO guides:
+  - `/blog/custom-mouthguards-tacoma-seattle.html`
+  - `/blog/mouthguards-near-me-contact-sports.html`
+- Added SEO keyword mapping, landing page plan, and blog content plan in `projectmanagement/seo/`.
+
+## Phase 11: Promo Management
+
+Status: Complete
+
+- Added `Fightclubcrate15` as a 15% Fight Club Crate promo.
+- Moved promo definitions into D1 with a seeded `promo_codes` table.
+- Added protected dashboard promo management for add, edit, disable/delete, usage tracking, and campaign reporting metrics.
+- Added public backend promo validation for checkout estimates.
+- Verified the live dashboard and D1-backed checkout promo flow.
+- See `projectmanagement/PROMOS.md` for the implementation phases.

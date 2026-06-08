@@ -1,6 +1,6 @@
 # Payment Plan
 
-Last updated: May 19, 2026
+Last updated: May 20, 2026
 
 ## Business Email
 
@@ -112,12 +112,14 @@ Dashboard URL:
 
 Worker secrets required:
 
-- `ADMIN_PASSWORD`
+- `ADMIN_PASSWORD_HASH`
 - `ADMIN_SESSION_SECRET`
 
 Non-secret Worker var:
 
 - `ADMIN_USERNAME=relentless`
+
+Local operator setup uses `.env` for `ADMIN_USERNAME`, `ADMIN_PASSWORD`, and `ADMIN_SESSION_SECRET`; the deploy step hashes `ADMIN_PASSWORD` before uploading it to Cloudflare as `ADMIN_PASSWORD_HASH`. Do not commit `.env`.
 
 The dashboard uses:
 

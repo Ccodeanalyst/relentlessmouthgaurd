@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: May 19, 2026
+Last updated: May 20, 2026
 
 ## Completed
 
@@ -144,3 +144,29 @@ Shop hero -> Package comparison -> Kit contents -> Ordering workflow -> Design u
   - Added protected internal notes editing for D1 orders.
   - Internal note changes are saved to the order record and logged in the order timeline.
   - Included internal notes in dashboard search and CSV export.
+- Completed dashboard credential setup:
+  - Added local `.env` placeholders for dashboard username/password/session secret input.
+  - Set Cloudflare dashboard secrets from `.env` using `ADMIN_PASSWORD_HASH` and `ADMIN_SESSION_SECRET`.
+  - Verified live `/dashboard/` login after credential rotation.
+- Started promo management phase:
+  - Added `projectmanagement/PROMOS.md` with D1-backed promo management phases.
+  - Added `Fightclubcrate15` / `FIGHTCLUBCRATE15` as a 15% Fight Club Crate promo in the frontend estimate and Worker backend validation.
+- Completed D1-backed promo management:
+  - Added the `promo_codes` D1 migration and seeded existing active promo codes.
+  - Added protected dashboard promo APIs for list, create, edit, disable/delete, and redemption lookup.
+  - Added public `/api/validate-promo` so checkout estimates use backend promo validation.
+  - Added `/dashboard/` promo manager UI with add/edit controls, active status, usage limits, discount impact, and revenue metrics.
+  - Deployed the update to Cloudflare and verified `FIGHTCLUBCRATE15` live against D1.
+  - Confirmed dashboard-created promo validation with temporary `QAPROMO15`, then removed the QA code from D1.
+  - Saved live dashboard QA screenshot in `projectmanagement/qa/dashboard-promo-manager-live.png`.
+- Improved the live backend dashboard layout:
+  - Added a compact operations console overview, collapsible Orders and Promo Manager modules, bounded table scroll regions, sticky table headers, visible row counts, and order date range filters.
+  - Made the order detail drawer's Items and Timeline sections collapsible so long records stay manageable.
+  - Deployed the dashboard layout update to Cloudflare and saved QA screenshot `projectmanagement/qa/dashboard-backend-layout-live.png`.
+- Started SEO planning:
+  - Added `projectmanagement/seo/` with the Month 1 roadmap, Tacoma / greater Seattle local SEO plan, and implementation checklist.
+  - Linked the SEO folder from the main project plan.
+- Completed the first basic SEO implementation pass:
+  - Added canonical URLs, social preview tags, crawl controls, `robots.txt`, and `sitemap.xml`.
+  - Added Blog navigation, `/blog.html`, and two first keyword-targeted blog posts for Tacoma / Seattle custom mouthguards and "mouthguards near me".
+  - Added `KEYWORDS.md`, `LANDING-PAGES.md`, and `BLOG-CONTENT.md` to the SEO project management folder.
