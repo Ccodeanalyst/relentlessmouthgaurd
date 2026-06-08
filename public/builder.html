@@ -469,16 +469,28 @@
       }
     }
 
-    /* ── Mouthguard 3-D Canvas ── */
+    /* ── Mouthguard preview ── */
     .mg-canvas-wrap {
       margin-bottom: 20px;
+      padding: 18px 14px 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0.35) 100%);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
     }
 
     .mg-canvas-wrap svg {
       width: 100%;
       display: block;
-      filter: drop-shadow(0 14px 32px rgba(0,0,0,0.55));
-      border-radius: 4px;
+      filter: drop-shadow(0 18px 36px rgba(0,0,0,0.6));
+      border-radius: 6px;
+    }
+
+    .mg-zone-hit {
+      cursor: pointer;
+    }
+
+    .mg-zone-hit:focus {
+      outline: none;
     }
 
     .mg-zone-tabs {
@@ -538,103 +550,7 @@
       fill: rgba(255,255,255,0.38);
       pointer-events: none;
       user-select: none;
-    }
-
-    .mg-preview-3d-btn {
-      width: 100%;
-      margin-top: 8px;
-      padding: 8px 14px;
-      border: 1px solid rgba(255,255,255,0.16);
-      background: rgba(8,8,12,0.55);
-      border-radius: 4px;
-      color: var(--chrome);
-      font-family: var(--font-accent);
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: border-color 0.18s, color 0.18s, background 0.18s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-    }
-
-    .mg-preview-3d-btn:hover {
-      border-color: var(--crimson);
-      color: var(--white);
-      background: rgba(193,18,31,0.12);
-    }
-
-    .mg-threed-overlay {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 4 / 3;
-      background: #06060a;
-      border-radius: 6px;
-      overflow: hidden;
-      margin-bottom: 20px;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .mg-threed-canvas {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    .mg-threed-close {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      z-index: 10;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.22);
-      background: rgba(0,0,0,0.62);
-      color: var(--white);
-      font-size: 0.78rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.18s;
-    }
-
-    .mg-threed-close:hover { background: rgba(193,18,31,0.75); }
-
-    .mg-threed-status {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--chrome);
-      font-family: var(--font-accent);
-      font-size: 0.72rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      pointer-events: none;
-      margin: 0;
-    }
-
-    .mg-threed-status.hidden { display: none; }
-
-    .mg-threed-hint {
-      position: absolute;
-      bottom: 10px;
-      left: 0;
-      right: 0;
-      text-align: center;
-      color: rgba(255,255,255,0.22);
-      font-family: var(--font-accent);
-      font-size: 0.6rem;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      pointer-events: none;
-      margin: 0;
+      transition: opacity 0.3s;
     }
   </style>
 </head>
@@ -898,7 +814,7 @@
                   fill="#050505" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
             <image id="imgLeft" clip-path="url(#clipLeft)"
                    href="" x="8" y="22" width="107" height="156"
-                   preserveAspectRatio="xMidYMid slice" style="display:none"/>
+                   preserveAspectRatio="xMidYMid meet" style="display:none"/>
             <path d="M 8,52 C 8,28 60,16 115,22 L 115,178 C 60,182 8,168 8,148 Z"
                   fill="url(#gradLeft)" pointer-events="none"/>
             <path d="M 8,52 C 8,28 60,16 115,22 L 115,178 C 60,182 8,168 8,148 Z"
@@ -916,7 +832,7 @@
             <!-- Design Reference ghost (faint layer behind user artwork) -->
             <image id="imgFrontRef" clip-path="url(#clipFront)"
                    href="" x="115" y="2" width="250" height="190"
-                   preserveAspectRatio="xMidYMid slice" opacity="0.4" style="display:none"/>
+                   preserveAspectRatio="xMidYMid slice" opacity="0.35" style="display:none"/>
             <image id="imgFront" clip-path="url(#clipFront)"
                    href="" x="115" y="2" width="250" height="190"
                    preserveAspectRatio="xMidYMid slice" style="display:none"/>
@@ -929,7 +845,8 @@
                   style="text-transform:uppercase;pointer-events:none;"></text>
             <path d="M 115,22 Q 200,2 240,2 Q 280,2 365,22 L 365,178 Q 280,192 240,192 Q 200,192 115,178 Z"
                   fill="url(#gradFront)" pointer-events="none"/>
-            <path d="M 115,22 Q 200,2 240,2 Q 280,2 365,22 L 365,178 Q 280,192 240,192 Q 200,192 115,178 Z"
+            <path id="zoneFrontShine"
+                  d="M 115,22 Q 200,2 240,2 Q 280,2 365,22 L 365,178 Q 280,192 240,192 Q 200,192 115,178 Z"
                   fill="url(#gradShine)" pointer-events="none"/>
             <text id="labelFront" class="mg-label" x="240" y="180" text-anchor="middle"
                   style="transition:opacity 0.3s">Front Face</text>
@@ -943,7 +860,7 @@
                   fill="#050505" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
             <image id="imgRight" clip-path="url(#clipRight)"
                    href="" x="365" y="22" width="107" height="156"
-                   preserveAspectRatio="xMidYMid slice" style="display:none"/>
+                   preserveAspectRatio="xMidYMid meet" style="display:none"/>
             <path d="M 472,52 C 472,28 420,16 365,22 L 365,178 C 420,182 472,168 472,148 Z"
                   fill="url(#gradRight)" pointer-events="none"/>
             <path d="M 472,52 C 472,28 420,16 365,22 L 365,178 C 420,182 472,168 472,148 Z"
@@ -966,6 +883,16 @@
                      C 60,182 8,168 8,148 Z"
                   fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="3"
                   stroke-linejoin="round" pointer-events="none"/>
+            <!-- Clickable zone targets (select surface to place artwork) -->
+            <path class="mg-zone-hit" data-zone="left" tabindex="0" role="button" aria-label="Select left side"
+                  d="M 8,52 C 8,28 60,16 115,22 L 115,178 C 60,182 8,168 8,148 Z"
+                  fill="transparent"/>
+            <path class="mg-zone-hit" data-zone="front" tabindex="0" role="button" aria-label="Select front face"
+                  d="M 115,22 Q 200,2 240,2 Q 280,2 365,22 L 365,178 Q 280,192 240,192 Q 200,192 115,178 Z"
+                  fill="transparent"/>
+            <path class="mg-zone-hit" data-zone="right" tabindex="0" role="button" aria-label="Select right side"
+                  d="M 472,52 C 472,28 420,16 365,22 L 365,178 C 420,182 472,168 472,148 Z"
+                  fill="transparent"/>
           </svg>
 
           <!-- Zone selector tabs -->
@@ -977,22 +904,8 @@
 
           <!-- Artwork assignment hint (shown after file is selected) -->
           <p class="mg-assign-prompt" id="mgAssignPrompt">
-            Artwork loaded — click a zone tab above to place it on that surface.
+            Artwork loaded — click the preview or a zone tab to place it on that surface.
           </p>
-
-          <!-- Preview 3D button -->
-          <button id="mgPreview3DBtn" type="button" class="mg-preview-3d-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-            Preview in 3D
-          </button>
-        </div>
-
-        <!-- Three.js 3D overlay (hidden until button click) -->
-        <div id="mgThreeDOverlay" class="mg-threed-overlay" style="display:none;">
-          <button id="mgThreeDClose" class="mg-threed-close" type="button" aria-label="Close 3D preview">&#x2715;</button>
-          <p id="mgThreeDStatus" class="mg-threed-status">Loading 3D engine&hellip;</p>
-          <canvas id="mgThreeDCanvas" class="mg-threed-canvas"></canvas>
-          <p class="mg-threed-hint">Drag to rotate &nbsp;&middot;&nbsp; Scroll to zoom</p>
         </div>
         <div class="builder-summary">
           <h4>Order Summary</h4>
@@ -1033,329 +946,7 @@
   <script src="js/cart.js"></script>
   <script src="js/main.js"></script>
   <script>
-    // ── Phase 2: Three.js state (module-level, outside DOMContentLoaded) ────────
-    let threeState = null;
-
-    function loadScript(src) {
-      return new Promise((resolve, reject) => {
-        if (document.querySelector('script[src="' + src + '"]')) { resolve(); return; }
-        const s = document.createElement('script');
-        s.src = src; s.onload = resolve; s.onerror = reject;
-        document.head.appendChild(s);
-      });
-    }
-
-    async function buildZoneTextureCanvas(artworkZones, hexColor, isClear, customText) {
-      const W = 1024, H = 256;
-      const canvas = document.createElement('canvas');
-      canvas.width = W; canvas.height = H;
-      const ctx = canvas.getContext('2d');
-
-      async function loadImg(url) {
-        if (!url) return null;
-        return new Promise(res => {
-          const img = new Image();
-          img.onload = () => res(img);
-          img.onerror = () => res(null);
-          img.src = url;
-        });
-      }
-
-      const [iL, iF, iR] = await Promise.all([
-        loadImg(artworkZones.left),
-        loadImg(artworkZones.front),
-        loadImg(artworkZones.right)
-      ]);
-
-      const zones = [
-        { x: 0,   w: 256, img: iL, text: null,       side: 'left'  },
-        { x: 256, w: 512, img: iF, text: customText,  side: 'front' },
-        { x: 768, w: 256, img: iR, text: null,        side: 'right' }
-      ];
-
-      for (const z of zones) {
-        // Base fill
-        if (isClear) {
-          const g = ctx.createLinearGradient(z.x, 0, z.x + z.w, H);
-          g.addColorStop(0,   'rgba(180,222,248,0.68)');
-          g.addColorStop(1,   'rgba(145,198,232,0.48)');
-          ctx.fillStyle = g;
-        } else {
-          ctx.fillStyle = hexColor;
-        }
-        ctx.fillRect(z.x, 0, z.w, H);
-
-        // Artwork (cover-fit)
-        if (z.img) {
-          const sc = Math.max(z.w / z.img.naturalWidth, H / z.img.naturalHeight);
-          const iw = z.img.naturalWidth * sc, ih = z.img.naturalHeight * sc;
-          ctx.save();
-          ctx.globalAlpha = 0.9;
-          ctx.drawImage(z.img, z.x + (z.w - iw) / 2, (H - ih) / 2, iw, ih);
-          ctx.restore();
-        }
-
-        // Custom text (front zone)
-        if (z.text) {
-          ctx.save();
-          ctx.font = '900 54px Impact, "Bebas Neue", sans-serif';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.strokeStyle = 'rgba(0,0,0,0.65)';
-          ctx.lineWidth = 8;
-          ctx.strokeText(z.text.toUpperCase(), z.x + z.w / 2, H / 2);
-          ctx.fillStyle = 'rgba(255,255,255,0.92)';
-          ctx.fillText(z.text.toUpperCase(), z.x + z.w / 2, H / 2);
-          ctx.restore();
-        }
-
-        // Top shine
-        const shine = ctx.createLinearGradient(z.x, 0, z.x, H);
-        shine.addColorStop(0,    'rgba(255,255,255,0.24)');
-        shine.addColorStop(0.28, 'rgba(255,255,255,0.0)');
-        ctx.fillStyle = shine; ctx.fillRect(z.x, 0, z.w, H);
-
-        // Side darkening + seam shadows
-        if (z.side === 'left') {
-          const dark = ctx.createLinearGradient(z.x, 0, z.x + z.w, 0);
-          dark.addColorStop(0,   'rgba(0,0,0,0.62)');
-          dark.addColorStop(0.7, 'rgba(0,0,0,0.0)');
-          ctx.fillStyle = dark; ctx.fillRect(z.x, 0, z.w, H);
-          // right-edge seam crease
-          const seam = ctx.createLinearGradient(z.x + z.w - 22, 0, z.x + z.w, 0);
-          seam.addColorStop(0, 'rgba(0,0,0,0.0)');
-          seam.addColorStop(1, 'rgba(0,0,0,0.72)');
-          ctx.fillStyle = seam; ctx.fillRect(z.x + z.w - 22, 0, 22, H);
-        } else if (z.side === 'right') {
-          const dark = ctx.createLinearGradient(z.x, 0, z.x + z.w, 0);
-          dark.addColorStop(0.3, 'rgba(0,0,0,0.0)');
-          dark.addColorStop(1,   'rgba(0,0,0,0.62)');
-          ctx.fillStyle = dark; ctx.fillRect(z.x, 0, z.w, H);
-          // left-edge seam crease
-          const seam = ctx.createLinearGradient(z.x, 0, z.x + 22, 0);
-          seam.addColorStop(0, 'rgba(0,0,0,0.72)');
-          seam.addColorStop(1, 'rgba(0,0,0,0.0)');
-          ctx.fillStyle = seam; ctx.fillRect(z.x, 0, 22, H);
-        } else {
-          // Front: radial convex highlight
-          const rad = ctx.createRadialGradient(z.x + z.w/2, H/2, 18, z.x + z.w/2, H/2, z.w/2);
-          rad.addColorStop(0, 'rgba(255,255,255,0.10)');
-          rad.addColorStop(1, 'rgba(0,0,0,0.18)');
-          ctx.fillStyle = rad; ctx.fillRect(z.x, 0, z.w, H);
-        }
-      }
-      return canvas;
-    }
-
-    async function buildMouthguardMesh(THREE, texCanvas) {
-      // Realistic dental arch — wider, proper horseshoe proportions
-      const curve = new THREE.CatmullRomCurve3([
-        new THREE.Vector3(-2.55, 0, -1.15),
-        new THREE.Vector3(-2.25, 0, -0.35),
-        new THREE.Vector3(-1.70, 0,  0.50),
-        new THREE.Vector3(-0.88, 0,  1.10),
-        new THREE.Vector3( 0,    0,  1.28),
-        new THREE.Vector3( 0.88, 0,  1.10),
-        new THREE.Vector3( 1.70, 0,  0.50),
-        new THREE.Vector3( 2.25, 0, -0.35),
-        new THREE.Vector3( 2.55, 0, -1.15)
-      ]);
-
-      // Custom cross-section: flat superellipse (looks like real EVA stock)
-      // W = half-depth (front-face to bite channel), H = half-thickness
-      const SEGS   = 140;   // spine segments — smooth arch
-      const CS     = 22;    // cross-section segments
-      const W      = 0.58;  // wide (≈front-to-back depth of real guard)
-      const H      = 0.17;  // thin (≈guard thickness)
-      const POWER  = 3.2;   // superellipse exponent — rounder than rect, flatter than ellipse
-
-      const frames = curve.computeFrenetFrames(SEGS, false);
-      const pos = [], uvArr = [], idx = [];
-
-      for (let i = 0; i <= SEGS; i++) {
-        const t  = i / SEGS;
-        const p  = curve.getPointAt(t);
-        const N  = frames.normals  [Math.min(i, SEGS - 1)];
-        const B  = frames.binormals[Math.min(i, SEGS - 1)];
-
-        for (let j = 0; j <= CS; j++) {
-          const theta = (j / CS) * Math.PI * 2;
-          const ct = Math.cos(theta), st = Math.sin(theta);
-          // Superellipse: sign(cos)·|cos|^(2/n)·W, sign(sin)·|sin|^(2/n)·H
-          const cx = Math.sign(ct) * Math.pow(Math.abs(ct), 2 / POWER) * W;
-          const cy = Math.sign(st) * Math.pow(Math.abs(st), 2 / POWER) * H;
-
-          pos.push(
-            p.x + N.x * cx + B.x * cy,
-            p.y + N.y * cx + B.y * cy,
-            p.z + N.z * cx + B.z * cy
-          );
-          uvArr.push(t, j / CS);
-        }
-      }
-
-      for (let i = 0; i < SEGS; i++) {
-        for (let j = 0; j < CS; j++) {
-          const a = i * (CS + 1) + j,  b = a + 1;
-          const c = (i + 1) * (CS + 1) + j, d = c + 1;
-          idx.push(a, b, c,  b, d, c);
-        }
-      }
-
-      const geo = new THREE.BufferGeometry();
-      geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-      geo.setAttribute('uv',       new THREE.Float32BufferAttribute(uvArr, 2));
-      geo.setIndex(idx);
-      geo.computeVertexNormals();
-
-      const texture = new THREE.CanvasTexture(texCanvas);
-      texture.wrapS = THREE.ClampToEdgeWrapping;
-      texture.wrapT = THREE.ClampToEdgeWrapping;
-
-      // MeshPhysicalMaterial — glossy EVA plastic (clearcoat = the shiny outer shell)
-      const mat = new THREE.MeshPhysicalMaterial({
-        map:                texture,
-        roughness:          0.18,
-        metalness:          0.0,
-        clearcoat:          0.92,
-        clearcoatRoughness: 0.10,
-        reflectivity:       0.55
-      });
-
-      const mesh = new THREE.Mesh(geo, mat);
-      mesh.rotation.x = -0.10;   // slight forward tilt for natural view angle
-      return mesh;
-    }
-
-    async function initThreeD(artworkZones, hexColor, isClear, customText) {
-      const overlay = document.getElementById('mgThreeDOverlay');
-      const status  = document.getElementById('mgThreeDStatus');
-      const canvas  = document.getElementById('mgThreeDCanvas');
-
-      overlay.style.display = 'block';
-
-      if (threeState) {
-        // already running — just refresh texture
-        refreshTexture(artworkZones, hexColor, isClear, customText);
-        return;
-      }
-
-      status.classList.remove('hidden');
-      status.textContent = 'Loading 3D engine\u2026';
-
-      try {
-        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js');
-        await loadScript('https://cdn.jsdelivr.net/npm/three@0.134.0/examples/js/controls/OrbitControls.js');
-      } catch {
-        status.textContent = '3D engine failed to load. Check your connection.';
-        return;
-      }
-
-      status.classList.add('hidden');
-
-      const THREE = window.THREE;
-      const W = overlay.clientWidth  || 400;
-      const H = overlay.clientHeight || 300;
-
-      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, physicallyCorrectLights: true });
-      renderer.setSize(W, H);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.setClearColor(0x0e0e14, 1);
-      renderer.shadowMap.enabled = true;
-
-      const scene = new THREE.Scene();
-      // Subtle dark-to-slightly-lighter fog gives depth without washing out the guard
-      scene.fog = new THREE.Fog(0x0e0e14, 18, 40);
-
-      const camera = new THREE.PerspectiveCamera(38, W / H, 0.1, 100);
-      camera.position.set(0, 2.6, 7.8);
-      camera.lookAt(0, 0.1, 0.4);
-
-      // Studio 3-point lighting rig
-      // 1. Soft ambient fill
-      scene.add(new THREE.AmbientLight(0xd0d8f0, 0.45));
-
-      // 2. Key light — front-top-right, warm white (simulates overhead studio strobe)
-      const keyLight = new THREE.DirectionalLight(0xfff8f0, 1.8);
-      keyLight.position.set(2.5, 6, 6);
-      keyLight.castShadow = true;
-      scene.add(keyLight);
-
-      // 3. Fill light — left side, cooler/softer
-      const fillLight = new THREE.DirectionalLight(0xc8d8ff, 0.7);
-      fillLight.position.set(-6, 2, 3);
-      scene.add(fillLight);
-
-      // 4. Rim/back light — gives the glossy clearcoat edge highlight
-      const rimLight = new THREE.DirectionalLight(0xffffff, 0.55);
-      rimLight.position.set(0, -3, -6);
-      scene.add(rimLight);
-
-      // 5. Top bounce — softens top face of guard
-      const topBounce = new THREE.DirectionalLight(0xeeeeff, 0.30);
-      topBounce.position.set(0, 8, 0);
-      scene.add(topBounce);
-
-      const texCanvas = await buildZoneTextureCanvas(artworkZones, hexColor, isClear, customText);
-      const mesh = await buildMouthguardMesh(THREE, texCanvas);
-      scene.add(mesh);
-
-      const controls = new THREE.OrbitControls(camera, renderer.domElement);
-      controls.enableDamping   = true;
-      controls.dampingFactor   = 0.07;
-      controls.autoRotate      = true;
-      controls.autoRotateSpeed = 0.7;
-      controls.minDistance     = 4;
-      controls.maxDistance     = 16;
-      controls.maxPolarAngle   = Math.PI * 0.72;  // don't go fully underneath
-      controls.target.set(0, 0, 0.3);
-      controls.addEventListener('start', () => { controls.autoRotate = false; });
-
-      let animId;
-      function animate() {
-        animId = requestAnimationFrame(animate);
-        controls.update();
-        renderer.render(scene, camera);
-      }
-      animate();
-
-      function onResize() {
-        const w = overlay.clientWidth, h = overlay.clientHeight;
-        if (!w || !h) return;
-        camera.aspect = w / h;
-        camera.updateProjectionMatrix();
-        renderer.setSize(w, h);
-      }
-      window.addEventListener('resize', onResize);
-
-      threeState = { renderer, scene, camera, controls, mesh, animId, onResize };
-    }
-
-    async function refreshTexture(artworkZones, hexColor, isClear, customText) {
-      if (!threeState) return;
-      const newCanvas = await buildZoneTextureCanvas(artworkZones, hexColor, isClear, customText);
-      const tex = threeState.mesh.material.map;
-      tex.image = newCanvas;
-      tex.needsUpdate = true;
-    }
-
-    function closeThreeD() {
-      const overlay = document.getElementById('mgThreeDOverlay');
-      if (overlay) overlay.style.display = 'none';
-      if (!threeState) return;
-      cancelAnimationFrame(threeState.animId);
-      window.removeEventListener('resize', threeState.onResize);
-      threeState.controls.dispose();
-      threeState.mesh.geometry.dispose();
-      threeState.mesh.material.map.dispose();
-      threeState.mesh.material.dispose();
-      threeState.renderer.dispose();
-      threeState = null;
-    }
-
-    // ── Builder logic ────────────────────────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', () => {
-      // ── DOM refs ───────────────────────────────────────────────────────────────
       const colorOptions     = document.querySelectorAll('.color-option');
       const packageOptions   = document.querySelectorAll('.package-option');
       const referenceOptions = document.querySelectorAll('.reference-option');
@@ -1370,8 +961,8 @@
       const artworkFile      = document.getElementById('artworkFile');
       const artworkFileName  = document.getElementById('artworkFileName');
       const rushOrder        = document.getElementById('rushOrder');
+      const zoneLabels       = { left: 'Left Side', front: 'Front Face', right: 'Right Side' };
 
-      // ── Builder state ──────────────────────────────────────────────────────────
       let selectedPackage = {
         id: 'full-custom-graphics-guard', name: 'Full Custom Graphics Guard',
         detail: 'Dual Layer Custom Graphics', price: 149,
@@ -1379,28 +970,36 @@
       };
       let selectedReference  = { name: 'Fang Layout', image: 'assets/images/relentless-work-teeth.jpg' };
       let selectedArtworkName = '';
-      let activeZone   = 'front';
+      let activeZone = 'front';
       let artworkDataUrl = null;
-      let artworkZones   = { front: null, left: null, right: null };
-      let currentHex     = '#050505';
-      let currentIsClear = false;
+      let artworkZones = { front: null, left: null, right: null };
 
-      // ── Helpers ────────────────────────────────────────────────────────────────
       function money(v) { return '$' + Number(v).toFixed(2).replace('.00', ''); }
       function slug(v)  { return String(v).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'none'; }
       function mgEl(id) { return document.getElementById(id); }
 
-      function getCustomText() { return (document.getElementById('customText')?.value || '').trim(); }
+      function syncReferenceGhost() {
+        const ghost = mgEl('imgFrontRef');
+        if (!ghost) return;
+        ghost.setAttribute('href', selectedReference.image);
+        ghost.style.display = '';
+      }
 
-      // ── SVG preview ────────────────────────────────────────────────────────────
       function updateZoneColor(hex, isClear) {
-        currentHex = hex; currentIsClear = isClear;
         const fill = isClear ? 'url(#gradClear)' : hex;
         ['zoneLeftBase', 'zoneFrontBase', 'zoneRightBase'].forEach(id => {
           const el = mgEl(id);
           if (el) el.setAttribute('fill', fill);
         });
-        if (threeState) refreshTexture(artworkZones, currentHex, currentIsClear, getCustomText());
+        const shine = mgEl('zoneFrontShine');
+        if (shine) shine.setAttribute('opacity', isClear ? '0.45' : '1');
+      }
+
+      function updateFrontLabel() {
+        const lbl = mgEl('labelFront');
+        if (!lbl) return;
+        const customText = document.getElementById('customText').value.trim();
+        lbl.style.opacity = (artworkZones.front || customText) ? '0' : '';
       }
 
       function applyArtworkToZone(zone, dataUrl) {
@@ -1408,56 +1007,71 @@
         const img = mgEl('img' + key);
         if (!img) return;
         img.setAttribute('href', dataUrl);
+        img.setAttribute('preserveAspectRatio', zone === 'front' ? 'xMidYMid slice' : 'xMidYMid meet');
         img.style.display = '';
         artworkZones[zone] = dataUrl;
-        // Fade label for this zone
         const lbl = mgEl('label' + key);
-        if (lbl) lbl.style.opacity = '0';
-        if (threeState) refreshTexture(artworkZones, currentHex, currentIsClear, getCustomText());
+        if (lbl && zone !== 'front') lbl.style.opacity = '0';
+        updateFrontLabel();
       }
 
       function updatePreviewText(text) {
         const el = mgEl('textFront');
-        if (el) el.textContent = text.toUpperCase();
-        // Fade front label when text is present
-        const lbl = mgEl('labelFront');
-        if (lbl) lbl.style.opacity = text ? '0' : '';
-        if (threeState) refreshTexture(artworkZones, currentHex, currentIsClear, text.trim());
+        if (!el) return;
+        const trimmed = text.trim();
+        el.textContent = trimmed.toUpperCase();
+        const len = trimmed.length;
+        const size = !len ? 28 : len <= 8 ? 28 : len <= 12 ? 22 : len <= 18 ? 18 : 14;
+        el.setAttribute('font-size', size);
+        updateFrontLabel();
       }
 
       function setActiveZoneBorder(zone) {
         ['left', 'front', 'right'].forEach(z => {
-          const key    = z.charAt(0).toUpperCase() + z.slice(1);
+          const key = z.charAt(0).toUpperCase() + z.slice(1);
           const border = mgEl('zone' + key + 'Border');
           if (!border) return;
-          if (z === zone) {
-            border.setAttribute('stroke', 'rgba(193,18,31,0.85)');
-            border.setAttribute('stroke-width', '2.5');
-          } else {
-            border.setAttribute('stroke', 'transparent');
-          }
+          border.setAttribute('stroke', z === zone ? 'rgba(193,18,31,0.85)' : 'transparent');
+          border.setAttribute('stroke-width', z === zone ? '2.5' : '2.5');
         });
+      }
+
+      function selectZone(zone) {
+        activeZone = zone;
+        document.querySelectorAll('.mg-zone-tab').forEach(t => {
+          t.classList.toggle('active', t.dataset.zone === zone);
+        });
+        setActiveZoneBorder(zone);
+        if (artworkDataUrl) {
+          applyArtworkToZone(zone, artworkDataUrl);
+          const prompt = mgEl('mgAssignPrompt');
+          if (prompt) {
+            prompt.classList.add('visible');
+            prompt.textContent = '\u2713 Artwork on ' + zoneLabels[zone] + ' \u2014 click another zone to copy it there too.';
+          }
+        }
       }
 
       function initMouthguardPreview() {
         document.querySelectorAll('.mg-zone-tab').forEach(tab => {
-          tab.addEventListener('click', () => {
-            activeZone = tab.dataset.zone;
-            document.querySelectorAll('.mg-zone-tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            setActiveZoneBorder(activeZone);
-            if (artworkDataUrl) {
-              applyArtworkToZone(activeZone, artworkDataUrl);
-              const prompt = mgEl('mgAssignPrompt');
-              if (prompt) prompt.textContent = '\u2713 Artwork placed on ' + tab.textContent.trim() + ' \u2014 click another zone to copy there too.';
+          tab.addEventListener('click', () => selectZone(tab.dataset.zone));
+        });
+
+        document.querySelectorAll('.mg-zone-hit').forEach(hit => {
+          hit.addEventListener('click', () => selectZone(hit.dataset.zone));
+          hit.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              selectZone(hit.dataset.zone);
             }
           });
         });
-        setActiveZoneBorder('front');
+
+        selectZone('front');
         updateZoneColor('#050505', false);
+        syncReferenceGhost();
       }
 
-      // ── Summary ────────────────────────────────────────────────────────────────
       function updateSummary() {
         const rushPrice = rushOrder.checked ? 30 : 0;
         summaryPackageName.textContent  = selectedPackage.name;
@@ -1468,7 +1082,6 @@
         summaryTotal.textContent        = money(selectedPackage.price + rushPrice);
       }
 
-      // ── Package ────────────────────────────────────────────────────────────────
       packageOptions.forEach(opt => {
         opt.addEventListener('click', () => {
           packageOptions.forEach(o => o.classList.remove('selected'));
@@ -1482,34 +1095,25 @@
         });
       });
 
-      // ── Color ──────────────────────────────────────────────────────────────────
       colorOptions.forEach(opt => {
         opt.addEventListener('click', () => {
           colorOptions.forEach(o => o.classList.remove('selected'));
           opt.classList.add('selected');
           summaryColor.textContent = opt.dataset.color;
-          const isClear = opt.dataset.color === 'Clear';
-          if (opt.dataset.hex) updateZoneColor(opt.dataset.hex, isClear);
+          if (opt.dataset.hex) updateZoneColor(opt.dataset.hex, opt.dataset.color === 'Clear');
         });
       });
 
-      // ── Design reference (p1-refimg: ghost on front zone) ──────────────────────
       referenceOptions.forEach(opt => {
         opt.addEventListener('click', () => {
           referenceOptions.forEach(o => o.classList.remove('selected'));
           opt.classList.add('selected');
           selectedReference = { name: opt.dataset.referenceName, image: opt.dataset.referenceImage };
           updateSummary();
-          // Show faint reference ghost on SVG front zone
-          const ghost = mgEl('imgFrontRef');
-          if (ghost) {
-            ghost.setAttribute('href', opt.dataset.referenceImage);
-            ghost.style.display = '';
-          }
+          syncReferenceGhost();
         });
       });
 
-      // ── Artwork upload ─────────────────────────────────────────────────────────
       uploadArea.addEventListener('click', () => artworkFile.click());
 
       artworkFile.addEventListener('change', () => {
@@ -1526,7 +1130,7 @@
             applyArtworkToZone(activeZone, artworkDataUrl);
             if (prompt) {
               prompt.classList.add('visible');
-              prompt.textContent = '\u2713 Artwork placed on ' + activeZone + ' \u2014 click another zone tab to copy it there too.';
+              prompt.textContent = '\u2713 Artwork on ' + zoneLabels[activeZone] + ' \u2014 click another zone to copy it there too.';
             }
           };
           reader.readAsDataURL(file);
@@ -1537,31 +1141,20 @@
             const el = mgEl(id);
             if (el) { el.setAttribute('href', ''); el.style.display = 'none'; }
           });
-          // Restore all zone labels
-          ['labelLeft', 'labelFront', 'labelRight'].forEach(id => {
+          ['labelLeft', 'labelRight'].forEach(id => {
             const el = mgEl(id); if (el) el.style.opacity = '';
           });
+          updateFrontLabel();
           if (prompt) prompt.classList.remove('visible');
-          if (threeState) refreshTexture(artworkZones, currentHex, currentIsClear, getCustomText());
         }
       });
 
-      // ── Custom text ────────────────────────────────────────────────────────────
       document.getElementById('customText').addEventListener('input', e => {
         updatePreviewText(e.target.value);
       });
 
-      // ── Rush ───────────────────────────────────────────────────────────────────
       rushOrder.addEventListener('change', updateSummary);
 
-      // ── 3D Preview button ──────────────────────────────────────────────────────
-      document.getElementById('mgPreview3DBtn').addEventListener('click', () => {
-        initThreeD(artworkZones, currentHex, currentIsClear, getCustomText());
-      });
-
-      document.getElementById('mgThreeDClose').addEventListener('click', closeThreeD);
-
-      // ── Add to cart ────────────────────────────────────────────────────────────
       document.getElementById('addToCartBtn').addEventListener('click', async () => {
         const btn = document.getElementById('addToCartBtn');
         const color      = summaryColor.textContent;
@@ -1622,7 +1215,6 @@
         }, 2500);
       });
 
-      // ── Init ───────────────────────────────────────────────────────────────────
       initMouthguardPreview();
       updateSummary();
     });
