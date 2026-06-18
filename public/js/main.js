@@ -94,14 +94,112 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Design carousel ---
   document.querySelectorAll('[data-carousel]').forEach(carousel => {
     const track = carousel.querySelector('[data-carousel-track]');
+    if (!track) return;
+
+    // Define all slides (original 8 + 46 new photos)
+    const carouselImages = [
+      { img: 'assets/images/relentless-work-mafia.jpg', caption: 'Mafia Layout' },
+      { img: 'assets/images/relentless-work-yoda.jpg', caption: 'Green Pop' },
+      { img: 'assets/images/relentless-work-destroyer.jpg', caption: 'Destroyer Blue' },
+      { img: 'assets/images/relentless-work-teeth.jpg', caption: 'Fang Layout' },
+      { img: 'assets/images/relentless-work-pink.jpg', caption: 'Pink Custom' },
+      { img: 'assets/images/relentless-work-yellow.jpg', caption: 'Yellow Strike' },
+      { img: 'assets/images/relentless-work-usa-red.jpg', caption: 'Team Red' },
+      { img: 'assets/images/relentless-work-usa-blue.jpg', caption: 'Team Blue' },
+      // New PXL files from Downloads
+      { img: 'assets/images/PXL_20260307_060544010~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260308_223837548~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260314_060744112~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260314_184727924~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260314_184801156~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260319_235501283~3.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260319_235906081.NIGHT~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260320_233112459~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260324_232619160~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260331_203015407~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260331_203307532~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260402_201739699~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260402_202349695~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260404_201826622~3.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260404_201939673~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260406_181947191~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260411_184249063~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260413_000041363~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260413_020614985~3.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260413_020708223~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260414_192234593~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260414_192540272~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260416_031854203~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260416_031945561~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260417_001629629~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260417_174639123~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260417_181143079~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260418_031101202~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260418_204801333~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260420_181407452.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260420_181455019~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260425_182437686~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260428_230555279~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260428_230922254~3.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260428_234820591~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260428_235020529~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260502_165301986~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260502_165411447~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260502_165430752~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260502_165542330~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260502_165648568~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260502_165727571~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260512_014753501~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260512_185346453~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260512_214341140~2.jpg', caption: 'Custom Build' },
+      { img: 'assets/images/PXL_20260514_020241546~2.jpg', caption: 'Custom Build' }
+    ];
+
+    // Clear existing track HTML and rebuild dynamically
+    track.innerHTML = '';
+    carouselImages.forEach(slide => {
+      const slideLink = document.createElement('a');
+      slideLink.className = 'carousel-slide';
+      slideLink.href = 'gallery.html';
+
+      const imgEl = document.createElement('img');
+      imgEl.src = slide.img;
+      imgEl.alt = `${slide.caption} RELENTLESS custom mouthguard`;
+
+      const spanEl = document.createElement('span');
+      spanEl.className = 'gallery-caption';
+      spanEl.textContent = slide.caption;
+
+      slideLink.appendChild(imgEl);
+      slideLink.appendChild(spanEl);
+      track.appendChild(slideLink);
+    });
+
+    // Populate dots container dynamically if few slides, otherwise hide it
+    const dotsContainer = carousel.querySelector('[data-carousel-dots]');
+    if (dotsContainer) {
+      if (carouselImages.length <= 15) {
+        dotsContainer.innerHTML = '';
+        carouselImages.forEach((_, index) => {
+          const dotBtn = document.createElement('button');
+          dotBtn.type = 'button';
+          if (index === 0) dotBtn.className = 'active';
+          dotBtn.setAttribute('aria-label', `Show design ${index + 1}`);
+          dotsContainer.appendChild(dotBtn);
+        });
+      } else {
+        dotsContainer.style.display = 'none';
+      }
+    }
+
     const slides = Array.from(carousel.querySelectorAll('.carousel-slide'));
     const dots = Array.from(carousel.querySelectorAll('[data-carousel-dots] button'));
     const prev = carousel.querySelector('[data-carousel-prev]');
     const next = carousel.querySelector('[data-carousel-next]');
 
-    if (!track || slides.length === 0) return;
+    if (slides.length === 0) return;
 
-    const autoplayDelay = 6500;
+    const autoplayDelay = 2800;
     let activeIndex = 0;
     let autoplayTimer;
     let carouselInView = true;
@@ -203,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
           setActiveDot(slides.indexOf(entry.target));
         }
       });
-    }, { root: track, threshold: 0.62 });
+    }, { root: track, threshold: 0.2, rootMargin: '0px -35% 0px -35%' });
 
     slides.forEach(slide => slideObserver.observe(slide));
     setActiveDot(0);
