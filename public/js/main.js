@@ -210,6 +210,50 @@ document.addEventListener('DOMContentLoaded', () => {
     startAutoplay();
   });
 
+  // --- Homepage package picker ---
+  document.querySelectorAll('[data-package-picker]').forEach(picker => {
+    const stage = picker.querySelector('.package-stage');
+    const image = picker.querySelector('[data-package-image]');
+    const name = picker.querySelector('[data-package-name]');
+    const kicker = picker.querySelector('[data-package-kicker]');
+    const price = picker.querySelector('[data-package-price]');
+    const desc = picker.querySelector('[data-package-desc]');
+    const choices = Array.from(picker.querySelectorAll('.package-choice'));
+
+    if (!image || !name || !kicker || !price || !desc || choices.length === 0) return;
+
+    const selectPackage = choice => {
+      choices.forEach(btn => {
+        const isActive = btn === choice;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+
+      if (stage) stage.classList.add('is-switching');
+      window.setTimeout(() => {
+        image.src = choice.dataset.image;
+        image.alt = choice.dataset.alt || `${choice.dataset.name} custom mouthguard package`;
+        name.textContent = choice.dataset.name;
+        kicker.textContent = choice.dataset.kicker;
+        price.textContent = choice.dataset.price;
+        desc.textContent = choice.dataset.desc;
+        if (stage) stage.classList.remove('is-switching');
+      }, 140);
+    };
+
+    choices.forEach(choice => {
+      choice.addEventListener('click', () => selectPackage(choice));
+      choice.addEventListener('keydown', event => {
+        if (!['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(event.key)) return;
+        event.preventDefault();
+        const direction = event.key === 'ArrowDown' || event.key === 'ArrowRight' ? 1 : -1;
+        const nextIndex = (choices.indexOf(choice) + direction + choices.length) % choices.length;
+        choices[nextIndex].focus();
+        selectPackage(choices[nextIndex]);
+      });
+    });
+  });
+
   // --- Smooth scroll for anchor links ---
   document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.addEventListener('click', (e) => {

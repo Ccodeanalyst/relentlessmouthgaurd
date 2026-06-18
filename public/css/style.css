@@ -191,16 +191,16 @@ body.intro-active {
 
 /* --- Header / Nav --- */
 .site-header {
-  position: fixed;
-  top: 38px;
+  position: relative;
+  top: auto;
   left: 0;
   right: 0;
   z-index: 1000;
-  transition: background 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out), top 0.4s var(--ease-out);
+  transition: background 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
 }
 
 .site-header.scrolled {
-  top: 0;
+  top: auto;
 }
 
 .site-header.scrolled {
@@ -210,7 +210,7 @@ body.intro-active {
 }
 
 .announcement-bar + .site-header + .hero {
-  padding-top: 38px;
+  padding-top: 0;
 }
 
 .header-inner {
@@ -2518,7 +2518,7 @@ body {
 
 /* Header refinement */
 .site-header {
-  top: 40px;
+  top: auto;
 }
 
 .site-header.scrolled {
@@ -3955,19 +3955,15 @@ body {
   transform: translateY(-4px);
 }
 
-.reduction-plan {
-  padding: 116px 0;
-}
-
 .reduction-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(18px, 2.4vw, 36px);
+  gap: clamp(14px, 2vw, 24px);
 }
 
 .reduction-card {
-  min-height: 260px;
-  padding: clamp(24px, 3vw, 34px);
+  min-height: 190px;
+  padding: clamp(20px, 2.4vw, 26px);
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 8px;
   background:
@@ -3982,9 +3978,9 @@ body {
 }
 
 .reduction-card h3 {
-  margin: 14px 0 12px;
+  margin: 10px 0 8px;
   font-family: var(--font-accent);
-  font-size: 1.02rem;
+  font-size: 0.94rem;
   font-weight: 800;
   letter-spacing: 1.2px;
   text-transform: uppercase;
@@ -3992,7 +3988,8 @@ body {
 
 .reduction-card p {
   color: var(--chrome);
-  line-height: 1.7;
+  font-size: 0.88rem;
+  line-height: 1.6;
 }
 
 .text-link {
@@ -4229,6 +4226,7 @@ body {
   .shop-packages .shop-grid,
   .value-grid,
   .featured-offer-layout,
+  .package-range-layout,
   .order-flow,
   .upgrade-layout,
   .faq-grid,
@@ -4256,6 +4254,10 @@ body {
   .carousel-slide {
     flex-basis: min(82vw, 760px);
   }
+
+  .reduction-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 768px) {
@@ -4280,8 +4282,13 @@ body {
   .shop-upgrade,
   .shop-faq,
   .value-proof,
+  .package-range,
   .featured-offer {
     padding: 96px 0;
+  }
+
+  .reduction-plan {
+    padding: 72px 0;
   }
 
   .shop-kit .step-card {
@@ -4297,6 +4304,25 @@ body {
   .upgrade-image img {
     height: 360px;
     min-height: 0;
+  }
+
+  .package-stage {
+    min-height: 0;
+  }
+
+  .package-stage img {
+    min-height: 430px;
+  }
+
+  .package-stage-panel {
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+  }
+
+  .package-choice {
+    min-height: 112px;
+    padding: 22px;
   }
 
   .text-link {
@@ -4382,6 +4408,19 @@ body {
 @media (max-width: 540px) {
   .color-swatch-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .package-choice {
+    grid-template-columns: 1fr;
+  }
+
+  .package-choice small {
+    grid-row: auto;
+    grid-column: auto;
+  }
+
+  .reduction-grid {
+    grid-template-columns: 1fr;
   }
 }
 
