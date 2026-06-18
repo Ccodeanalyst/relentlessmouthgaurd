@@ -22,7 +22,7 @@ const SECURITY_HEADERS = {
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com data:",
     "connect-src 'self' https://api.stripe.com https://api.resend.com",
-    "frame-src https://js.stripe.com https://hooks.stripe.com",
+    "frame-src https://js.stripe.com https://hooks.stripe.com https://www.youtube-nocookie.com https://www.youtube.com",
     "img-src 'self' data: https: blob:",
     "object-src 'none'",
     "base-uri 'self'"
@@ -210,6 +210,20 @@ async function handleAdminApi(request, env, url) {
     return json({ error: 'Method not allowed' }, 405);
   }
 
+  if (url.pathname === '/api/admin/promos') {
+    if (request.method === 'GET') return listAdminPromos(env);
+    if (request.method === 'POST') return createAdminPromo(request, env, session.username);
+    return json({ error: 'Method not allowed' }, 405);
+  }
+
+  const promoMatch = url.pathname.match(/^\/api\/admin\/promos\/([^/]+)$/);
+  if (promoMatch) {
+    const code = decodeURIComponent(promoMatch[1]);
+    if (request.method === 'PATCH') return updateAdminPromo(request, env, code);
+    if (request.method === 'DELETE') return deleteAdminPromo(env, code);
+    return json({ error: 'Method not allowed' }, 405);
+  }
+
   return json({ error: 'Not found' }, 404);
 }
 
@@ -381,6 +395,116 @@ async function updateAdminOrder(request, env, orderId, username) {
   return getAdminOrder(env, orderId);
 }
 
+async function listAdminPromos(env) {
+  if (!env.DB) return json({ error: 'Database not configured.' }, 503);
+
+  const result = await env.DB.prepare(`
+    SELECT
+      p.code, p.campaign, p.discount_type, p.discount_value, p.max_uses,
+      p.starts_at, p.expires_at, p.active, p.created_at, p.created_by,
+      COUNT(r.id) AS uses,
+      COALESCE(SUM(r.discount_cents), 0) AS discount_total_cents,
+      COALESCE(SUM(CASE WHEN o.payment_status = 'paid' THEN o.total_cents ELSE 0 END), 0) AS paid_revenue_cents,
+      COUNT(CASE WHEN o.payment_status = 'paid' THEN 1 END) AS order_count
+    FROM promo_codes p
+    LEFT JOIN promo_redemptions r ON r.promo_code = p.code
+    LEFT JOIN orders o ON o.id = r.order_id
+    GROUP BY p.code
+    ORDER BY p.created_at DESC
+  `).all();
+
+  return json({ promos: result.results || [] });
+}
+
+async function createAdminPromo(request, env, username) {
+  if (!env.DB) return json({ error: 'Database not configured.' }, 503);
+
+  let payload;
+  try {
+    payload = await request.json();
+  } catch {
+    return json({ error: 'Invalid JSON body.' }, 400);
+  }
+
+  const code = text(payload.code).toUpperCase().replace(/[^A-Z0-9_-]/g, '').slice(0, 40);
+  const campaign = text(payload.campaign, 120);
+  const discountType = payload.discountType === 'amount' ? 'amount' : 'pct';
+  const discountValue = Math.max(1, Math.round(Number(payload.discountValue) || 0));
+  const maxUses = payload.maxUses ? Math.max(1, Math.round(Number(payload.maxUses))) : null;
+  const startsAt = payload.startsAt || null;
+  const expiresAt = payload.expiresAt || null;
+  const active = payload.active !== false ? 1 : 0;
+
+  if (!code) return json({ error: 'Code is required.' }, 400);
+  if (!campaign) return json({ error: 'Campaign is required.' }, 400);
+  if (!discountValue) return json({ error: 'Discount value is required.' }, 400);
+
+  const existing = await env.DB.prepare('SELECT code FROM promo_codes WHERE code = ?').bind(code).first();
+  if (existing) return json({ error: `Promo code ${code} already exists.` }, 409);
+
+  await env.DB.prepare(
+    `INSERT INTO promo_codes (code, campaign, discount_type, discount_value, max_uses, starts_at, expires_at, active, created_by)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+  ).bind(code, campaign, discountType, discountValue, maxUses, startsAt, expiresAt, active, username || 'admin').run();
+
+  return json({ ok: true, code }, 201);
+}
+
+async function updateAdminPromo(request, env, code) {
+  if (!env.DB) return json({ error: 'Database not configured.' }, 503);
+
+  let payload;
+  try {
+    payload = await request.json();
+  } catch {
+    return json({ error: 'Invalid JSON body.' }, 400);
+  }
+
+  const existing = await env.DB.prepare('SELECT code FROM promo_codes WHERE code = ?').bind(code).first();
+  if (!existing) return json({ error: 'Promo code not found.' }, 404);
+
+  const campaign = text(payload.campaign, 120);
+  const discountType = payload.discountType === 'amount' ? 'amount' : 'pct';
+  const discountValue = Math.max(1, Math.round(Number(payload.discountValue) || 0));
+  const maxUses = payload.maxUses ? Math.max(1, Math.round(Number(payload.maxUses))) : null;
+  const startsAt = payload.startsAt || null;
+  const expiresAt = payload.expiresAt || null;
+  const active = payload.active !== false ? 1 : 0;
+
+  await env.DB.prepare(
+    `UPDATE promo_codes
+     SET campaign = ?, discount_type = ?, discount_value = ?, max_uses = ?,
+         starts_at = ?, expires_at = ?, active = ?, updated_at = datetime('now')
+     WHERE code = ?`
+  ).bind(campaign, discountType, discountValue, maxUses, startsAt, expiresAt, active, code).run();
+
+  return json({ ok: true, code });
+}
+
+async function deleteAdminPromo(env, code) {
+  if (!env.DB) return json({ error: 'Database not configured.' }, 503);
+
+  const promo = await env.DB.prepare(
+    `SELECT p.code, COUNT(r.id) AS uses
+     FROM promo_codes p
+     LEFT JOIN promo_redemptions r ON r.promo_code = p.code
+     WHERE p.code = ?
+     GROUP BY p.code`
+  ).bind(code).first();
+
+  if (!promo) return json({ error: 'Promo code not found.' }, 404);
+
+  if (Number(promo.uses || 0) > 0) {
+    await env.DB.prepare(
+      `UPDATE promo_codes SET active = 0, updated_at = datetime('now') WHERE code = ?`
+    ).bind(code).run();
+    return json({ ok: true, action: 'disabled' });
+  }
+
+  await env.DB.prepare('DELETE FROM promo_codes WHERE code = ?').bind(code).run();
+  return json({ ok: true, action: 'deleted' });
+}
+
 async function createCheckoutSession(request, env, origin) {
   const stripeSecretKey = normalizeStripeSecretKey(env.STRIPE_SECRET_KEY);
   if (!stripeSecretKey) {
@@ -398,7 +522,7 @@ async function createCheckoutSession(request, env, origin) {
     return json({ error: 'Invalid JSON body.' }, 400);
   }
 
-  const normalized = normalizeOrder(payload);
+  const normalized = await normalizeOrder(payload, env);
   if (normalized.error) {
     return json({ error: normalized.error }, 400);
   }
@@ -506,7 +630,7 @@ async function handleStripeWebhook(request, env) {
   return json({ received: true });
 }
 
-function normalizeOrder(payload) {
+async function normalizeOrder(payload, env) {
   const items = Array.isArray(payload?.items) ? payload.items : [];
   if (!items.length) return { error: 'Cart is empty.' };
   if (items.length > MAX_ITEMS) return { error: 'Cart has too many line items.' };
@@ -552,7 +676,7 @@ function normalizeOrder(payload) {
   }
 
   const subtotalCents = normalizedItems.reduce((sum, item) => sum + item.unitCents * item.quantity, 0);
-  const promo = validatePromo(payload.promoCode, subtotalCents);
+  const promo = await lookupPromo(env, payload.promoCode, subtotalCents);
   const discountCents = promo ? promo.discountCents : 0;
   const totalCents = Math.max(0, subtotalCents - discountCents);
 
@@ -1118,10 +1242,37 @@ function parseBuilderMeta(metaString) {
   return result;
 }
 
-function validatePromo(rawCode, subtotalCents) {
+async function lookupPromo(env, rawCode, subtotalCents) {
   const code = text(rawCode).toUpperCase();
   if (!code) return null;
 
+  if (env.DB) {
+    const row = await env.DB.prepare(
+      `SELECT code, campaign, discount_type, discount_value, max_uses, starts_at, expires_at, active
+       FROM promo_codes WHERE code = ?`
+    ).bind(code).first();
+
+    if (row && Number(row.active) === 1) {
+      const today = new Date();
+      if (row.starts_at && new Date(row.starts_at + 'T00:00:00') > today) return null;
+      if (row.expires_at && new Date(row.expires_at + 'T23:59:59') < today) return null;
+
+      if (row.max_uses) {
+        const usage = await env.DB.prepare(
+          'SELECT COUNT(*) as cnt FROM promo_redemptions WHERE promo_code = ?'
+        ).bind(code).first();
+        if ((usage?.cnt || 0) >= Number(row.max_uses)) return null;
+      }
+
+      const discountCents = row.discount_type === 'amount'
+        ? Math.min(subtotalCents, Number(row.discount_value))
+        : Math.round(subtotalCents * (Number(row.discount_value) / 100));
+
+      return { code, campaign: row.campaign, discountCents };
+    }
+  }
+
+  // Fallback to hardcoded list when DB is unavailable
   const promo = PROMOS[code];
   if (!promo) return null;
 
@@ -1129,11 +1280,7 @@ function validatePromo(rawCode, subtotalCents) {
     ? Math.round(subtotalCents * (promo.discount / 100))
     : Math.min(subtotalCents, Math.round(promo.discount * 100));
 
-  return {
-    code,
-    campaign: promo.campaign,
-    discountCents
-  };
+  return { code, campaign: promo.campaign, discountCents };
 }
 
 async function validatePromoEndpoint(request, env) {
@@ -1151,23 +1298,26 @@ async function validatePromoEndpoint(request, env) {
     return json({ valid: false, msg: 'Please enter a code.' });
   }
 
-  const result = validatePromo(code, subtotalCents);
+  const result = await lookupPromo(env, code, subtotalCents);
   if (!result) {
     return json({ valid: false, msg: 'Code not recognised.' });
   }
 
-  const promo = PROMOS[code];
+  const label = env.DB
+    ? await (async () => {
+        const row = await env.DB.prepare(
+          'SELECT discount_type, discount_value FROM promo_codes WHERE code = ?'
+        ).bind(code).first();
+        if (!row) return `${result.discountCents / 100} off`;
+        return row.discount_type === 'amount'
+          ? `$${(Number(row.discount_value) / 100).toFixed(2)} off`
+          : `${row.discount_value}% off`;
+      })()
+    : (() => {
+        const p = PROMOS[code];
+        return p ? (p.type === 'pct' ? `${p.discount}% off` : `$${p.discount} off`) : '';
+      })();
 
-  if (promo.maxUses !== null && env.DB) {
-    const row = await env.DB.prepare(
-      'SELECT COUNT(*) as cnt FROM promo_redemptions WHERE promo_code = ?'
-    ).bind(code).first();
-    if ((row?.cnt || 0) >= promo.maxUses) {
-      return json({ valid: false, msg: 'This code has reached its usage limit.' });
-    }
-  }
-
-  const label = promo.type === 'pct' ? `${promo.discount}% off` : `$${promo.discount} off`;
   return json({ valid: true, code: result.code, discountCents: result.discountCents, label, campaign: result.campaign });
 }
 
