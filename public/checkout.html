@@ -513,10 +513,13 @@
         const result = await response.json().catch(() => ({}));
 
         if (response.ok && result.valid) {
+          const discountAmount = Number.isFinite(Number(result.discountAmount))
+            ? Number(result.discountAmount)
+            : Number(result.discountCents || 0) / 100;
           appliedPromo = {
             valid: true,
             code: result.code,
-            amount: Number(result.discountAmount || 0),
+            amount: discountAmount,
             label: result.label,
             campaign: result.campaign
           };
@@ -528,7 +531,7 @@
           feedback.className = 'promo-feedback error';
         }
       } catch {
-        const result = Promo.validate(code, Cart.subtotal());
+        const result = await Promo.validate(code, Cart.subtotal());
         if (result.valid) {
           appliedPromo = result;
           feedback.textContent = `${result.label} applied! (${result.campaign})`;

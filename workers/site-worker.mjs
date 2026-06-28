@@ -1283,6 +1283,19 @@ async function lookupPromo(env, rawCode, subtotalCents) {
   return { code, campaign: promo.campaign, discountCents };
 }
 
+function calculateItemsSubtotalCents(items) {
+  if (!Array.isArray(items) || !items.length) return 0;
+
+  return items.slice(0, MAX_ITEMS).reduce((sum, item) => {
+    const product = resolveProduct(item);
+    if (!product) return sum;
+
+    const qty = clampInt(item.qty ?? item.quantity, 1, MAX_QTY);
+    const hasRush = String(item.id || '').endsWith('-rush') || /rush requested/i.test(String(item.meta || ''));
+    return sum + (product.cents + (hasRush ? 3000 : 0)) * qty;
+  }, 0);
+}
+
 async function validatePromoEndpoint(request, env) {
   let payload;
   try {
@@ -1291,8 +1304,11 @@ async function validatePromoEndpoint(request, env) {
     return json({ error: 'Invalid JSON body.' }, 400);
   }
 
-  const code = text(payload.code).toUpperCase();
-  const subtotalCents = Math.max(0, Math.round(Number(payload.subtotalCents) || 0));
+  const code = text(payload.code || payload.promoCode).toUpperCase();
+  const subtotalCents = Math.max(
+    0,
+    Math.round(Number(payload.subtotalCents) || calculateItemsSubtotalCents(payload.items) || 0)
+  );
 
   if (!code) {
     return json({ valid: false, msg: 'Please enter a code.' });
@@ -1318,7 +1334,14 @@ async function validatePromoEndpoint(request, env) {
         return p ? (p.type === 'pct' ? `${p.discount}% off` : `$${p.discount} off`) : '';
       })();
 
-  return json({ valid: true, code: result.code, discountCents: result.discountCents, label, campaign: result.campaign });
+  return json({
+    valid: true,
+    code: result.code,
+    discountCents: result.discountCents,
+    discountAmount: result.discountCents / 100,
+    label,
+    campaign: result.campaign
+  });
 }
 
 async function checkLoginRateLimit(env, ip) {
