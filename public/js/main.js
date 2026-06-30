@@ -374,7 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const input = form.querySelector('input');
     const note = document.createElement('p');
     note.style.cssText = 'font-size:0.78rem;color:var(--chrome);margin-top:8px;';
-    note.textContent = 'Email list coming soon. For now, reach us at relentlessmouthgaurds@gmail.com.';
+    note.textContent = 'Email list coming soon. For now, reach us at relentlessmouthguards@gmail.com.';
     form.appendChild(note);
 
     if (btn && input) {
