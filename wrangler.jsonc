@@ -8,7 +8,7 @@
     "enabled": true
   },
   "vars": {
-    "BUSINESS_EMAIL": "relentlessmouthgaurds@gmail.com",
+    "BUSINESS_EMAIL": "relentlessmouthguards@gmail.com",
     "STRIPE_TAX_ENABLED": "true",
     "ADMIN_DASHBOARD_ENABLED": "true",
     "ADMIN_USERNAME": "relentless"

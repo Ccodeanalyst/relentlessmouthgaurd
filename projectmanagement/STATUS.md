@@ -170,3 +170,8 @@ Shop hero -> Package comparison -> Kit contents -> Ordering workflow -> Design u
   - Added canonical URLs, social preview tags, crawl controls, `robots.txt`, and `sitemap.xml`.
   - Added Blog navigation, `/blog.html`, and two first keyword-targeted blog posts for Tacoma / Seattle custom mouthguards and "mouthguards near me".
   - Added `KEYWORDS.md`, `LANDING-PAGES.md`, and `BLOG-CONTENT.md` to the SEO project management folder.
+- Completed June 29 bug fix pass:
+  - Corrected business email from `relentlessmouthgaurds@gmail.com` to `relentlessmouthguards@gmail.com` across checkout, contact, index schema, wrangler.jsonc, and the confirmation email in the Worker.
+  - Added client-side validation to the contact form (name, email, message required before mailto fires).
+  - Added favicon (`relentless-logo-full-transparent.png`) to all public pages that were missing it: shop, checkout, gallery, contact, podcast.
+  - Fixed builder `reference-grid` tablet breakpoint so it renders 2 columns at 993–992px instead of collapsing to 1.

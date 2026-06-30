@@ -16,6 +16,7 @@
   <meta name="twitter:title" content="Contact RELENTLESS Mouth Guards">
   <meta name="twitter:description" content="Custom mouthguard order help for Tacoma, Seattle, teams, gyms, and athletes.">
   <meta name="twitter:image" content="https://relentlessmouthguards.com/assets/images/relentless-work-usa-blue.jpg">
+  <link rel="icon" type="image/png" href="assets/images/relentless-logo-full-transparent.png">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -73,10 +74,10 @@
               Use this page for bulk order questions, gym partnership interest, affiliate requests, or help choosing between Light Bite, Heavy Bite, and Custom Graphics packages.
             </p>
             <div class="hero-actions">
-              <a href="mailto:relentlessmouthgaurds@gmail.com" class="btn btn-primary">Email Us <span class="btn-icon">&rarr;</span></a>
+              <a href="mailto:relentlessmouthguards@gmail.com" class="btn btn-primary">Email Us <span class="btn-icon">&rarr;</span></a>
               <a href="shop.html" class="btn btn-outline">View Packages</a>
             </div>
-            <p class="section-desc" style="margin-top:18px;">Email: <a href="mailto:relentlessmouthgaurds@gmail.com" class="text-link">relentlessmouthgaurds@gmail.com</a></p>
+            <p class="section-desc" style="margin-top:18px;">Email: <a href="mailto:relentlessmouthguards@gmail.com" class="text-link">relentlessmouthguards@gmail.com</a></p>
           </div>
 
           <div class="checkout-card reveal">
@@ -191,9 +192,14 @@
       const email = document.getElementById('contactEmail').value.trim();
       const topic = document.getElementById('contactTopic').value;
       const message = document.getElementById('contactMessage').value.trim();
+
+      if (!name) { alert('Please enter your name.'); return; }
+      if (!email || !email.includes('@')) { alert('Please enter a valid email address.'); return; }
+      if (!message) { alert('Please enter a message.'); return; }
+
       const subject = encodeURIComponent(`RELENTLESS contact - ${topic}`);
       const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nTopic: ${topic}\n\n${message}`);
-      window.location.href = `mailto:relentlessmouthgaurds@gmail.com?subject=${subject}&body=${body}`;
+      window.location.href = `mailto:relentlessmouthguards@gmail.com?subject=${subject}&body=${body}`;
     });
   </script>
 </body>

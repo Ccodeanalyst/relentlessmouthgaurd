@@ -923,7 +923,7 @@ async function sendCustomerConfirmation(env, { orderId, customerEmail, customerN
     `<p>Hi ${escapeHtmlEmail(name)},</p>`,
     `<p>Your payment was received. Order <strong>${escapeHtmlEmail(orderId)}</strong> is confirmed — total <strong>${total}${taxNote}</strong>.</p>`,
     '<p>Your at-home impression kit will ship soon. We\'ll follow up with tracking and, for Custom Graphics orders, a design proof before production begins.</p>',
-    '<p>Questions? Reply to this email or contact <a href="mailto:relentlessmouthgaurds@gmail.com">relentlessmouthgaurds@gmail.com</a>.</p>',
+    '<p>Questions? Reply to this email or contact <a href="mailto:relentlessmouthguards@gmail.com">relentlessmouthguards@gmail.com</a>.</p>',
     '<p>Follow our latest builds on Instagram: <a href="https://www.instagram.com/relentlessmouthguards/">@relentlessmouthguards</a></p>',
     '<hr style="border:none;border-top:1px solid #eee;margin:24px 0;">',
     '<p style="font-size:0.8em;color:#888;">RELENTLESS Mouth Guards · Custom contact sports protection</p>',
